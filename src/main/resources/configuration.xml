@@ -3,17 +3,5 @@
 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
-	<typeAliases>
-		<typeAlias alias="Emp"
-			type="com.oracle.oBootMyBatis03.model.Emp" />
-		<typeAlias alias="Dept"
-			type="com.oracle.oBootMyBatis03.model.Dept" />
-		<typeAlias alias="DeptVO"
-			type="com.oracle.oBootMyBatis03.model.DeptVO" />
-		<typeAlias alias="EmpDept"
-			type="com.oracle.oBootMyBatis03.model.EmpDept" />
-		<typeAlias alias="Member1"
-			type="com.oracle.oBootMyBatis03.model.Member1" />
-	</typeAliases>
 
 </configuration>

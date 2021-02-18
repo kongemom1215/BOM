@@ -1,0 +1,98 @@
+/*!
+ * Start Bootstrap - Simple Sidebar (https://startbootstrap.com/template/simple-sidebar)
+ * Copyright 2013-2020 Start Bootstrap
+ * Licensed under MIT (https://github.com/StartBootstrap/startbootstrap-simple-sidebar/blob/master/LICENSE)
+ */
+@font-face {
+	font-family: 'GmarketSansLight';
+	src:
+		url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansLight.woff')
+		format('woff');
+	font-weight: normal;
+	font-style: normal;
+}
+body{
+	font-family:GmarketSansLight;
+}
+#wrapper {
+	overflow-x: hidden;
+}
+
+#sidebar-wrapper {
+	min-height: 100vh;
+	/*
+	margin-left: -15rem;
+	-webkit-transition: margin .25s ease-out;
+	-moz-transition: margin .25s ease-out;
+	-o-transition: margin .25s ease-out;
+	transition: margin .25s ease-out;*/
+	/*내가추가*/
+	position: fixed;
+	top: 0;
+	left: 0;
+}
+
+#sidebar-wrapper2 {
+	min-height: 100vh;
+	margin-left: -15rem;
+	-webkit-transition: margin .25s ease-out;
+	-moz-transition: margin .25s ease-out;
+	-o-transition: margin .25s ease-out;
+	transition: margin .25s ease-out;
+	/*내가추가*/
+	position: fixed;
+	top: 0;
+	right: 0;
+}
+
+#sidebar-wrapper .sidebar-heading {
+	padding: 0.875rem 1.25rem;
+	font-size: 1.2rem;
+}
+
+#sidebar-wrapper .list-group {
+	width: 15rem;
+}
+
+#sidebar-wrapper2 .list-group {
+	width: 15rem;
+}
+
+#page-content-wrapper {
+	min-width: 100vw;
+	/*내가추가*/
+	margin-left: 15rem;
+	/*margin-right: 15rem;*/
+}
+
+#wrapper.toggled #sidebar-wrapper {
+	margin-left: 0;
+}
+
+@media ( min-width : 799px) {
+	#sidebar-wrapper {
+		margin-left: 0;
+	}
+	#sidebar-wrapper2 {
+		display: inline-block;
+	}
+	#page-content-wrapper {
+		min-width: 0;
+		width: 100%;
+		/*내가추가*/
+		margin-right: 15rem;
+	}
+	#wrapper.toggled #sidebar-wrapper {
+		margin-left: -15rem;
+	}
+}
+
+@media ( max-width :800px) {
+	#sidebar-wrapper2 {
+		display: none;
+	}
+	#page-content-wrapper {
+		min-width: 0;
+		width: 100%;
+	}
+}
