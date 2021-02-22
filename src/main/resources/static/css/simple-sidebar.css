@@ -11,9 +11,11 @@
 	font-weight: normal;
 	font-style: normal;
 }
-body{
-	font-family:GmarketSansLight;
+
+body {
+	font-family: GmarketSansLight;
 }
+
 #wrapper {
 	overflow-x: hidden;
 }
@@ -67,6 +69,59 @@ body{
 
 #wrapper.toggled #sidebar-wrapper {
 	margin-left: 0;
+}
+
+.card-text {
+	/*3줄넘기면 짤러 ...*/
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-line-clamp: 3; /*라인수*/
+	-webkit-box-orient: vertical;
+	word-wrap: break-word;
+	line-height: 1.2em;
+	height: 3.6em;
+	color: black;
+}
+
+.card-text:hover {
+	color: #5cb85c;
+	text-decoration: none;
+}
+
+#drop_the_text input {
+	background-image: url("../img/search.png");
+	background-position: 5px center;
+	background-size:20px;
+	background-repeat:no-repeat;
+	padding-left: 40px;
+	border: 1px solid #5cb85c;
+	width: 100%;
+	height: 30px;
+	box-sizing: border-box;
+	outline: none;
+	border-radius: 3px;
+}
+
+
+/* 사이드바 색깔 바꾸기 */
+.sidebar-custom {
+    background-color: white;
+}
+/* change the brand and text color */
+.sidebar-custom .sidebar-brand,
+.sidebar-custom .sidebar-text {
+    color: rgba(255,255,255,.8);
+}
+/* change the link color */
+.sidebar-custom .sidebar-nav .sidebar-link {
+    color: rgba(255,255,255,.5);
+}
+/* change the color of active or hovered links */
+.sidebar-custom .sidebar-item.active .sidebar-link,
+.sidebar-custom .sidebar-item:focus .sidebar-link,
+.sidebar-custom .sidebar-item:hover .sidebar-link {
+    color: #ffffff;
 }
 
 @media ( min-width : 799px) {

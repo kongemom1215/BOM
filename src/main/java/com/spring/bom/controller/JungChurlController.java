@@ -1,14 +1,16 @@
 package com.spring.bom.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.apache.catalina.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.spring.bom.iron.service.UserInfoService;
 
 //o jungchurl Controller
 //- active navi support
@@ -17,11 +19,29 @@ import org.springframework.web.bind.annotation.RequestMapping;
 //o profile support
 
 @Controller
-public class JungchurlController {
+public class JungChurlController {
+	/*
+	 * @Autowired private UserInfoService us;
+	 */
+	/*
+	 * @Autowired private FollowService fs;
+	 * 
+	 * @Autowired private BoardService bs;
+	 */
 	
-	@GetMapping(value = "test")
-	public String goTest(HttpServletRequest request,Model model) {
-		return "test";
+	@GetMapping(value = "iron/timeline")
+	public String goTimeline(HttpServletRequest request, Model model) {
+		HttpSession session = request.getSession();
+		/*
+		 * List<Follow> listFollow1 = fs.getFollowList1(follow); List<Follow>
+		 * listFollow2 = fs.getFollowList2(follow);
+		 */
+		return "iron/timeline";
+	}
+	
+	@GetMapping(value = "iron/profile")
+	public String goProfile(Model model) {
+		return "iron/profile";
 	}
 	//Service Bean Zone
 	//Autowired
