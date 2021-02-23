@@ -1,4 +1,4 @@
-package com.spring.bom.iron.model;
+package com.spring.bom.model.iron;
 
 public class Follow {
 	private Integer ucode;

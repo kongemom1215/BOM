@@ -3,5 +3,10 @@
 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
-
+	<typeAliases>
+		<typeAlias alias="Iron_User_Info"
+			type="com.spring.bom.model.User_Info" />
+		<typeAlias alias="Iron_Board"
+			type="com.spring.bom.model.Board" />
+	</typeAliases>
 </configuration>

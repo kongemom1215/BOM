@@ -52,7 +52,7 @@
 				<img src="/img/logo2.jpg" width="150" height="150">
 			</div>
 			<div class="list-group list-group-flush">
-				<a href="timeline" class="list-group-item list-group-item-action"> <img
+				<a href="/iron/timeline" class="list-group-item list-group-item-action"> <img
 					src="/img/home.svg" width="15" height="15"> 타임라인
 				</a> 
 				
@@ -86,11 +86,13 @@
 						<img src="/img/write.svg" width="15" height="15"> 글 쓰기
 					</button>
 				</a>
+				
+				
 				<div class="card">
 					<div class="card-body">
-						<img src="/img/라이언.png" class="rounded-circle" width="50"
-							width="50"> <a class="card-title text-dark">서정철</a> <a
-							class="card-subtitle mb-2 text-muted">@iron</a>
+						<img src="/img/user/유저이미지" alt="no_image" class="rounded-circle" width="50"
+							width="50"> <a class="card-title text-dark">${user.unickName }</a> <a
+							class="card-subtitle mb-2 text-muted">@${user.uatid }</a>
 					</div>
 					<button type="button" class="btn btn-success">로그아웃</button>
 				</div>
@@ -104,7 +106,7 @@
 		
 			<nav
 				class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
-				<button class="btn btn-success" id="menu-toggle">←</button>
+				<button class="btn btn-success" id="menu-toggle" onclick="history.back()">←</button>
 			</nav>
 			<!--
 			<div class="alert alert-success" role="alert">
@@ -131,16 +133,23 @@
 					</div>
 				</div>
 				<!--글 정렬-->
-				<c:forEach begin="1" end="1" step="1">
-					<div class="card"u>
+				<c:forEach var="tl_element" items="tl_list">
+					<div class="card">
 						<div class="card-body">
-							<button type="button" class="btn btn-light float-right">⋯</button>
-							<img src="/img/" class="rounded-circle" width="50"
-								width="50"> <a class="card-title text-dark"></a> <a
-								class="card-subtitle mb-2 text-muted"></a> <a
-								class="card-subtitle mb-2 text-muted">2021/02/22 13:00:00</a> <a href="#"
-								class="card-text" style="margin-top: 10px;">
-								</a>
+							<button type="button" class="btn btn-light float-right dropdown-toggle caret-off">⋯</button>
+							<div class="dropdown-menu">
+										<c:if test="${tl_element.ucode == user.ucode }">
+											<a class="dropdown-item" href="#">봄 삭제</a>
+										</c:if>
+										<a class="dropdown-item" href="#">봄 신고</a>
+										<a class="dropdown-item" href="#">봄 분석</a>
+							</div>
+							<img src="/img/라이언.png" alt="no_image" class="rounded-circle" width="50"
+								width="50"> <a class="card-title text-dark">${tl_element.unickName }</a>
+								 <a class="card-subtitle mb-2 text-muted">@${tl_element.uatid }</a>
+								 <a	class="card-subtitle mb-2 text-muted">${tl_element.bregDate }</a>
+								 <a href="#" class="card-text" style="margin-top: 10px;">${tl_element.bcontent }</a>
+								 
 							<div align="center">
 								<div class="btn-group col-md-12" role="group"
 									aria-label="Button group with nested dropdown">

@@ -1,0 +1,24 @@
+package com.spring.bom.service.iron;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.spring.bom.dao.iron.User_InfoDao;
+import com.spring.bom.model.iron.User_Info;
+
+@Service
+public class User_InfoServiceImpl implements User_InfoService {
+
+	@Autowired
+	private User_InfoDao ud;
+	
+	@Override
+	public User_Info getLoginUserInfo(int ucode) {
+		System.out.println("[iron] User_InfoServiceImpl getLoginUserInfo start...");
+		User_Info user = ud.getLoginUserInfo(ucode); 
+		if(user==null) System.out.println("[iron] ud.getLoginUserInfo -> null;;");
+		else System.out.println("[iron] ud.getLoginUserInfo -> exist!!");
+		return user;
+	}
+
+}
