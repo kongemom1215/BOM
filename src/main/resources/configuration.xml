@@ -5,8 +5,10 @@
 <configuration>
 	<typeAliases>
 		<typeAlias alias="Iron_User_Info"
-			type="com.spring.bom.model.User_Info" />
+			type="com.spring.bom.model.iron.User_Info" />
 		<typeAlias alias="Iron_Board"
-			type="com.spring.bom.model.Board" />
+			type="com.spring.bom.model.iron.Board" />
+		<typeAlias alias="Iron_Follow"
+			type="com.spring.bom.model.iron.Follow" />
 	</typeAliases>
 </configuration>

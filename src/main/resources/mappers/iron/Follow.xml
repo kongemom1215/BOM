@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.spring.bom.dao.iron.FollowDao">
+	<select id="followListWhoIknow" parameterType="int" resultType="Iron_Follow">
+		select 
+			ui.ucode uucode,
+			ui.uatid uatid, ui.unickName unickName, ui.ubirth ubirth, 
+			ui.unation unation, ui.uintro uintro, ui.uloc uloc, ui.uimage uimage, ui.ustate ustate, ui.uonline uonline, f.fblockstate fblockstate
+		from (select * from follow where fopcode = #{ucode} and ucode != #{ucode}) f, user_info ui
+		where ui.ucode = f.ucode
+	</select>
+</mapper>

@@ -1,6 +1,7 @@
 package com.spring.bom.model.iron;
 
 public class User_Info {
+	//Mirror
 	private int ucode; // 회원코드
 	private String uemail; // 회원이메일
 	private String upassword;// 비밀번호
@@ -22,7 +23,9 @@ public class User_Info {
 	private int ustate;	//회원상태 여부	0:탈퇴, 1: 정상, 2:활동정지
 	private int ureportCount;	//신고횟수
 	private int uloginCount;	//로그인 시도횟수
-
+	private int uonline;	//온라인 여부
+	//Extra columns
+	
 	public int getUcode() {
 		return ucode;
 	}
@@ -191,4 +194,12 @@ public class User_Info {
 		this.uloginCount = uloginCount;
 	}
 
+	public int getUonline() {
+		return uonline;
+	}
+
+	public void setUonline(int uonline) {
+		this.uonline = uonline;
+	}
+	
 }

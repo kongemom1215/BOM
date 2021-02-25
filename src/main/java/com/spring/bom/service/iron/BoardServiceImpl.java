@@ -12,6 +12,7 @@ import com.spring.bom.model.iron.Board;
 public class BoardServiceImpl implements BoardService {
 	@Autowired
 	private BoardDao bd;
+
 	@Override
 	public List<Board> getTimelineBoard(int ucode) {
 		System.out.println("[iron] BoardServiceImpl getTimelineBoard start...");

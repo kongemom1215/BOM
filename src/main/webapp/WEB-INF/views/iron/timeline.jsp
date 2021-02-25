@@ -90,7 +90,7 @@
 				
 				<div class="card">
 					<div class="card-body">
-						<img src="/img/user/유저이미지" alt="no_image" class="rounded-circle" width="50"
+						<img src="/img/profile_image/${user.uimage}" alt="no_image" class="rounded-circle" width="50"
 							width="50"> <a class="card-title text-dark">${user.unickName }</a> <a
 							class="card-subtitle mb-2 text-muted">@${user.uatid }</a>
 					</div>
@@ -133,23 +133,22 @@
 					</div>
 				</div>
 				<!--글 정렬-->
-				<c:forEach var="tl_element" items="tl_list">
+				<c:forEach var="tl_element" items="${tl_list }">
 					<div class="card">
 						<div class="card-body">
 							<button type="button" class="btn btn-light float-right dropdown-toggle caret-off">⋯</button>
 							<div class="dropdown-menu">
-										<c:if test="${tl_element.ucode == user.ucode }">
+										<%-- <c:if test="${tl_element.loginUcode == user.ucode }">
 											<a class="dropdown-item" href="#">봄 삭제</a>
-										</c:if>
+										</c:if> --%>
 										<a class="dropdown-item" href="#">봄 신고</a>
 										<a class="dropdown-item" href="#">봄 분석</a>
 							</div>
-							<img src="/img/라이언.png" alt="no_image" class="rounded-circle" width="50"
+							<img src="/img/profile_image/${tl_element.uimage }" alt="no_image" class="rounded-circle" width="50"
 								width="50"> <a class="card-title text-dark">${tl_element.unickName }</a>
 								 <a class="card-subtitle mb-2 text-muted">@${tl_element.uatid }</a>
 								 <a	class="card-subtitle mb-2 text-muted">${tl_element.bregDate }</a>
 								 <a href="#" class="card-text" style="margin-top: 10px;">${tl_element.bcontent }</a>
-								 
 							<div align="center">
 								<div class="btn-group col-md-12" role="group"
 									aria-label="Button group with nested dropdown">
@@ -199,36 +198,19 @@
 					<div class="card bg-light mb-3">
 						<div class="card-header">팔로우 추천</div>
 						<div class="card-body" style="padding: 5px;">
-							<div class="card">
-								<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
-									<img src="/img/teemo.jpg" class="rounded-circle" width="20"
-										height="20"> <a class="card-title text-dark">닉네임</a> <a
-										class="card-subtitle mb-2 text-muted">@atid</a>
-									<button type="button"
-										class="btn btn-outline-success btn-sm float-right"
-										style="font-size: 0.8rem;">팔로우</button>
+							<c:forEach var="justFollowMe" items="${suggestFlist2 }">
+								<div class="card">
+									<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
+										<img src="/img/profile_image/${justFollowMe.uimage}" class="rounded-circle" width="20"
+											height="20">
+											<a class="card-title text-dark">${justFollowMe.unickName}</a>
+											<a class="card-subtitle mb-2 text-muted">@${justFollowMe.uatid}</a>
+										<button type="button"
+											class="btn btn-outline-success btn-sm float-right"
+											style="font-size: 0.8rem;">팔로우</button>
+									</div>
 								</div>
-							</div>
-							<div class="card">
-								<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
-									<img src="/img/teemo.jpg" class="rounded-circle" width="20"
-										height="20"> <a class="card-title text-dark">닉네임</a> <a
-										class="card-subtitle mb-2 text-muted">@atid</a>
-									<button type="button"
-										class="btn btn-outline-success btn-sm float-right"
-										style="font-size: 0.8rem;">팔로우</button>
-								</div>
-							</div>
-							<div class="card">
-								<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
-									<img src="/img/teemo.jpg" class="rounded-circle" width="20"
-										height="20"> <a class="card-title text-dark">닉네임</a> <a
-										class="card-subtitle mb-2 text-muted">@atid</a>
-									<button type="button"
-										class="btn btn-outline-success btn-sm float-right"
-										style="font-size: 0.8rem;">팔로우</button>
-								</div>
-							</div>
+							</c:forEach>
 						</div>
 					</div>
 				</div>

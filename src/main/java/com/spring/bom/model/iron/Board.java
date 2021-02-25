@@ -21,7 +21,18 @@ public class Board {
 	private int breportCount; // 글 신고 횟수
 	
 	//Extra DB column data
+	private int loginUcode;
+	private String uatid;
+	private String unickName;
+	private String uimage;
 	
+	public String getUimage() {
+		return uimage;
+	}
+	public void setUimage(String uimage) {
+		this.uimage = uimage;
+	}
+	//Mirror getter/setter
 	public int getBcode() {
 		return bcode;
 	}
@@ -125,5 +136,24 @@ public class Board {
 		this.breportCount = breportCount;
 	}
 	
+	//Extra getter/setter
+	public int getLoginUcode() {
+		return loginUcode;
+	}
+	public void setLoginUcode(int loginUcode) {
+		this.loginUcode = loginUcode;
+	}
+	public String getUatid() {
+		return uatid;
+	}
+	public void setUatid(String uatid) {
+		this.uatid = uatid;
+	}
+	public String getUnickName() {
+		return unickName;
+	}
+	public void setUnickName(String unickName) {
+		this.unickName = unickName;
+	}
 	
 }
