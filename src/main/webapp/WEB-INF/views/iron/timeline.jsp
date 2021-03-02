@@ -139,14 +139,14 @@
 							<button type="button" class="btn btn-light float-right dropdown-toggle caret-off">⋯</button>
 							<div class="dropdown-menu">
 										<%-- <c:if test="${tl_element.loginUcode == user.ucode }">
-											<a class="dropdown-item" href="#">봄 삭제</a>
+												<a class="dropdown-item" href="#">봄 삭제</a>
 										</c:if> --%>
 										<a class="dropdown-item" href="#">봄 신고</a>
 										<a class="dropdown-item" href="#">봄 분석</a>
 							</div>
 							<img src="/img/profile_image/${tl_element.uimage }" alt="no_image" class="rounded-circle" width="50"
 								width="50"> <a class="card-title text-dark">${tl_element.unickName }</a>
-								 <a class="card-subtitle mb-2 text-muted">@${tl_element.uatid }</a>
+								 <a class="card-subtitle mb-2 text-muted">@${tl_element.uatid }</a>		
 								 <a	class="card-subtitle mb-2 text-muted">${tl_element.bregDate }</a>
 								 <a href="#" class="card-text" style="margin-top: 10px;">${tl_element.bcontent }</a>
 							<div align="center">
@@ -158,7 +158,7 @@
 									</button>
 									<button type="button" class="btn btn-secondary btn-light mr-3"
 										data-toggle="tooltip" data-placement="top" title="스크랩 or 인용">
-										<img src="/img/bring.svg" width="20" height="20">
+										<img src="/img/bring.svg" width="20" height="20">		
 									</button>
 									<button type="button" class="btn btn-secondary btn-light mr-3"
 										data-toggle="tooltip" data-placement="top" title="좋아요">
@@ -198,19 +198,37 @@
 					<div class="card bg-light mb-3">
 						<div class="card-header">팔로우 추천</div>
 						<div class="card-body" style="padding: 5px;">
-							<c:forEach var="justFollowMe" items="${suggestFlist2 }">
-								<div class="card">
-									<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
-										<img src="/img/profile_image/${justFollowMe.uimage}" class="rounded-circle" width="20"
-											height="20">
-											<a class="card-title text-dark">${justFollowMe.unickName}</a>
-											<a class="card-subtitle mb-2 text-muted">@${justFollowMe.uatid}</a>
-										<button type="button"
-											class="btn btn-outline-success btn-sm float-right"
-											style="font-size: 0.8rem;">팔로우</button>
+							<c:if test="${suggestFlist2_size>0 }">
+								<c:forEach var="justFollowMe" items="${suggestFlist2 }">
+									<div class="card">
+										<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
+											<img src="/img/profile_image/${justFollowMe.uimage}" class="rounded-circle" width="20"
+												height="20">
+												<a class="card-title text-dark">${justFollowMe.unickName}</a>
+												<a class="card-subtitle mb-2 text-muted">@${justFollowMe.uatid}</a>
+											<button type="button"
+												class="btn btn-outline-success btn-sm float-right"
+												style="font-size: 0.8rem;">팔로우</button>
+										</div>
 									</div>
-								</div>
-							</c:forEach>
+								</c:forEach>
+							</c:if>
+							<!-- 팔로우하는 유저가 없을 경우 관심항목이 비슷한 사람을 추천 -->
+							<c:if test="${suggestFlist2_size<1 }">
+								<c:forEach var="justFollowMe" items="${suggestFlist2 }">
+									<div class="card">
+										<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
+											<img src="/img/profile_image/${justFollowMe.uimage}" class="rounded-circle" width="20"
+												height="20">
+												<a class="card-title text-dark">${justFollowMe.unickName}</a>
+												<a class="card-subtitle mb-2 text-muted">@${justFollowMe.uatid}</a>
+											<button type="button"
+												class="btn btn-outline-success btn-sm float-right"
+												style="font-size: 0.8rem;">팔로우</button>
+										</div>
+									</div>
+								</c:forEach>
+							</c:if>
 						</div>
 					</div>
 				</div>

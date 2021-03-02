@@ -12,9 +12,18 @@ import com.spring.bom.model.iron.Follow;
 public class FollowDaoImpl implements FollowDao {
 	@Autowired
 	private SqlSession session;
+	
 	@Override
-	public List<Follow> getSuggestFollowList(int ucode) {
-		System.out.println("[iron] FollowDaoImpl start...");
+	public List<Follow> getSuggestFollowList1(int ucode) {
+		System.out.println("[iron] FollowDaoImpl getSuggestFllowList1 start...");
+		List<Follow> suggestFlist = session.selectList("followListWhoSameTrend",ucode);
+		System.out.println("[iron] FollowDaoImpl suggestFlist.size() -> "+suggestFlist.size());
+		return suggestFlist;
+	}
+	
+	@Override
+	public List<Follow> getSuggestFollowList2(int ucode) {
+		System.out.println("[iron] FollowDaoImpl getSuggestFllowList2 start...");
 		List<Follow> suggestFlist = session.selectList("followListWhoIknow",ucode);
 		System.out.println("[iron] FollowDaoImpl suggestFlist.size() -> "+suggestFlist.size());
 		return suggestFlist;

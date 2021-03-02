@@ -8,7 +8,22 @@
 			ui.ucode uucode,
 			ui.uatid uatid, ui.unickName unickName, ui.ubirth ubirth, 
 			ui.unation unation, ui.uintro uintro, ui.uloc uloc, ui.uimage uimage, ui.ustate ustate, ui.uonline uonline, f.fblockstate fblockstate
-		from (select * from follow where fopcode = #{ucode} and ucode != #{ucode}) f, user_info ui
+		from (select * from follow 
+      			where fopcode = #{ucode} <!-- A를 팔로우하는 사람-->
+      			and ucode NOT in ( select fopcode from follow where  ucode = #{ucode} )) f <!--A가 팔로우하는 사람이 아닌-->
+      			, user_info ui
+		where ui.ucode = f.ucode
+	</select>
+	
+	<select id="followListWhoSameTrend" parameterType="int" resultType="Iron_Follow">
+		select 
+			ui.ucode uucode,
+			ui.uatid uatid, ui.unickName unickName, ui.ubirth ubirth, 
+			ui.unation unation, ui.uintro uintro, ui.uloc uloc, ui.uimage uimage, ui.ustate ustate, ui.uonline uonline, f.fblockstate fblockstate
+		from (select * from follow 
+      			where fopcode = #{ucode} <!-- A를 팔로우하는 사람-->
+      			and ucode NOT in ( select fopcode from follow where  ucode = #{ucode} )) f <!--A가 팔로우하는 사람이 아닌-->
+      			, user_info ui
 		where ui.ucode = f.ucode
 	</select>
 </mapper>

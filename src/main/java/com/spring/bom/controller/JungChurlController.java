@@ -37,10 +37,11 @@ public class JungChurlController {
 	@GetMapping(value = "iron/timeline")
 	public String goTimeline(HttpServletRequest request, Model model) {
 		// 임시 로그인 세팅
+		System.out.println("context->"+request.getContextPath());
 		System.out.println("[JungChurlController] goTimeline start...");
 		HttpSession session = request.getSession();
 		System.out.println("[JungChurlController] Do -> us.getLoginUserInfo(21)");
-		User_Info user = us.getLoginUserInfo(21); // DB에서 회원코드 21인 회원 정보 가져오기. 필요한것만!
+		User_Info user = us.getLoginUserInfo(24); // DB에서 회원코드 21인 회원 정보 가져오기. 필요한것만!
 		session.setAttribute("user", user); // Session에 user 데이터 저장
 		System.out.println("[JungChurlController] Result : " + user + " -> us.getLoginUserInfo(21)");
 
@@ -52,9 +53,16 @@ public class JungChurlController {
 		model.addAttribute("tl_list_size", bdlist.size());
 		model.addAttribute("tl_list", bdlist);
 		
-		// 팔로우 추천2 나와 관심사가 겹치는 인물들 추천
+		// 팔로우 추천1 나와 관심사가 겹치는 유저를 추천
 		System.out.println("[JungChurlController[ Do -> fs.getSuggestFollowList()");
-		List<Follow> suggestFlist2 = fs.getSuggestFollowList(user.getUcode());
+		List<Follow> suggestFlist1 = fs.getSuggestFollowList1(user.getUcode());
+		System.out.println("[JungChurlController[ Result : listSize is "+suggestFlist1.size());
+		model.addAttribute("suggestFlist1_size", suggestFlist1.size());
+		model.addAttribute("suggestFlist1", suggestFlist1);
+		
+		// 팔로우 추천2 나를 팔로우하는 유저 추천
+		System.out.println("[JungChurlController[ Do -> fs.getSuggestFollowList()");
+		List<Follow> suggestFlist2 = fs.getSuggestFollowList2(user.getUcode());
 		System.out.println("[JungChurlController[ Result : listSize is "+suggestFlist2.size());
 		model.addAttribute("suggestFlist2_size", suggestFlist2.size());
 		model.addAttribute("suggestFlist2", suggestFlist2);
@@ -68,7 +76,6 @@ public class JungChurlController {
 	}
 	// Service Bean Zone
 	// Autowired
-
 	// Navigation
 	// RequestMapping
 	// 홈

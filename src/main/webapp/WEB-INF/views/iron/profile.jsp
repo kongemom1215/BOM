@@ -105,9 +105,7 @@
 				class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
 				<button class="btn btn-success" id="menu-toggle">←</button>
 			</nav>
-			<div class="alert alert-success" role="alert">
-				<a href="#" class="alert-link">좋아요</a>를 누르셨습니다.
-			</div>
+			
 			<div class="container-fluid">
 				<p>
 				<div class="card">

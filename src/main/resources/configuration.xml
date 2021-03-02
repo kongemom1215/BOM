@@ -10,5 +10,9 @@
 			type="com.spring.bom.model.iron.Board" />
 		<typeAlias alias="Iron_Follow"
 			type="com.spring.bom.model.iron.Follow" />
+
+		<!-- bro -->
+		<typeAlias alias="user_info"
+			type="com.spring.bom.model.bro.user_info" />
 	</typeAliases>
 </configuration>

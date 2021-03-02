@@ -19,5 +19,5 @@ public class User_InfoDaoImpl implements User_InfoDao {
 		else System.out.println("[iron] User_InfoDaoImpl getLoginUserInfo -> exist!!");
 		return user;
 	}
-
+	
 }

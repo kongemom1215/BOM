@@ -12,10 +12,19 @@ import com.spring.bom.model.iron.Follow;
 public class FollowServiceImpl implements FollowService {
 	@Autowired
 	private FollowDao fd;
+	
 	@Override
-	public List<Follow> getSuggestFollowList(int ucode) {
-		System.out.println("[iron] FollowServiceImpl getSuggestFollowList start... ");
-		List<Follow> suggestFlist = fd.getSuggestFollowList(ucode);
+	public List<Follow> getSuggestFollowList1(int ucode) {
+		System.out.println("[iron] FollowServiceImpl getSuggestFollowList1 start... ");
+		List<Follow> suggestFlist = fd.getSuggestFollowList1(ucode);
+		System.out.println("[iron] suggestFlist.size() -> "+suggestFlist.size());
+		return suggestFlist;
+	}
+	
+	@Override
+	public List<Follow> getSuggestFollowList2(int ucode) {
+		System.out.println("[iron] FollowServiceImpl getSuggestFollowList2 start... ");
+		List<Follow> suggestFlist = fd.getSuggestFollowList2(ucode);
 		System.out.println("[iron] suggestFlist.size() -> "+suggestFlist.size());
 		return suggestFlist;
 	}
