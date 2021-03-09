@@ -4,13 +4,15 @@
 "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
 	<typeAliases>
+		<!-- iron -->
 		<typeAlias alias="Iron_User_Info"
 			type="com.spring.bom.model.iron.User_Info" />
 		<typeAlias alias="Iron_Board"
 			type="com.spring.bom.model.iron.Board" />
 		<typeAlias alias="Iron_Follow"
 			type="com.spring.bom.model.iron.Follow" />
-
+	<typeAlias alias="Iron_HashTag"
+			type="com.spring.bom.model.iron.HashTag" />
 		<!-- bro -->
 		<typeAlias alias="user_info"
 			type="com.spring.bom.model.bro.user_info" />

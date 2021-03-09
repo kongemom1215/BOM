@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.spring.bom.dao.iron.HashTagDao">
+	<select id="followListWhoIknow" resultType="Iron_HashTag">
+		select 
+			hname, count(hname) hcount
+		from hashtag
+		group by hname
+		order by hcount desc;
+	</select>
+</mapper>

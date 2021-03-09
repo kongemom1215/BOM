@@ -19,12 +19,17 @@ public class Board {
 	private int bjoinCount; // 글 참여수
 	private int bstate; // 글상태 -> 0: 삭제, 1: 정상, 2: 차단
 	private int breportCount; // 글 신고 횟수
+	private int breplyCount;	// 댓글 횟수
+	private int bquoteCount;	// 인용 횟수
 	
 	//Extra DB column data
 	private int loginUcode;
 	private String uatid;
 	private String unickName;
 	private String uimage;
+	//Not DTO
+	private String battachType;
+	private String battachSrc;
 	
 	public String getUimage() {
 		return uimage;
@@ -135,6 +140,18 @@ public class Board {
 	public void setBreportCount(int breportCount) {
 		this.breportCount = breportCount;
 	}
+	public int getBreplyCount() {
+		return breplyCount;
+	}
+	public void setBreplyCount(int breplyCount) {
+		this.breplyCount = breplyCount;
+	}
+	public int getBquoteCount() {
+		return bquoteCount;
+	}
+	public void setBquoteCount(int bquoteCount) {
+		this.bquoteCount = bquoteCount;
+	}
 	
 	//Extra getter/setter
 	public int getLoginUcode() {
@@ -154,6 +171,18 @@ public class Board {
 	}
 	public void setUnickName(String unickName) {
 		this.unickName = unickName;
+	}
+	public String getBattachType() {
+		return battachType;
+	}
+	public void setBattachType(String battachType) {
+		this.battachType = battachType;
+	}
+	public String getBattachSrc() {
+		return battachSrc;
+	}
+	public void setBattachSrc(String battachSrc) {
+		this.battachSrc = battachSrc;
 	}
 	
 }

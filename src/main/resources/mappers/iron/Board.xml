@@ -5,34 +5,35 @@
 <mapper namespace="com.spring.bom.dao.iron.BoardDao">
 	<select id="timelineBoardList" parameterType="int"
 		resultType="com.spring.bom.model.iron.Board">
-		select loginUcode, uimage, ucode, uatid, unickName, bcode, bcontent,
+		select loginUcode, uimage, ucode, uatid, unickName, bcode, bcontent, breplyCount, bquoteCount, blikeCount, battach,
   		  case when trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))/365) >=1 then trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))/365)||'년 전'
      		when trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))/31) >=1 then trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))/31)||'달 전'
      		when trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))) >=1 then trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss')))||'일 전'
      		when trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))*24) >=1 then trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))*24)||'시간 전'
      		when trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))*24*60) >=1 then trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))*24*60)||'분 전'
      		when trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))*24*60*60) >=0 then trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))*24*60*60)||'초 전'
-    	  end as bregdate       
+    	  end as bregDate      
 		FROM
      	(
       		select
            		 ui.ucode loginUcode, ui.uimage uimage, b.ucode ucode,
-           		 ui.uatid uatid, ui.unickname unickName, b.bcode bcode, b.bcontent bcontent, b.bregdate
+           		 ui.uatid uatid, ui.unickname unickName, b.bcode bcode, b.bcontent bcontent, b.bregDate bregDate, b.breplyCount breplyCount, b.bquoteCount bquoteCount, b.blikeCount blikeCount, b.battach battach
           	from
             	 user_info ui, board b, follow f
           	where f.ucode = #{ucode}
-          
             and (f.fopcode=b.ucode)
             and b.ucode = ui.ucode
        UNION
        		select
             	 ui.ucode loginUcode, ui.uimage uimage, b.ucode ucode,
-            	 ui.uatid uatid, ui.unickname unickName, b.bcode bcode, b.bcontent bcontent, b.bregdate
+            	 ui.uatid uatid, ui.unickname unickName, b.bcode bcode, b.bcontent bcontent, b.bregDate bregDate, b.breplyCount breplyCount, b.bquoteCount bquoteCount, b.blikeCount blikeCount, b.battach battach
             from
             	 user_info ui, board b
           	where ui.ucode = #{ucode}
             	 and b.ucode = ui.ucode
       	)
+      	
+      	
 		<!-- select
 		ui.ucode, b.ucode, ui.uatid, ui.unickname, b.bcode, b.bcontent
 		from

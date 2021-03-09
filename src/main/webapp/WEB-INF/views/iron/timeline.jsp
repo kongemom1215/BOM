@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -148,21 +149,33 @@
 								width="50"> <a class="card-title text-dark">${tl_element.unickName }</a>
 								 <a class="card-subtitle mb-2 text-muted">@${tl_element.uatid }</a>		
 								 <a	class="card-subtitle mb-2 text-muted">${tl_element.bregDate }</a>
-								 <a href="#" class="card-text" style="margin-top: 10px;">${tl_element.bcontent }</a>
+								 <p class="card-text" style="margin-top: 10px;">${tl_element.bcontent }</p>
+								 <c:if test="${tl_element.battach!=null }">
+								 	<c:if test="${tl_element.battachType=='image'}">
+								 		<img class="img-thumnail" width="300" src="/img/media/${tl_element.battachSrc}"/>
+								 	</c:if>
+								 	<c:if test="${tl_element.battachType=='video'}">
+								 		<video controls width="300">
+								 			<source  src="/img/media/${tl_element.battachSrc}" type="video/mp4">
+								 			<source  src="/img/media/${tl_element.battachSrc}" type="video/webm">
+								 			해당 브라우저에는 지원하지 않는 비디오입니다.
+								 		</video>
+								 	</c:if>
+								 </c:if>
 							<div align="center">
 								<div class="btn-group col-md-12" role="group"
 									aria-label="Button group with nested dropdown">
 									<button type="button" class="btn btn-secondary mr-3 btn-light"
-										data-toggle="tooltip" data-placement="top" title="답글">
-										<img src="/img/speech-bubble.svg" width="20" height="20">
+										data-toggle="tooltip" data-placement="top" title="답글 ">
+										<img src="/img/speech-bubble.svg" width="20" height="20"> ${tl_element.breplyCount }
 									</button>
 									<button type="button" class="btn btn-secondary btn-light mr-3"
 										data-toggle="tooltip" data-placement="top" title="스크랩 or 인용">
-										<img src="/img/bring.svg" width="20" height="20">		
+										<img src="/img/bring.svg" width="20" height="20"> ${tl_element.bquoteCount }
 									</button>
 									<button type="button" class="btn btn-secondary btn-light mr-3"
 										data-toggle="tooltip" data-placement="top" title="좋아요">
-										<img src="/img/heart.svg" width="20" height="20">
+										<img src="/img/heart.svg" width="20" height="20"> ${tl_element.blikeCount }
 									</button>
 									<button type="button"
 										class="btn btn-secondary btn-light mr-3 dropdown-toggle caret-off"
@@ -171,8 +184,8 @@
 										<img src="/img/share.svg" width="20" height="20">
 									</button>
 									<div class="dropdown-menu">
-										<a class="dropdown-item" href="#">북마크 추가/삭제</a> <a
-											class="dropdown-item" href="#">URL담아가기</a>
+										<a class="dropdown-item" href="#">북마크 추가/삭제</a>
+										<a class="dropdown-item" href="#">URL담아가기</a>
 									</div>
 								</div>
 							</div>
@@ -189,7 +202,7 @@
 				<div class="list-group-item list-group-item-action bg-light">
 					<div id="drop_the_text">
 						<!-- 엔터치면 searchData() 실행 -->
-						<input class="form-control" id="search" placeholder="봄 검색"
+						<input  class="form-control" id="search" placeholder="봄 검색"
 							onkeypress="if( event.keyCode == 13 ){searchData();}">
 					</div>
 				</div>
@@ -235,34 +248,19 @@
 				<div class="list-group-item list-group-item-action bg-light"
 					style="padding: 5px;">
 					<div class="card bg-light mb-3">
-						<div class="card-header">실시간 트랜드</div>
+						<div class="card-header">실시간 해시태그</div>
 						<div class="card-body" style="padding: 5px;">
-							<div class="card">
-								<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
-									1위
-									<div>
-										<a href="#">#사랑해티모</a> <span class="float-right">11,333
-											봄</span>
+							<c:forEach var="tag" items="${tag_list}">
+								<div class="card">
+									<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
+										${tag.hrank}위
+										<div>
+											<a href="#">#${tag.hname}</a> <span class="float-right">${tag.hcount }
+												봄</span>
+										</div>
 									</div>
 								</div>
-							</div>
-							<div class="card">
-								<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
-									2위
-									<div>
-										<a href="#">#티세구</a> <span class="float-right">2,301 봄</span>
-									</div>
-								</div>
-							</div>
-							<div class="card">
-								<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
-									3위
-									<div>
-										<a href="#">#롤하고싶다</a> <span class="float-right">1,300
-											봄</span>
-									</div>
-								</div>
-							</div>
+							</c:forEach>
 						</div>
 					</div>
 				</div>
