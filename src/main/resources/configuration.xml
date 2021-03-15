@@ -11,8 +11,10 @@
 			type="com.spring.bom.model.iron.Board" />
 		<typeAlias alias="Iron_Follow"
 			type="com.spring.bom.model.iron.Follow" />
-	<typeAlias alias="Iron_HashTag"
+		<typeAlias alias="Iron_HashTag"
 			type="com.spring.bom.model.iron.HashTag" />
+		<typeAlias alias="Iron_Like_Bookmark"
+			type="com.spring.bom.model.iron.Like_Bookmark" />
 		<!-- bro -->
 		<typeAlias alias="user_info"
 			type="com.spring.bom.model.bro.user_info" />

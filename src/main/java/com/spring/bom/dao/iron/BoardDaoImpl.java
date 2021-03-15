@@ -16,9 +16,9 @@ public class BoardDaoImpl implements BoardDao {
 
 	@Override
 	public List<Board> getTimelineBoard(int ucode) {
-		System.out.println("[iron] BaordDaoImpl getTimelineBoard start...");
+		System.out.println("[iron] BoardDaoImpl getTimelineBoard start...");
 		List<Board> bdlist = session.selectList("timelineBoardList", ucode);
-		System.out.println("[iron] User_InfoDaoImpl bdlist.size() -> " + bdlist.size());
+		System.out.println("[iron] BoardDaoImpl bdlist.size() -> " + bdlist.size());
 		/*
 		 * <a href="#"></a> for (int i = 0; i < bdlist.size(); i++) { String hbcontent =
 		 * bdlist.get(i).getbcontent(); if (hbcontent.contains(" #") ||
@@ -38,5 +38,22 @@ public class BoardDaoImpl implements BoardDao {
 		 */
 		return bdlist;
 	}
+
+	@Override
+	public Board getSingleBoard(Board board) {
+		System.out.println("[iron] BaordDaoImpl getTimelineBoard start...");
+		board = session.selectOne("SingleBoard", board);
+		System.out.println("[iron] User_InfoDaoImpl bLikeCount -> " + board.getBlikeCount());
+		return board;
+	}
+
+	@Override
+	public List<Board> getReplyList(int bcode) {
+		System.out.println("[iron] BoardDaoImpl getReplyList start...");
+		List<Board> list = session.selectList("ReplyList", bcode);
+		System.out.println("[iron] replylist.size() -> " + list.size());
+		return list;
+	}
+	
 
 }

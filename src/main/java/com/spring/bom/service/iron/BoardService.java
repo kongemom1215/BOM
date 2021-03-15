@@ -8,4 +8,8 @@ public interface BoardService {
 
 	List<Board> getTimelineBoard(int ucode);
 
+	Board getSingleBoard(Board board);
+
+	List<Board> getReplyList(int bcode);
+
 }

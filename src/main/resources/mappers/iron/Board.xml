@@ -5,7 +5,43 @@
 <mapper namespace="com.spring.bom.dao.iron.BoardDao">
 	<select id="timelineBoardList" parameterType="int"
 		resultType="com.spring.bom.model.iron.Board">
+		
 		select loginUcode, uimage, ucode, uatid, unickName, bcode, bcontent, breplyCount, bquoteCount, blikeCount, battach,
+  		  case when trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))/365) >=1 then trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))/365)||'년 전'
+     		when trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))/31) >=1 then trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))/31)||'달 전'
+     		when trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))) >=1 then trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss')))||'일 전'
+     		when trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))*24) >=1 then trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))*24)||'시간 전'
+     		when trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))*24*60) >=1 then trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))*24*60)||'분 전'
+     		when trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))*24*60*60) >=0 then trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))*24*60*60)||'초 전'
+    	  end as bregDate, ltype, bbtype, ldate, bdate, btype, orderData
+		FROM
+     	(
+      		select
+           		 ui.ucode loginUcode, ui.uimage uimage, b.ucode ucode,
+           		 ui.uatid uatid, ui.unickname unickName, b.bcode bcode, b.bcontent bcontent, b.bregDate bregDate, b.breplyCount breplyCount, b.bquoteCount bquoteCount, b.blikeCount blikeCount, b.battach battach,
+                 lb.ltype ltype, lb.bbtype bbtype, lb.ldate ldate, lb.bdate bdate, b.btype btype, b.bregDate orderData
+          	from
+            	 user_info ui, board b, follow f, like_bookmark lb
+          	where f.ucode = #{ucode}
+            and f.fopcode = b.ucode
+            and b.bcode = lb.bcode(+)
+            and b.ucode = ui.ucode
+            and b.btype = 'normal'
+       UNION
+       		select
+            	 ui.ucode loginUcode, ui.uimage uimage, b.ucode ucode,
+            	 ui.uatid uatid, ui.unickname unickName, b.bcode bcode, b.bcontent bcontent, b.bregDate bregDate, b.breplyCount breplyCount, b.bquoteCount bquoteCount, b.blikeCount blikeCount, b.battach battach,
+              	 lb.ltype ltype, lb.bbtype bbtype, lb.ldate ldate, lb.bdate bdate, b.btype btype, b.bregDate orderData
+            from
+            	 user_info ui, board b, like_bookmark lb
+          	where ui.ucode = #{ucode}
+               and b.bcode = lb.bcode(+)
+               and b.ucode = ui.ucode
+               and b.btype = 'normal'
+      	)
+      	order by orderData desc
+		
+		<!-- select loginUcode, uimage, ucode, uatid, unickName, bcode, bcontent, breplyCount, bquoteCount, blikeCount, battach,
   		  case when trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))/365) >=1 then trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))/365)||'년 전'
      		when trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))/31) >=1 then trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))/31)||'달 전'
      		when trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))) >=1 then trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss')))||'일 전'
@@ -31,7 +67,7 @@
             	 user_info ui, board b
           	where ui.ucode = #{ucode}
             	 and b.ucode = ui.ucode
-      	)
+      	) -->
       	
       	
 		<!-- select
@@ -42,5 +78,25 @@
 		and (f.ucode=b.ucode or f.fopcode=b.ucode)
 		and b.ucode = ui.ucode
 		order by b.bregdate; -->
+	</select>
+	<select id="SingleBoard" parameterType="Iron_Board" resultType="Iron_Board">
+		select ui.ucode loginUcode, ui.uimage uimage, b.ucode ucode,
+           		 ui.uatid uatid, ui.unickname unickName, b.bcode bcode, b.bcontent bcontent, b.bregDate bregDate, b.breplyCount breplyCount, b.bquoteCount bquoteCount, b.blikeCount blikeCount, b.battach battach,
+                 lb.ltype ltype, lb.bbtype bbtype, lb.ldate ldate, lb.bdate bdate
+		from board b, user_info ui , like_bookmark lb
+		where b.bcode = #{bcode}
+		and	b.ucode = ui.ucode
+		and b.bcode = lb.bcode(+)
+	</select>
+	<select id="ReplyList" parameterType="Iron_Board" resultType="Iron_Board">
+		select ui.ucode loginUcode, ui.uimage uimage, b.ucode ucode,
+           		 ui.uatid uatid, ui.unickname unickName, b.bcode bcode, b.bcontent bcontent, b.bregDate bregDate, b.breplyCount breplyCount, b.bquoteCount bquoteCount, b.blikeCount blikeCount, b.battach battach,
+                 lb.ltype ltype, lb.bbtype bbtype, lb.ldate ldate, lb.bdate bdate
+		from board b, user_info ui , like_bookmark lb
+		where bbcode = #{bcode}
+		and btype = 'reply'
+		and b.ucode = ui.ucode
+		and b.bcode = lb.bcode(+)
+		order by bregdate desc
 	</select>
 </mapper>

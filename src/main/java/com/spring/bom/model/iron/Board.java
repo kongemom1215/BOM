@@ -27,6 +27,12 @@ public class Board {
 	private String uatid;
 	private String unickName;
 	private String uimage;
+	private String ltype; //좋아요 여부
+	private String bbtype; //북마크 여부
+	private String ldate; //좋아요 일시
+	private String bdate; //북마크 일시
+	private String orderData; //정렬용
+	
 	//Not DTO
 	private String battachType;
 	private String battachSrc;
@@ -184,5 +190,36 @@ public class Board {
 	public void setBattachSrc(String battachSrc) {
 		this.battachSrc = battachSrc;
 	}
+	public String getLtype() {
+		return ltype;
+	}
+	public void setLtype(String ltype) {
+		this.ltype = ltype;
+	}
+	public String getBbtype() {
+		return bbtype;
+	}
+	public void setBbtype(String bbtype) {
+		this.bbtype = bbtype;
+	}
+	public String getLdate() {
+		return ldate;
+	}
+	public void setLdate(String ldate) {
+		this.ldate = ldate;
+	}
+	public String getBdate() {
+		return bdate;
+	}
+	public void setBdate(String bdate) {
+		this.bdate = bdate;
+	}
+	public String getOrderData() {
+		return orderData;
+	}
+	public void setOrderData(String orderData) {
+		this.orderData = orderData;
+	}
+	
 	
 }

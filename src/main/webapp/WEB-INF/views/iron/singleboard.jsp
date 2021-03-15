@@ -2,9 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-<% 
-	String context = request.getContextPath();
-%>
+<% String context = request.getContextPath(); %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -43,67 +41,82 @@
 .dropdown-toggle.caret-off::after {
 	display: none;
 }
- 
 .card-body:hover{
 	background: #CBEBAD;
 }
-
 </style>
+<script type="text/javascript">
+function goSingleBoard(bbcode,bindex){
+	alert(bbcode+'로 이동합니다.');
+	location.href = 'singleBoard?bcode='+bbcode;
+}
+function clickLikeBtn1(bbcode){
+	event.stopPropagation();
+	var bcode = bbcode;
+	var msg = '게시글['+bcode+']에 좋아요를 눌렀습니다!';
+	alert(msg);
+	$.ajax({
+		url : "<%=context%>/iron/AjaxLikeAction",
+		data:{ bcode: bcode }, 
+		dataType:'json',
+		success : function(data){
+			var str='';
+			$('#likeBtn').empty();
+			if(data.ltype==0||data.ltype==null)
+				str += "<img src='/img/heart.svg' width='20' height='20'> " + data.likeCount
+			if(data.ltype==1)
+				str+= "<img src='/img/red_heart.svg' width='20' height='20'> "+ data.likeCount
+			$('#likeBtn').append(str);
+			alert(".ajax clickLikeBtn str->"+str);
+		}
+	});
+}
 
-<!-- Like Ajax Fuction -->
-<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
-<script type="text/javascript" >
-	
-	function goSingleBoard(bbcode,bindex){
-		alert(bbcode+'로 이동합니다.');
-		location.href = 'singleBoard?bcode='+bbcode;
-	}
-	
-	function clickLikeBtn(bbcode,btnIndex){
-		event.stopPropagation();
-		var index = btnIndex;
-		var bcode = bbcode;
-		var msg = '게시글['+bcode+']에 좋아요를 눌렀습니다!';
-		alert(msg);
-		$.ajax({
-			url : "<%=context%>/iron/AjaxLikeAction",
-			data:{ bcode: bcode }, 
-			dataType:'json',
-			success : function(data){
-				var str='';
-				$('#likeBtn'+index).empty();
-				if(data.ltype==0||data.ltype==null)
-					str += "<img src='/img/heart.svg' width='20' height='20'> " + data.likeCount
-				if(data.ltype==1)
-					str+= "<img src='/img/red_heart.svg' width='20' height='20'> "+ data.likeCount
-				$('#likeBtn'+index).append(str);
-				alert(".ajax clickLikeBtn str->"+str);
-			}
-		});
-	}
-	
-	function viewBoardOptions(bbcode,bindex){
-		event.stopPropagation();
-		var index = bindex;
-		var bcode = bbcode;
-		var msg = '게시글['+bcode+']의 옵션을 눌렀습니다!';
-		alert(msg);
-		$.ajax({
-			url : "<%=context%>/iron/AjaxViewBoardOptions",
-			data:{ bcode: bcode }, 
-			dataType:'json',
-			success : function(data){
-				var str='';
-				$('#boardDropdownOption'+index).empty();
-				if(data.bbtype==0||data.bbtype==null)
-					str += "<a class='dropdown-item' onclick=bookmarkAction();> 북마크추가</a>"
-				if(data.bbtype==1)
-					str += "<a class='dropdown-item' onclick=bookmarkAction();> 북마크 삭제</a>"
-				$('#boardDropdownOption'+index).append(str+"<a class='dropdown-item' href='#'>URL담아가기</a>");
-				alert(".ajax viewBoardOptions str->"+str);
-			}
-		});
-	}
+function clickLikeBtn2(bbcode, bindex){
+	event.stopPropagation();
+	var index = bindex;
+	var bcode = bbcode;
+	var msg = '게시글['+bcode+']에 좋아요를 눌렀습니다!';
+	alert(msg);
+	$.ajax({
+		url : "<%=context%>/iron/AjaxLikeAction",
+		data:{ bcode: bcode }, 
+		dataType:'json',
+		success : function(data){
+			var str='';
+			$('#likeBtn'+index).empty();
+			if(data.ltype==0||data.ltype==null)
+				str += "<img src='/img/heart.svg' width='20' height='20'> " + data.likeCount
+			if(data.ltype==1)
+				str+= "<img src='/img/red_heart.svg' width='20' height='20'> "+ data.likeCount
+			$('#likeBtn'+index).append(str);
+			alert(".ajax clickLikeBtn str->"+str);
+		}
+	});
+}
+
+function viewBoardOptions(bbcode,bindex){
+	event.stopPropagation();
+	var index = bindex;
+	var bcode = bbcode;
+	var msg = '게시글['+bcode+']의 옵션을 눌렀습니다!';
+	alert(msg);
+	$.ajax({
+		url : "<%=context%>/iron/AjaxViewBoardOptions",
+		data:{ bcode: bcode }, 
+		dataType:'json',
+		success : function(data){
+			var str='';
+			$('#boardDropdownOption').empty();
+			if(data.bbtype==0||data.bbtype==null)
+				str += "<a class='dropdown-item' onclick=bookmarkAction();> 북마크추가</a>"
+			if(data.bbtype==1)
+				str += "<a class='dropdown-item' onclick=bookmarkAction();> 북마크 삭제</a>"
+			$('#boardDropdownOption').append(str+"<a class='dropdown-item' href='#'>URL담아가기</a>");
+			alert(".ajax viewBoardOptions str->"+str);
+		}
+	});
+}
 </script>
 </head>
 
@@ -145,11 +158,13 @@
 				<a href="more" class="list-group-item list-group-item-action"> <img
 					src="/img/more.svg" width="15" height="15"> 더보기
 				</a> 
+				
 				<a href="bom" class="list-group-item list-group-item-action">
 					<button type="button" class="btn btn-outline-success">
 						<img src="/img/write.svg" width="15" height="15"> 글 쓰기
 					</button>
 				</a>
+				
 				
 				<div class="card">
 					<div class="card-body">
@@ -169,36 +184,78 @@
 		
 			<nav
 				class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
-				<button class="btn btn-success" id="menu-toggle" onclick="history.back(); return false;">←</button>
+				<button class="btn btn-success" id="menu-toggle" onclick="history.back()">←</button>
 			</nav>
-			<!--
-			<div class="alert alert-success" role="alert">
-				<a href="#" class="alert-link">좋아요</a>를 누르셨습니다.
-			</div>
-			-->
-			
+						
 			<div class="container-fluid">
-				<p>
+				<!-- 단일 게시글 내용 출력 -->
 				<div class="card">
-					<div class="card-header">글쓰기</div>
 					<div class="card-body">
-						<div class="form-group">
-							<textarea class="form-control" id="exampleFormControlTextarea1"
-								rows="3"></textarea>
+						<button type="button" class="btn btn-light float-right dropdown-toggle caret-off">⋯</button>
+							<div class="dropdown-menu">
+									<%-- <c:if test="${tl_element.loginUcode == user.ucode }">
+											<a class="dropdown-item" href="#">봄 삭제</a>
+									</c:if> --%>
+									<a class="dropdown-item" href="#">봄 신고</a>
+									<a class="dropdown-item" href="#">봄 분석</a>
+							</div>
+						<img src="<%=context %>/profile_image/${board.uimage }" alt="no_image" class="rounded-circle" width="50"
+							width="50"> <a class="card-title text-dark">${board.unickName }</a>
+						 <a class="card-subtitle mb-2 text-muted">@${board.uatid }</a>		
+						 <a	class="card-subtitle mb-2 text-muted">${board.bregDate }</a>
+							 <p class="card-text" style="margin-top: 10px;">${board.bcontent }</p>
+							 <c:if test="${board.battach!=null }">
+							 	<c:if test="${board.battachType=='image'}">
+							 		<img class="img-thumnail" width="300" src="<%=context %>/image/${board.battachSrc}"/>
+							 	</c:if>
+							 	<c:if test="${board.battachType=='video'}">
+							 		<video controls width="300">
+							 			<source  src="<%=context %>/video/${board.battachSrc}" type="video/mp4">
+							 			<source  src="<%=context %>/video/${board.battachSrc}" type="video/webm">
+							 			해당 브라우저에는 지원하지 않는 비디오입니다.
+							 		</video>
+							 	</c:if>
+							 </c:if>
+						<div align="center">
+							<div class="btn-group col-md-12" role="group"
+								aria-label="Button group with nested dropdown">
+								<button type="button" class="btn btn-secondary mr-3 btn-light"
+									data-toggle="tooltip" data-placement="top" title="답글 ">
+									<img src="/img/speech-bubble.svg" width="20" height="20"> ${board.breplyCount }
+								</button>
+								<button type="button" class="btn btn-secondary btn-light mr-3"
+									data-toggle="tooltip" data-placement="top" title="스크랩 or 인용">
+									<img src="/img/bring.svg" width="20" height="20"> ${board.bquoteCount }
+								</button>
+								<button id="likeBtn" type="button" class="btn btn-secondary btn-light mr-3"
+									data-toggle="tooltip" data-placement="top" title="좋아요" onclick="clickLikeBtn1(${board.bcode});">
+									<c:if test="${board.ltype == 0 || board.ltype == null }">
+										<img src="/img/heart.svg" width="20" height="20"> ${board.blikeCount }
+									</c:if>
+									<c:if test="${board.ltype == 1 }">
+										<img src="/img/red_heart.svg" width="20" height="20"> ${board.blikeCount }
+									</c:if>
+								</button>
+								<button type="button"
+									class="btn btn-secondary btn-light mr-3 dropdown-toggle caret-off"
+									data-toggle="dropdown" aria-haspopup="true"
+									aria-expanded="false">
+									<img src="/img/share.svg" width="20" height="20">
+								</button>
+								<div class="dropdown-menu">
+									<a class="dropdown-item" href="#">북마크 추가/삭제</a>
+									<a class="dropdown-item" href="#">URL담아가기</a>
+								</div>
+							</div>
 						</div>
-						<div class="btn-group" role="group" aria-label="Basic example">
-							<button type="button" class="btn btn-outline-secondary">미디어</button>
-							<button type="button" class="btn btn-outline-secondary">GIF</button>
-							<button type="button" class="btn btn-outline-secondary">투표</button>
-							<button type="button" class="btn btn-outline-secondary">예약하기</button>
-						</div>
-						<button type="submit" class="btn btn-success float-right">등록</button>
+						
 					</div>
 				</div>
-				<!--글 정렬-->
-				<c:forEach var="tl_element" items="${tl_list }" varStatus="status">
+				
+				<!-- 단일 게시글 댓글 내용 출력 -->
+				<c:forEach var="reply" items="${replylist }" varStatus="status">
 					<div class="card">
-						<div class="card-body" id="singleBoard" onclick="goSingleBoard(${tl_element.bcode},${status.index });">
+						<div class="card-body" id="singleBoard" onclick="goSingleBoard(${reply.bcode},${status.index });">
 							<button type="button" class="btn btn-light dropdown-toggle caret-off float-right">⋯</button>
 							<div class="dropdown-menu">
 										<%-- <c:if test="${tl_element.loginUcode == user.ucode }">
@@ -207,19 +264,19 @@
 										<a class="dropdown-item" href="#">봄 신고</a>
 										<a class="dropdown-item" href="#">봄 분석</a>
 							</div>
-							<img src="<%=context %>/profile_image/${tl_element.uimage }" alt="no_image" class="rounded-circle" width="50"
-								width="50"> <a class="card-title text-dark">${tl_element.unickName }</a>
-								 <a class="card-subtitle mb-2 text-muted">@${tl_element.uatid }</a>		
-								 <a	class="card-subtitle mb-2 text-muted">${tl_element.bregDate }</a>
-								 <p class="card-text" style="margin-top:10px;" onclick="goSingleBoard(${tl_element.bcode}, ${tl_element_ucode});">${tl_element.bcontent }</p>
-								 <c:if test="${tl_element.battach!=null }">
-								 	<c:if test="${tl_element.battachType=='image'}">
-								 		<img class="img-thumnail" width="300" src="<%=context %>/image/${tl_element.battachSrc}"/>
+							<img src="<%=context %>/profile_image/${reply.uimage }" alt="no_image" class="rounded-circle" width="50"
+								width="50"> <a class="card-title text-dark">${reply.unickName }</a>
+								 <a class="card-subtitle mb-2 text-muted">@${reply.uatid }</a>		
+								 <a	class="card-subtitle mb-2 text-muted">${reply.bregDate }</a>
+								 <p class="card-text" style="margin-top:10px;" onclick="goSingleBoard(${reply.bcode}, ${reply_ucode});">${reply.bcontent }</p>
+								 <c:if test="${reply.battach!=null }">
+								 	<c:if test="${reply.battachType=='image'}">
+								 		<img class="img-thumnail" width="300" src="<%=context %>/image/${reply.battachSrc}"/>
 								 	</c:if>
-								 	<c:if test="${tl_element.battachType=='video'}">
+								 	<c:if test="${reply.battachType=='video'}">
 								 		<video controls width="300">
-								 			<source  src="<%=context %>/video/${tl_element.battachSrc}" type="video/mp4">
-								 			<source  src="<%=context %>/video/${tl_element.battachSrc}" type="video/webm">
+								 			<source  src="<%=context %>/video/${reply.battachSrc}" type="video/mp4">
+								 			<source  src="<%=context %>/video/${reply.battachSrc}" type="video/webm">
 								 			해당 브라우저에는 지원하지 않는 비디오입니다.
 								 		</video>
 								 	</c:if>
@@ -229,22 +286,22 @@
 									aria-label="Button group with nested dropdown">
 									<button type="button" class="btn btn-secondary mr-3 btn-light"
 										data-toggle="tooltip" data-placement="top" title="답글 ">
-										<img src="/img/speech-bubble.svg" width="20" height="20"> ${tl_element.breplyCount }
+										<img src="/img/speech-bubble.svg" width="20" height="20"> ${reply.breplyCount }
 									</button>
 									<button type="button" class="btn btn-secondary btn-light mr-3"
 										data-toggle="tooltip" data-placement="top" title="스크랩 or 인용">
-										<img src="/img/bring.svg" width="20" height="20"> ${tl_element.bquoteCount }
+										<img src="/img/bring.svg" width="20" height="20"> ${reply.bquoteCount }
 									</button>
 									
 									
 									<button id="likeBtn${status.index }" type="button" class="btn btn-secondary btn-light mr-3"
-										data-toggle="tooltip" data-placement="top" title="좋아요" onclick="clickLikeBtn(${tl_element.bcode},${status.index }); return false;">
+										data-toggle="tooltip" data-placement="top" title="좋아요" onclick="clickLikeBtn2(${reply.bcode},${status.index }); return false;">
 										
-										<c:if test="${tl_element.ltype == 0 || tl_element.ltype == null }">
-											<img src="/img/heart.svg" width="20" height="20"> ${tl_element.blikeCount }
+										<c:if test="${reply.ltype == 0 || reply.ltype == null }">
+											<img src="/img/heart.svg" width="20" height="20"> ${reply.blikeCount }
 										</c:if>
-										<c:if test="${tl_element.ltype == 1 }">
-											<img src="/img/red_heart.svg" width="20" height="20"> ${tl_element.blikeCount }
+										<c:if test="${reply.ltype == 1 }">
+											<img src="/img/red_heart.svg" width="20" height="20"> ${reply.blikeCount }
 										</c:if>
 										
 									</button>
@@ -258,10 +315,10 @@
 									<!-- ajax -->
 									<div class="dropdown-menu" id="boardDropdownOption${status.index }">
 										<%-- 
-										<c:if test="${tl_element.bbtype==1 }">
+										<c:if test="${reply.bbtype==1 }">
 											<a class="dropdown-item" href="#">북마크 삭제</a>
 										</c:if>
-										<c:if test="${tl_element.bbtype==0 || tl_element.bbtype==null}">
+										<c:if test="${reply.bbtype==0 || reply.bbtype==null}">
 											<a class="dropdown-item" href="#">북마크 추가</a>
 										</c:if>
 											<a class="dropdown-item" href="#">URL담아가기</a>
@@ -272,6 +329,7 @@
 						</div>
 					</div>
 				</c:forEach>
+				
 			</div>
 		</div>
 		<!-- /#page-content-wrapper -->
@@ -311,7 +369,7 @@
 								<c:forEach var="justFollowMe" items="${suggestFlist2 }">
 									<div class="card">
 										<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
-											<img src="${resourcePath }/profile_image/${justFollowMe.uimage}" class="rounded-circle" width="20"
+											<img src="/img/profile_image/${justFollowMe.uimage}" class="rounded-circle" width="20"
 												height="20">
 												<a class="card-title text-dark">${justFollowMe.unickName}</a>
 												<a class="card-subtitle mb-2 text-muted">@${justFollowMe.uatid}</a>

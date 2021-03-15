@@ -21,4 +21,16 @@ public class BoardServiceImpl implements BoardService {
 		return bdlist;
 	}
 
+	@Override
+	public Board getSingleBoard(Board board) {
+		System.out.println("[iron] BoardServiceImpl getSingleBoard start...");
+		return bd.getSingleBoard(board);
+	}
+
+	@Override
+	public List<Board> getReplyList(int bcode) {
+		System.out.println("[iron] BoardServiceImpl getReplyList start...");
+		return bd.getReplyList(bcode);
+	}
+
 }
