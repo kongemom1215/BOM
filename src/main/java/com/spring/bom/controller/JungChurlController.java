@@ -58,6 +58,7 @@ public class JungChurlController {
 		User_Info user = us.getLoginUserInfo(21); // DB에서 회원코드 21인 회원 정보 가져오기. 필요한것만!
 		session.setAttribute("user", user); // Session에 user 데이터 저장
 		System.out.println("[JungChurlController] Result : " + user + " -> us.getLoginUserInfo(21)");
+		
 		/*
 		 * //업로드 파일경로 세션처리 String resourcePath =
 		 * request.getSession().getServletContext().getRealPath("");
@@ -81,6 +82,7 @@ public class JungChurlController {
 						+ bdlist.get(i).getBattachSrc());
 			}
 		}
+		
 		System.out.println("[JungChurlController] Setting Battach Type and Src -> done!!!");
 
 		model.addAttribute("tl_list_size", bdlist.size());
@@ -196,7 +198,6 @@ public class JungChurlController {
 		model.addAttribute("board", board);
 		
 		//해당 댓글 가져오기
-		
 		List<Board> replylist = bs.getReplyList(Integer.parseInt(bcode));
 		System.out.println("[JungChurlController] Result : listSize is " + replylist.size()
 				+ " -> bs.getTimelineBoard(user.getUcode()).size()");
@@ -227,15 +228,33 @@ public class JungChurlController {
 		// 실시간 해시태그 순위
 		System.out.println("[JungChurlController] Do -> hts.getHashTagRanking()");
 		List<HashTag> hashtagList = hs.getHashTagRanking();
+		
 		for (int i = 0; i < hashtagList.size(); i++)
 			hashtagList.get(i).setHrank(i + 1);
+		
 		model.addAttribute("tag_list", hashtagList);
 
 		return "iron/singleboard";
 	}
 
 	@GetMapping(value = "iron/profile")
-	public String goProfile(Model model) {
+	public String goProfile(@RequestParam String uatid, Model model, HttpSession session) {
+		System.out.println("[JungChurlController] goProfile start...");
+		//user - 세션에 존재하는 로그인 유저의 정보
+		User_Info user = (User_Info)session.getAttribute("user");
+		//someone - param uatid에 대칭되는 유저
+		User_Info someone = new User_Info();
+		someone.setUatid(uatid);
+		//someone 에 uatid 유저정보 저장 -> 저장 정보 : 
+		someone = us.getUserInfoUatid(someone);
+		
+		//uatid가 만약 존재하지 않다면 profile.jsp에서 존재하지 않는다고 출력한 뒤 login 중인 유저의 프로필 정보를 보여주자
+		
+		
+		model.addAttribute("user", user);
+		model.addAttribute("someone",someone);
+		
+		
 		return "iron/profile";
 	}
 }

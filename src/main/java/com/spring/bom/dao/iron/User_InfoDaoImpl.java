@@ -19,5 +19,14 @@ public class User_InfoDaoImpl implements User_InfoDao {
 		else System.out.println("[iron] User_InfoDaoImpl getLoginUserInfo -> exist!!");
 		return user;
 	}
+
+	@Override
+	public User_Info getUserInfoUatid(User_Info user) {
+		System.out.println("[iron] User_InfoDaoImpl getUserInfoUatid start...");
+		user = session.selectOne("getUserInfoUatid",user);
+		if(user.getUnickName()==null) System.out.println("[iron] User_InfoDaoImpl getLoginUserInfo -> null;;");
+		else System.out.println("[iron] User_InfoDaoImpl getLoginUserInfo -> exist!!");
+		return user;
+	}
 	
 }

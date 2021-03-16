@@ -84,13 +84,13 @@ function clickLikeBtn2(bbcode, bindex){
 		dataType:'json',
 		success : function(data){
 			var str='';
-			$('#likeBtn'+index).empty();
+			$('#likeBtn2'+index).empty();
 			if(data.ltype==0||data.ltype==null)
 				str += "<img src='/img/heart.svg' width='20' height='20'> " + data.likeCount
 			if(data.ltype==1)
 				str+= "<img src='/img/red_heart.svg' width='20' height='20'> "+ data.likeCount
-			$('#likeBtn'+index).append(str);
-			alert(".ajax clickLikeBtn str->"+str);
+			$('#likeBtn2'+index).append(str);
+			alert(".ajax clickLikeBtn2 str->"+str);
 		}
 	});
 }
@@ -294,7 +294,7 @@ function viewBoardOptions(bbcode,bindex){
 									</button>
 									
 									
-									<button id="likeBtn${status.index }" type="button" class="btn btn-secondary btn-light mr-3"
+									<button id="likeBtn2${status.index }" type="button" class="btn btn-secondary btn-light mr-3"
 										data-toggle="tooltip" data-placement="top" title="좋아요" onclick="clickLikeBtn2(${reply.bcode},${status.index }); return false;">
 										
 										<c:if test="${reply.ltype == 0 || reply.ltype == null }">

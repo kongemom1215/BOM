@@ -21,4 +21,14 @@ public class User_InfoServiceImpl implements User_InfoService {
 		return user;
 	}
 
+	@Override
+	public User_Info getUserInfoUatid(User_Info user) {
+		System.out.println("[iron] User_InfoServiceImpl getUserInfoUatid start...");
+		user = ud.getUserInfoUatid(user);
+		if(user.getUnickName()==null) System.out.println("[iron] ud.getUserInfoUatid -> null;;");
+		else System.out.println("[iron] ud.getLoginUserInfo -> exist!! -> "+user.getUcode()+user.getUnickName()
+		);
+		return user;
+	}
+
 }

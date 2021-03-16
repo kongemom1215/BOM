@@ -6,4 +6,6 @@ public interface User_InfoDao {
 
 	User_Info getLoginUserInfo(int ucode);
 
+	User_Info getUserInfoUatid(User_Info user);
+
 }

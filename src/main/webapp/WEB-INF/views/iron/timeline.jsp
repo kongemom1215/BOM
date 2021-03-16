@@ -138,7 +138,7 @@
 					src="/img/bookmark.svg" width="15" height="15"> 북마크
 				</a> 
 				
-				<a href="/iron/profile" class="list-group-item list-group-item-action"> <img
+				<a href="/iron/profile/uatid=${user.uatid }" class="list-group-item list-group-item-action"> <img
 					src="/img/user.svg" width="15" height="15"> 프로필
 				</a> 
 				
@@ -195,7 +195,9 @@
 						<button type="submit" class="btn btn-success float-right">등록</button>
 					</div>
 				</div>
+				
 				<!--글 정렬-->
+				
 				<c:forEach var="tl_element" items="${tl_list }" varStatus="status">
 					<div class="card">
 						<div class="card-body" id="singleBoard" onclick="goSingleBoard(${tl_element.bcode},${status.index });">
@@ -211,7 +213,13 @@
 								width="50"> <a class="card-title text-dark">${tl_element.unickName }</a>
 								 <a class="card-subtitle mb-2 text-muted">@${tl_element.uatid }</a>		
 								 <a	class="card-subtitle mb-2 text-muted">${tl_element.bregDate }</a>
-								 <p class="card-text" style="margin-top:10px;" onclick="goSingleBoard(${tl_element.bcode}, ${tl_element_ucode});">${tl_element.bcontent }</p>
+								 <p class="card-text" style="margin-top:10px;" onclick="goSingleBoard(${tl_element.bcode}, ${tl_element_ucode});">${tl_element.bcontent }
+								 
+								 <c:if test="${btype=='quote' }">
+								 	<>
+								 </c:if>
+								 
+								 </p>
 								 <c:if test="${tl_element.battach!=null }">
 								 	<c:if test="${tl_element.battachType=='image'}">
 								 		<img class="img-thumnail" width="300" src="<%=context %>/image/${tl_element.battachSrc}"/>

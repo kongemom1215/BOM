@@ -13,31 +13,31 @@
      		when trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))*24) >=1 then trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))*24)||'시간 전'
      		when trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))*24*60) >=1 then trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))*24*60)||'분 전'
      		when trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))*24*60*60) >=0 then trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))*24*60*60)||'초 전'
-    	  end as bregDate, ltype, bbtype, ldate, bdate, btype, orderData
+    	  end as bregDate, ltype, bbtype, ldate, bdate, btype, orderData, bstate
 		FROM
      	(
       		select
            		 ui.ucode loginUcode, ui.uimage uimage, b.ucode ucode,
            		 ui.uatid uatid, ui.unickname unickName, b.bcode bcode, b.bcontent bcontent, b.bregDate bregDate, b.breplyCount breplyCount, b.bquoteCount bquoteCount, b.blikeCount blikeCount, b.battach battach,
-                 lb.ltype ltype, lb.bbtype bbtype, lb.ldate ldate, lb.bdate bdate, b.btype btype, b.bregDate orderData
+                 lb.ltype ltype, lb.bbtype bbtype, lb.ldate ldate, lb.bdate bdate, b.btype btype, b.bregDate orderData, b.bstate bstate
           	from
             	 user_info ui, board b, follow f, like_bookmark lb
           	where f.ucode = #{ucode}
             and f.fopcode = b.ucode
             and b.bcode = lb.bcode(+)
             and b.ucode = ui.ucode
-            and b.btype = 'normal'
+            and b.bstate = 1
        UNION
        		select
             	 ui.ucode loginUcode, ui.uimage uimage, b.ucode ucode,
             	 ui.uatid uatid, ui.unickname unickName, b.bcode bcode, b.bcontent bcontent, b.bregDate bregDate, b.breplyCount breplyCount, b.bquoteCount bquoteCount, b.blikeCount blikeCount, b.battach battach,
-              	 lb.ltype ltype, lb.bbtype bbtype, lb.ldate ldate, lb.bdate bdate, b.btype btype, b.bregDate orderData
+              	 lb.ltype ltype, lb.bbtype bbtype, lb.ldate ldate, lb.bdate bdate, b.btype btype, b.bregDate orderData, b.bstate bstate
             from
             	 user_info ui, board b, like_bookmark lb
           	where ui.ucode = #{ucode}
                and b.bcode = lb.bcode(+)
                and b.ucode = ui.ucode
-               and b.btype = 'normal'
+               and b.bstate = 1 
       	)
       	order by orderData desc
 		

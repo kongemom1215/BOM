@@ -54,6 +54,6 @@ public class BoardDaoImpl implements BoardDao {
 		System.out.println("[iron] replylist.size() -> " + list.size());
 		return list;
 	}
-	
 
+	
 }

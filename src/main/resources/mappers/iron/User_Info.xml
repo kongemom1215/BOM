@@ -3,7 +3,18 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.spring.bom.dao.iron.User_InfoDao">
-	<select id="loginInfo" parameterType="int" resultType="Iron_User_Info">
+	<select id="loginInfo" parameterType="int"
+		resultType="Iron_User_Info">
 		select * from user_info where ucode = #{ucode}
+	</select>
+	<select id="getUserInfoUatid" parameterType="Iron_User_Info"
+		resultType="Iron_User_Info">
+		select ui.ucode ucode, ui.uemail uemail, ui.unickName unickName,
+		ui.ubirth ubirth, ui.ugender ugender, ui.unation unation, ui.uchat, ui.ualarm ualarm,
+		ui.uprivate uprivate, ui.uregDate uregDate, ui.uintro uintro, ui.ubg ubg, ui.uprofileLink, ui.ustate ustate,
+		ui.ureportCount ureportCount, ui.uonline uonline, count(f.ucode) followCount
+		from user_info ui, follow f,
+		where ui.uatid = #{uatid}
+		and ui.ucode = f.ucode
 	</select>
 </mapper>

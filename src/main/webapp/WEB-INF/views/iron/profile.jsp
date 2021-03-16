@@ -11,7 +11,7 @@
 	content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="description" content="">
 <meta name="author" content="">
-
+<% String context = request.getContextPath(); %>
 <title>BOM_PROFILE</title>
 
 <!-- Bootstrap core CSS -->
@@ -41,7 +41,61 @@
 }
 </style>
 </head>
-
+<!-- Like Ajax Fuction -->
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+<script type="text/javascript" >
+	
+	function goSingleBoard(bbcode,bindex){
+		alert(bbcode+'로 이동합니다.');
+		location.href = 'singleBoard?bcode='+bbcode;
+	}
+	
+	function clickLikeBtn(bbcode,btnIndex){
+		event.stopPropagation();
+		var index = btnIndex;
+		var bcode = bbcode;
+		var msg = '게시글['+bcode+']에 좋아요를 눌렀습니다!';
+		alert(msg);
+		$.ajax({
+			url : "<%=context%>/iron/AjaxLikeAction",
+			data:{ bcode: bcode }, 
+			dataType:'json',
+			success : function(data){
+				var str='';
+				$('#likeBtn'+index).empty();
+				if(data.ltype==0||data.ltype==null)
+					str += "<img src='/img/heart.svg' width='20' height='20'> " + data.likeCount
+				if(data.ltype==1)
+					str+= "<img src='/img/red_heart.svg' width='20' height='20'> "+ data.likeCount
+				$('#likeBtn'+index).append(str);
+				alert(".ajax clickLikeBtn str->"+str);
+			}
+		});
+	}
+	
+	function viewBoardOptions(bbcode,bindex){
+		event.stopPropagation();
+		var index = bindex;
+		var bcode = bbcode;
+		var msg = '게시글['+bcode+']의 옵션을 눌렀습니다!';
+		alert(msg);
+		$.ajax({
+			url : "<%=context%>/iron/AjaxViewBoardOptions",
+			data:{ bcode: bcode }, 
+			dataType:'json',
+			success : function(data){
+				var str='';
+				$('#boardDropdownOption'+index).empty();
+				if(data.bbtype==0||data.bbtype==null)
+					str += "<a class='dropdown-item' onclick=bookmarkAction();> 북마크추가</a>"
+				if(data.bbtype==1)
+					str += "<a class='dropdown-item' onclick=bookmarkAction();> 북마크 삭제</a>"
+				$('#boardDropdownOption'+index).append(str+"<a class='dropdown-item' href='#'>URL담아가기</a>");
+				alert(".ajax viewBoardOptions str->"+str);
+			}
+		});
+	}
+</script>
 <body>
 
 	<div class="d-flex" id="wrapper">
@@ -79,7 +133,7 @@
 				
 				<a href="#" class="list-group-item list-group-item-action"> <img
 					src="/img/more.svg" width="15" height="15"> 더보기
-				</a> 
+				</a>
 				
 				<a href="#" class="list-group-item list-group-item-action">
 					<button type="button" class="btn btn-outline-success">
@@ -88,9 +142,9 @@
 				</a>
 				<div class="card">
 					<div class="card-body">
-						<img src="/img/teemo.jpg" class="rounded-circle" width="50"
-							width="50"> <a class="card-title text-dark">닉네임</a> <a
-							class="card-subtitle mb-2 text-muted">@atid</a>
+						<img src="<%=context %>/image/${user.uimage}" class="rounded-circle" width="50"
+							width="50"> <a class="card-title text-dark">${user.uimage }</a> <a
+							class="card-subtitle mb-2 text-muted">@${user.uatid}</a>
 					</div>
 					<button type="button" class="btn btn-success">로그아웃</button>
 				</div>
@@ -105,75 +159,108 @@
 				class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
 				<button class="btn btn-success" id="menu-toggle">←</button>
 			</nav>
-			
+			<!-- 이미지 출력!! -->
 			<div class="container-fluid">
-				<p>
-				<div class="card">
-					<div class="card-header">글쓰기</div>
-					<div class="card-body">
-						<div class="form-group">
-							<textarea class="form-control" id="exampleFormControlTextarea1"
-								rows="3"></textarea>
-						</div>
-						<div class="btn-group" role="group" aria-label="Basic example">
-							<button type="button" class="btn btn-outline-secondary">미디어</button>
-							<button type="button" class="btn btn-outline-secondary">GIF</button>
-							<button type="button" class="btn btn-outline-secondary">투표</button>
-							<button type="button" class="btn btn-outline-secondary">예약하기</button>
-						</div>
-						<button type="submit" class="btn btn-success float-right">등록</button>
-					</div>
+				<div>background</div>
+				<div class="card" style="width: 18rem;">
+					<img src="<%=context %>/profile_image/${someone.uimage}" class="card-img-top rounded-circle" alt="/img/user.svg">
+					  <div class="card-body">
+						 <pre class="card-text">
+						 	${someone.nickName }
+						 	@${someone.uatid } <c:if test="${someone.ucode!=ucode and someone.follow!=null }">나를 팔로우합니다.</c:if>
+						 	<c:if test="${someone.intro!=null }">${someone.intro}</c:if>
+						 	가입일:${user.uregDate }
+						 	<a href="follow/follow?ucode=${someone.ucode}">${someone.followCount} 팔로우 중</a> <a href="follow/follower?ucode=${someone.ucode}">${user.followerCount} 팔로워</a>
+						 </pre>
+					  </div>
 				</div>
-				
+			
 				<!-- 4가지 -->
-				
-				<!-- 내 글 정렬-->
-				<c:forEach begin="1" end="10" step="1">
-					<div class="card">
-						<div class="card-body">
-							<button type="button" class="btn btn-light float-right">⋯</button>
-							<img src="/img/teemo.jpg" class="rounded-circle" width="50"
-								width="50"> <a class="card-title text-dark">닉네임</a> <a
-								class="card-subtitle mb-2 text-muted">@atid</a> <a
-								class="card-subtitle mb-2 text-muted">작성시간</a> <a href="#"
-								class="card-text" style="margin-top: 10px;">글내용 블라블라글내용
-								블라블라글내용 블라블라글내용 블라블라글내용 블라블라글내용 블라블라글내용 블라블라글내용 블라블라 글내용 블라블라글내용
-								블라블라글내용 블라블라글내용 블라블라글내용 블라블라글내용 블라블라글내용 블라블라글내용 블라블라 글내용 블라블라글내용
-								블라블라글내용 블라블라글내용 블라블라글내용 블라블라글내용 블라블라글내용 블라블라글내용 블라블라 글내용 블라블라글내용
-								블라블라글내용 블라블라글내용 블라블라글내용 블라블라글내용 블라블라글내용 블라블라글내용 블라블라</a>
-							<div align="center">
-								<div class="btn-group col-md-12" role="group"
-									aria-label="Button group with nested dropdown">
-									<button type="button" class="btn btn-secondary mr-3 btn-light"
-										data-toggle="tooltip" data-placement="top" title="답글">
-										<img src="/img/speech-bubble.svg" width="20" height="20">
-									</button>
-									<button type="button" class="btn btn-secondary btn-light mr-3"
-										data-toggle="tooltip" data-placement="top" title="스크랩 or 인용">
-										<img src="/img/bring.svg" width="20" height="20">
-									</button>
-									<button type="button" class="btn btn-secondary btn-light mr-3"
-										data-toggle="tooltip" data-placement="top" title="좋아요">
-										<img src="/img/heart.svg" width="20" height="20">
-									</button>
-									<button type="button"
-										class="btn btn-secondary btn-light mr-3 dropdown-toggle caret-off"
-										data-toggle="dropdown" aria-haspopup="true"
-										aria-expanded="false">
-										<img src="/img/share.svg" width="20" height="20">
-									</button>
-									<div class="dropdown-menu">
-										<a class="dropdown-item" href="#">북마크 추가/삭제</a> <a
-											class="dropdown-item" href="#">URL담아가기</a>
+				<nav
+					class="navbar navbar-expand-lg navbar-light bg-light border-bottom fixed-top"
+					style="left: 241px; right: 241px; margin-top: 50px;  z-index: 3;  padding-bottom: 0px;">
+				<ul class="nav nav-tabs nav-justified col-md-20" id="myTab"
+					role="tablist" style="width: 800px;">
+					<li class="nav-item mr-5" role="presentation"><a
+						class="nav-link active" id="home-tab" data-toggle="tab"
+						href="#mybom" role="tab" aria-controls="fame" aria-selected="true">봄</a></li>
+
+					<li class="nav-item mr-5" role="presentation"><a
+						class="nav-link" id="profile-tab" data-toggle="tab" href="#user"
+						role="tab" aria-controls="user" aria-selected="false">답글</a></li>
+
+					<li class="nav-item mr-5" role="presentation"><a
+						class="nav-link" id="contact-tab" data-toggle="tab" href="#new"
+						role="tab" aria-controls="new" aria-selected="false">미디어</a></li>
+
+					<li class="nav-item mr-5" role="presentation"><a
+						class="nav-link" id="contact-tab" data-toggle="tab"	href="#image" 
+						role="tab" aria-controls="image" aria-selected="false">좋아요</a></li>
+
+				</ul>
+			</nav>
+			<p>
+				<!--글 정렬-->
+			<%-- 	
+			<div class="tab-content" id="myTabContent">
+				<!-- 내글 -->
+				<div class="tab-pane fade show active" id="mybom" role="tabpanel"
+					aria-labelledby="home-tab">
+					<c:if test="${blist.size() == 0 }">
+						작성된 봄이 없습니다;;
+					</c:if>
+					<c:forEach var="board" items="${blist }">
+						<div class="card">
+							<div class="card-body">
+								<button type="button" class="btn btn-light float-right">⋯</button>
+								<img src="<%=context %>/profile-image/${board.uimage }.jpg" class="rounded-circle" width="50"
+									width="50"> <a class="card-title text-dark">${board.nickName}</a> <a
+									class="card-subtitle mb-2 text-muted">@${board.uatid }</a> <a
+									class="card-subtitle mb-2 text-muted">${board.bregDate}</a> <a href="#"
+									class="card-text" style="margin-top: 10px;"></a>
+								<div align="center">
+									<div class="btn-group col-md-12" role="group"
+										aria-label="Button group with nested dropdown">
+										<button type="button" class="btn btn-secondary mr-3 btn-light"
+											data-toggle="tooltip" data-placement="top" title="답글">
+											<img src="/img/speech-bubble.svg" width="20" height="20">
+										</button>
+										<button type="button" class="btn btn-secondary btn-light mr-3"
+											data-toggle="tooltip" data-placement="top" title="스크랩 or 인용">
+											<img src="/img/bring.svg" width="20" height="20">
+										</button>
+										<button type="button" class="btn btn-secondary btn-light mr-3"
+											data-toggle="tooltip" data-placement="top" title="좋아요">
+											<img src="/img/heart.svg" width="20" height="20">
+										</button>
+										<button type="button"
+											class="btn btn-secondary btn-light mr-3 dropdown-toggle caret-off"
+											data-toggle="dropdown" aria-haspopup="true"
+											aria-expanded="false">
+											<img src="/img/share.svg" width="20" height="20">
+										</button>
+										<div class="dropdown-menu">
+											<a class="dropdown-item" href="#">북마크 추가/삭제</a> <a
+												class="dropdown-item" href="#">URL담아가기</a>
+										</div>
 									</div>
 								</div>
 							</div>
 						</div>
-					</div>
-				</c:forEach>
+					</c:forEach>
+				</div>
+			</div>		 --%>					
+				<!-- 내글 -->
 				
 			</div>
 		</div>
+		
+		<!-- 내 답글 -->
+		
+		<!-- 미디어글 -->
+		
+		<!-- 좋아요 글 -->
+		
 		<!-- /#page-content-wrapper -->
 
 		<!-- 오른쪽 사이드바 -->
