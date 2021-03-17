@@ -36,12 +36,17 @@
 			alias="User" />
 
 		<!-- coffee -->
-		<typeAlias type="com.spring.bom.model.coffee.CoffeeUser_info"
+		<typeAlias
+			type="com.spring.bom.model.coffee.CoffeeUser_info"
 			alias="CoffeeUser_info" />
 		<typeAlias type="com.spring.bom.model.coffee.BoardUser_info"
 			alias="CoffeeBoardUser_info" />
 		<typeAlias
 			type="com.spring.bom.model.coffee.ReportUser_infoBoard"
 			alias="CoffeeReportUser_infoBoard" />
+
+		<!-- hoon -->
+		<typeAlias type="com.spring.bom.model.hoon.Junghun"
+			alias="Junghun" />
 	</typeAliases>
 </configuration>

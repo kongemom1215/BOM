@@ -481,7 +481,7 @@ background: white;}
 			<div class="list-group list-group-flush">
 				<a href="/iron/timeline" class="list-group-item list-group-item-action"> <img
 					src="/img/home.svg" width="15" height="15"> 타임라인
-				</a> <a href="#" class="list-group-item list-group-item-action"> <img
+				</a> <a href="/hoon/explore" class="list-group-item list-group-item-action"> <img
 					src="/img/search.svg" width="15" height="15"> 검색하기
 				</a> <a href="#" class="list-group-item list-group-item-action"> <img
 					src="/img/bell.svg" width="15" height="15"> 알림 <span

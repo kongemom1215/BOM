@@ -181,7 +181,7 @@ label {
 					src="/img/home.svg" width="15" height="15"> 타임라인
 				</a> 
 				
-				<a href="search" class="list-group-item list-group-item-action"> <img
+				<a href="/hoon/explore" class="list-group-item list-group-item-action"> <img
 					src="/img/search.svg" width="15" height="15"> 검색하기
 				</a> 
 				

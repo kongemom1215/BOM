@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.bom.model.Junghun">
+	<!-- 글검색 -->
+	<select id="searchfame" parameterType="Junghun"
+		resultType="Junghun">		
+		
+		select b.bcontent , b.blikecount ,b.breplycount
+		,b.bquotecount , u.uatid , u.unickname ,
+		b.ucode , b.battach ,b.bcode,
+		case when trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))/365) >=1 then trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))/365)||'년 전'
+     		when trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))/31) >=1 then trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))/31)||'달 전'
+     		when trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))) >=1 then trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss')))||'일 전'
+     		when trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))*24) >=1 then trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))*24)||'시간 전'
+     		when trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))*24*60) >=1 then trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))*24*60)||'분 전'
+     		when trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))*24*60*60) >=0 then trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))*24*60*60)||'초 전'
+    	  end as bregdate
+		from board b, user_info u <!-- like.book 조인 -->
+		where b.uCode = u.uCode
+		and
+		b.bcontent
+		like
+		'%'||#{search}||'%' 
+		and 
+		b.ucode not in(select bopcode from block where
+		ucode=${loginUcode} and bopcode is not null) <!-- 유저코드 -->
+		ORDER BY b.blikecount DESC
+		
+		
+	</select>
+	<select id="searchblock" parameterType="Junghun" resultType="Junghun">
+		select bword
+		from block
+		where ucode = ${loginUcode}
+		and bword is not null
+	</select>
+
+	<!-- 검색시 검색어저장 -->
+	<update id="searchData" parameterType="Junghun">
+		merge into search
+		USING dual
+		on (search='${search}' and
+		UCODE=${loginUcode})
+		when MATCHED THEN
+		UPDATE SET 
+		scount = scount+1,
+		stime = to_char(sysdate,'yy/mm/dd hh24:mi:ss')
+		WHEN
+		NOT MATCHED THEN
+		INSERT (search, UCODE,
+		SAGE, STYPE, STIME,
+		SRECORD,SCOUNT)
+		VALUES (trim('${search}'),${loginUcode},10,
+		<choose>
+			<when test='search.contains("#")'>'hash'</when>
+			<when test='search.contains("@")'>'user'</when>
+			<otherwise>'word'</otherwise>
+		</choose>
+		,to_char(sysdate,'yy/mm/dd hh24:mi:ss'),1,0)
+	</update>
+
+	<!-- 회원검색 -->
+	<select id="searchuser" parameterType="Junghun"
+		resultType="Junghun">
+		select uatid , unickname , uintro
+		from user_info
+		where (
+		uatid like
+		'%'||#{search}||'%' or unickname like '%'||#{search}||'%')
+		and ucode not in (select bopcode from block where ucode=${loginUcode} and bopcode is not null)
+	</select>
+
+	<!-- 최신글검색 -->
+	<select id="searchnew" parameterType="Junghun"
+		resultType="Junghun">
+		select b.bcontent , b.blikecount ,b.breplycount
+		,b.bquotecount , u.uatid , u.unickname ,
+		b.ucode , b.battach ,
+		case when trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))/365) >=1 then trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))/365)||'년 전'
+     		when trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))/31) >=1 then trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))/31)||'달 전'
+     		when trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))) >=1 then trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss')))||'일 전'
+     		when trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))*24) >=1 then trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))*24)||'시간 전'
+     		when trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))*24*60) >=1 then trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))*24*60)||'분 전'
+     		when trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))*24*60*60) >=0 then trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))*24*60*60)||'초 전'
+    	  end as bregdate
+		from board b,
+		user_info u
+		where b.uCode = u.uCode
+		and
+		b.bcontent
+		like
+		'%'||#{search}||'%' 
+		and 
+		b.ucode not in(select bopcode from block where
+		ucode=${loginUcode} and bopcode is not null) <!-- 유저코드 -->
+		ORDER BY bregdate DESC
+	</select>
+	
+	
+	<!-- explore 검색어순위 -->
+	<select id="searchcount" parameterType="Junghun"
+		resultType="Junghun">
+		<![CDATA[
+		SELECT search , count(*)
+		from search
+		where stime > to_char(sysdate,'YYYY/MM/DD')
+		GROUP by search
+		ORDER by count(*) desc
+		]]>
+	</select>
+
+	<!-- 해쉬태그 랜덤값 -->
+	<select id="searchHash" parameterType="Junghun"
+		resultType="Junghun">
+		<![CDATA[
+		select * from ( select * from search where search like '<'||'%' order by DBMS_RANDOM.RANDOM)
+		where rownum <10
+		and scount>3000
+		]]>
+	</select>
+
+	<!-- 해쉬태그 순위 -->
+	<select id="searchTrend" parameterType="Junghun"
+		resultType="Junghun">
+		<![CDATA[
+		select * from search
+		where search like '<'||'%'
+		ORDER BY
+		scount DESC
+		]]>
+	</select>
+
+	<!-- 검색기록 -->
+	<select id="searchkeyword" parameterType="int"
+		resultType="Junghun">
+		select search
+		from search
+		where ucode = ${loginUcode}
+		ORDER BY
+		stime DESC
+	</select>
+	<!-- 검색기록삭제 -->
+	<delete id="searchdelete" parameterType="int">
+		delete from search
+		where
+		ucode = #{uCode}
+	</delete>
+	
+	<!-- 좋아요  -->
+	<update id="searchlike" parameterType="Junghun" >
+		insert into like_bookmark(ucode, bcode, ltype, ldate) 
+         values(${loginUcode}, #{bCode}, '1', to_char(sysdate, 'yy/mm/dd hh24:mi:ss'))
+	</update>
+</mapper>
