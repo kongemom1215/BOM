@@ -1,0 +1,128 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="GodBoard">
+	<select id="JHgetReserveNum" parameterType="int" resultType="java.lang.String">
+		select count(*) from board where BSAVEORRSVD=1 and bregdate is not null and bregdate > to_char(sysdate, 'yy/mm/dd hh24:mi:ss') and ucode=#{ucode} and bstate=1
+	</select>
+	<select id="JHgetSaveNum" parameterType="int" resultType="java.lang.String">
+		select count(*) from board where BSAVEORRSVD=0 and bregdate is null and ucode=#{ucode} and bstate=1
+	</select>
+	<select id="JHgetReserveList" parameterType="GodBoard" resultType="GodBoard">
+		select * from board where BSAVEORRSVD=1 and bregdate is not null and bregdate > to_char(sysdate, 'yy/mm/dd hh24:mi:ss') and ucode=#{ucode} and bstate=1
+	</select>
+	<select id="JHgetSaveList" parameterType="GodBoard" resultType="GodBoard">
+		select * from board where BSAVEORRSVD=0 and bregdate is null and ucode=#{ucode} and bstate=1
+	</select>
+	<insert id="JHinsertSaveBoard">
+		<selectKey keyProperty="bcode" resultType="java.lang.Integer" order="BEFORE">
+			select board_bcode.nextval from dual
+		</selectKey>
+		insert into board
+			(bcode, ucode, bcontent, 
+			bregdate, btype,
+			banchor, bpermission, bbcode, battach, 
+			bvotecode, BSAVEORRSVD, 
+			blikecount, bexpcount, bjoincount, bstate,
+			breportcount, breplycount, bquotecount)
+		values
+			(#{bcode}, #{ucode}, #{bcontent}, 
+			null, #{btype},
+			#{banchor}, #{bpermission}, null, #{battach, jdbcType=VARCHAR},
+			null, 0,
+			0,0,0,1,
+			0,0,0)
+	</insert>
+	<insert id="JHinsertRsvdBoard">
+		<selectKey keyProperty="bcode" resultType="java.lang.Integer" order="BEFORE">
+			select board_bcode.nextval from dual
+		</selectKey>
+		insert into board
+			(bcode, ucode, bcontent, 
+			bregdate, btype,
+			banchor, bpermission, bbcode, battach, 
+			bvotecode, BSAVEORRSVD, 
+			blikecount, bexpcount, bjoincount, bstate,
+			breportcount, breplycount, bquotecount)
+		values
+			(#{bcode}, #{ucode}, #{bcontent}, 
+			#{bregdate}, #{btype},
+			#{banchor}, #{bpermission}, null, #{battach, jdbcType=VARCHAR},
+			null, 1,
+			0,0,0,1,
+			0,0,0)
+	</insert>
+	<insert id="JHinsertBoard">
+		<selectKey keyProperty="bcode" resultType="java.lang.Integer" order="BEFORE">
+			select board_bcode.nextval from dual
+		</selectKey>
+		insert into board
+			(bcode, ucode, bcontent, 
+			bregdate, btype,
+			banchor, bpermission, bbcode, battach, 
+			bvotecode, BSAVEORRSVD, 
+			blikecount, bexpcount, bjoincount, bstate,
+			breportcount, breplycount, bquotecount)
+		values
+			(#{bcode}, #{ucode}, #{bcontent}, 
+			to_char(sysdate, 'yy/mm/dd hh24:mi:ss'), #{btype},
+			#{banchor}, #{bpermission}, null, #{battach, jdbcType=VARCHAR},
+			null, null,
+			0,0,0,1,
+			0,0,0)
+	</insert>
+	<insert id="JHinsertVoteBoard">
+		<selectKey keyProperty="bcode" resultType="java.lang.Integer" order="BEFORE">
+			select board_bcode.nextval from dual
+		</selectKey>
+		insert into board
+			(bcode, ucode, bcontent, 
+			bregdate, btype,
+			banchor, bpermission, bbcode, battach, 
+			bvotecode, BSAVEORRSVD, 
+			blikecount, bexpcount, bjoincount, bstate,
+			breportcount, breplycount, bquotecount)
+		values
+			(#{bcode}, #{ucode}, #{bcontent}, 
+			to_char(sysdate, 'yy/mm/dd hh24:mi:ss'), #{btype},
+			#{banchor}, #{bpermission}, null, #{battach, jdbcType=VARCHAR},
+			#{bvotecode}, null,
+			0,0,0,1,
+			0,0,0)
+	</insert>
+	<select id="JHgetBoard" parameterType="int" resultType="GodBoard">
+		select * from board where bcode=#{bcode}
+	</select>
+	<update id="JHinsertSaveRsvdBoard1" parameterType="GodBoard">
+		update board set 
+			bcontent=#{bcontent}, 
+			bregdate=<if test="bregdate == null"> to_char(sysdate, 'yy/mm/dd hh24:mi:ss')</if>
+			<if test="bregdate != null">#{bregdate}</if>,
+			btype=#{btype},
+			banchor=#{banchor}, bpermission=#{bpermission}, BBCODE=null, 
+			battach=#{battach, jdbcType=VARCHAR}, 
+			bvotecode=null, BSAVEORRSVD=1, 
+			blikecount=0, bexpcount=0, bjoincount=0, bstate=1,
+			breportcount=0, breplycount=0, bquotecount=0
+		where bcode=#{savebcode}
+	</update>
+	<update id="JHinsertSaveRsvdBoard2" parameterType="GodBoard">
+		update board set 
+			bcontent=#{bcontent}, 
+			bregdate=<if test="bregdate == null"> to_char(sysdate, 'yy/mm/dd hh24:mi:ss')</if>
+			<if test="bregdate != null">#{bregdate}</if>,
+			btype=#{btype},
+			banchor=#{banchor}, bpermission=#{bpermission}, BBCODE=null, 
+			battach=#{battach, jdbcType=VARCHAR}, 
+			bvotecode=null, BSAVEORRSVD=null, 
+			blikecount=0, bexpcount=0, bjoincount=0, bstate=1,
+			breportcount=0, breplycount=0, bquotecount=0
+		where bcode=#{savebcode}
+	</update>
+	<update id="JHdeleteSaveWrite" parameterType="java.util.HashMap">
+			update board set
+				bstate=0
+			where bcode in
+		<foreach collection="arraylist" item="bcode" index="index" open="(" close=")" separator=","> 
+			#{bcode}
+		</foreach>
+	</update>
+</mapper>

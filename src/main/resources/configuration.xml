@@ -15,8 +15,17 @@
 			type="com.spring.bom.model.iron.HashTag" />
 		<typeAlias alias="Iron_Like_Bookmark"
 			type="com.spring.bom.model.iron.Like_Bookmark" />
+
 		<!-- bro -->
-		<typeAlias alias="user_info"
-			type="com.spring.bom.model.bro.user_info" />
+		<typeAlias type="com.spring.bom.model.bro.User_info"
+			alias="User_info" />
+		<typeAlias type="com.spring.bom.model.bro.Interest"
+			alias="Interest" />
+
+		<!-- god -->
+		<typeAlias type="com.spring.bom.model.god.JHBoard"
+			alias="GodBoard" />
+		<typeAlias type="com.spring.bom.model.god.JHVote"
+			alias="GodVote" />
 	</typeAliases>
 </configuration>

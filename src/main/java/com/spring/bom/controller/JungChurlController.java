@@ -48,16 +48,22 @@ public class JungChurlController {
 	private Like_BookmarkService lbs;
 
 	@GetMapping(value = "iron/timeline")
-	public String goTimeline(HttpServletRequest request, Model model) {
+	public String goTimeline(HttpServletRequest request,HttpSession session, Model model) {
 		// System.out.println("[JungChurlController]");
 		System.out.println("[JungChurlController] goTimeline start...");
-		HttpSession session = request.getSession();
-		System.out.println("[JungChurlController] Do -> us.getLoginUserInfo(21)");
+		User_Info user = new User_Info();
+		
+		//From BroController
+		int ucode = Integer.parseInt(session.getAttribute("ucode").toString());
+		System.out.println("session ucode ? -> "+ucode);
+		user.setUcode(ucode);
+	
+		System.out.println("[JungChurlController] Do -> us.getLoginUserInfo()");
 
 		// 임시 로그인 세팅
-		User_Info user = us.getLoginUserInfo(21); // DB에서 회원코드 21인 회원 정보 가져오기. 필요한것만!
+		user = us.getLoginUserInfo(ucode); // DB에서 회원코드 21인 회원 정보 가져오기. 필요한것만!
 		session.setAttribute("user", user); // Session에 user 데이터 저장
-		System.out.println("[JungChurlController] Result : " + user + " -> us.getLoginUserInfo(21)");
+		System.out.println("[JungChurlController] Result : " + user + " -> us.getLoginUserInfo()");
 		
 		/*
 		 * //업로드 파일경로 세션처리 String resourcePath =
@@ -108,6 +114,9 @@ public class JungChurlController {
 		for (int i = 0; i < hashtagList.size(); i++)
 			hashtagList.get(i).setHrank(i + 1);
 		model.addAttribute("tag_list", hashtagList);
+		
+		//For Context
+		model.addAttribute("context", request.getContextPath());
 		return "iron/timeline";
 	}
 

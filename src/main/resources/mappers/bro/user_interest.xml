@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Interest">
+<select id="uCode2" parameterType="Interest" resultType="int">
+select uCode
+ from ( select uCode from user_info order by rownum desc)
+ where ROWNUM=1
+
+</select>
+<insert id="interestValue" parameterType="Interest" >
+insert into interest (uCode, iCode)
+values (#{uCode}, #{iCode} )
+</insert>
+</mapper>

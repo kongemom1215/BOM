@@ -22,11 +22,14 @@
                  lb.ltype ltype, lb.bbtype bbtype, lb.ldate ldate, lb.bdate bdate, b.btype btype, b.bregDate orderData, b.bstate bstate
           	from
             	 user_info ui, board b, follow f, like_bookmark lb
-          	where f.ucode = #{ucode}
+            	 <![CDATA[
+            	 where f.ucode = #{ucode}
             and f.fopcode = b.ucode
             and b.bcode = lb.bcode(+)
             and b.ucode = ui.ucode
             and b.bstate = 1
+            and b.bregdate <= to_char(sysdate,'yy/mm/dd hh24:mi:ss')
+            	 ]]>
        UNION
        		select
             	 ui.ucode loginUcode, ui.uimage uimage, b.ucode ucode,
@@ -34,10 +37,13 @@
               	 lb.ltype ltype, lb.bbtype bbtype, lb.ldate ldate, lb.bdate bdate, b.btype btype, b.bregDate orderData, b.bstate bstate
             from
             	 user_info ui, board b, like_bookmark lb
-          	where ui.ucode = #{ucode}
+            	<![CDATA[
+            	where ui.ucode = #{ucode}
                and b.bcode = lb.bcode(+)
                and b.ucode = ui.ucode
-               and b.bstate = 1 
+               and b.bstate = 1
+               and b.bregdate <= to_char(sysdate,'yy/mm/dd hh24:mi:ss')
+            	]]>
       	)
       	order by orderData desc
 		
