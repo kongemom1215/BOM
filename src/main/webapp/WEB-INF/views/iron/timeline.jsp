@@ -202,7 +202,7 @@ label {
 					src="/img/user.svg" width="15" height="15"> 프로필
 				</a> 
 				
-				<a href="more" class="list-group-item list-group-item-action"> <img
+				<a href="/right/moreSee" class="list-group-item list-group-item-action"> <img
 					src="/img/more.svg" width="15" height="15"> 더보기
 				</a> 
 				

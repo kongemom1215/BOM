@@ -1,11 +1,6 @@
 package com.spring.bom.controller;
 
 
-
-
-
-
-
 import java.io.File;
 
 import java.util.List;
@@ -22,6 +17,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,20 +44,28 @@ public class BroController {
 	
 		return "bro/email";
 	}
-	
-	
-	
 		
 	@RequestMapping(value = "bro/login" , method=RequestMethod.POST)
-	public String login(User_info ui, HttpServletRequest req, String uEmail) throws Exception{
+	public String login(User_info ui, HttpServletRequest req, String uEmail, Model model) throws Exception{
 		HttpSession session = req.getSession();
 		User_info login = bs.loginCheck(ui);
 		if(login == null) {
 			session.setAttribute("login", null);
 			System.out.println("login off");
 			System.out.println("controller uEamil-->"+uEmail);
-			bs.logout(uEmail);
+			bs.logout(uEmail);	//5번 실패 미구현
 			return "bro/loginFail";
+		}
+		else if(login.getuState() == 0){
+			//탈퇴 회원 로그인시 계정 복구page
+			String uemail = req.getParameter("uemail");
+			model.addAttribute("uemail",uemail);
+			model.addAttribute("user",login);
+			System.out.println("uemail : "+ login.getuEmail());
+			session.setAttribute("ui",login);
+			session.setAttribute("ucode", login.getuCode());
+			System.out.println("탈퇴회원 login");
+			return "/right/UserdisabledPage";
 		}
 		else if(login.getuCode()==0){
 			session.setAttribute("login", login);

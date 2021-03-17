@@ -3,8 +3,28 @@ package com.spring.bom.model.bro;
 import java.sql.Date;
 
 public class User_info {
-	int uCode;
-	String uEmail;
+	private int uCode;
+	private String uEmail;String uPassword;
+	private String uAtid;
+	private String uNickname;
+	private Date uBirth;
+	private String uGender;
+	private String uNation;
+	private int uIdentify;
+	private int uChat;
+	private int uAlarm;
+	private int uPrivate;
+	private String uRegdate;
+	private String uIntro;
+	private String uLoc;
+	private String uImage;
+	private String uBg;
+	private String uProfileLink;
+	private int uState;
+	private int uReportCount;
+	private int uOnline;
+	private int uLoginCount;
+
 	public int getuCode() {
 		return uCode;
 	}
@@ -137,25 +157,4 @@ public class User_info {
 	public void setuLoginCount(int uLoginCount) {
 		this.uLoginCount = uLoginCount;
 	}
-	String uPassword;
-	String uAtid;
-	String uNickname;
-	Date uBirth;
-	String uGender;
-	String uNation;
-	int uIdentify;
-	int uChat;
-	int uAlarm;
-	int uPrivate;
-	String uRegdate;
-	String uIntro;
-	String uLoc;
-	String uImage;
-	String uBg;
-	String uProfileLink;
-	int uState;
-	int uReportCount;
-	int uOnline;
-	int uLoginCount;
-
 }

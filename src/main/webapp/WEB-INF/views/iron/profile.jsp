@@ -106,34 +106,34 @@
 				<img src="/img/logo2.jpg" width="150" height="150">
 			</div>
 			<div class="list-group list-group-flush">
-				<a href="timeline" class="list-group-item list-group-item-action"> <img
+				<a href="/iron/timeline" class="list-group-item list-group-item-action"> <img
 					src="/img/home.svg" width="15" height="15"> 타임라인
 				</a> 
 				
-				<a href="#" class="list-group-item list-group-item-action"> <img
+				<a href="/hoon/explore" class="list-group-item list-group-item-action"> <img
 					src="/img/search.svg" width="15" height="15"> 검색하기
 				</a> 
 				
-				<a href="#" class="list-group-item list-group-item-action"> <img
+				<a href="alarm" class="list-group-item list-group-item-action"> <img
 					src="/img/bell.svg" width="15" height="15"> 알림 <span
 					class="badge badge-success">1</span>
 				</a>
-				
-				<a href="#" class="list-group-item list-group-item-action"> <img
+				<!-- bear1 -->
+				<a href="/bear/chat" class="list-group-item list-group-item-action"> <img
 					src="/img/send.svg" width="15" height="15"> 쪽지
 				</a>
 				
-				<a href="#" class="list-group-item list-group-item-action"> <img
+				<a href="bookmark" class="list-group-item list-group-item-action"> <img
 					src="/img/bookmark.svg" width="15" height="15"> 북마크
 				</a> 
 				
-				<a href="profile" class="list-group-item list-group-item-action"> <img
+				<a href="/iron/profile/uatid=${user.uatid }" class="list-group-item list-group-item-action"> <img
 					src="/img/user.svg" width="15" height="15"> 프로필
 				</a> 
 				
-				<a href="#" class="list-group-item list-group-item-action"> <img
+				<a href="/right/moreSee" class="list-group-item list-group-item-action"> <img
 					src="/img/more.svg" width="15" height="15"> 더보기
-				</a>
+				</a> 
 				
 				<a href="#" class="list-group-item list-group-item-action">
 					<button type="button" class="btn btn-outline-success">

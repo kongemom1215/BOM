@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.bom.right.RUser_InfoDao">
+	<select id="rightUserSelectemail" resultType="RUser">
+		select * from user_info where uemail = #{uemail}
+	</select>
+	<select id="rightUserSelect" resultType="RUser">
+		select * from user_info where ucode = #{ucode}
+	</select>
+	<!-- change_info에 바뀐 데이터 insert -->
+	<insert id="rightUserEdit1" parameterType="RUser">
+		insert into change_info 
+							values(to_char(sysdate,'yyyy/mm/dd hh24:mi:ss'),#{ucode},
+									null,null,null,null,null,null,null,null,
+									#{uatid},null,to_date(#{ubirth}, 'yyyy/mm/dd'),#{ugender},#{unation},null )
+	</insert>
+	<!-- change_info에 기존 데이터 update -->
+	<update id="rightUserEdit2" parameterType="RUser">
+		update change_info c set (cid, cbirth, cgender, cnation ) 
+						= (select uatid,ubirth,ugender,unation 
+						 from user_info ui 
+						 where ui.ucode = #{ucode}) 
+		where c.ucode = #{ucode}
+	</update>
+	<!-- user_info에 바뀐 데이터 update -->
+	<update id="rightUserEdit3" parameterType="RUser">
+		update user_info set uatid = #{uatid},
+							 ubirth = #{ubirth},
+							 ugender = #{ugender},
+							 unation = #{unation},
+							 uprivate = #{uprivate},
+							 ualarm   = #{ualarm}				 
+		where ucode=#{ucode}
+	</update>
+	<!-- id check ajax가 하고싶었다... -->
+	<select id="checkId" parameterType="String" resultType="int">
+		select count(*) from user_info where uatid = #{uatid}
+	</select>
+	<!-- change_info에 바뀐 데이터 insert -->
+	<insert id="rightUserDisabl" parameterType="RUser">
+		insert into change_info 
+							values(to_char(sysdate,'yy/mm/dd hh24:mi:ss'),#{ucode},
+									null,null,null,null,null,null,1,null,
+									null,null,null,null,null,0 )
+	</insert>
+	<!-- 회원 탈퇴 user_info ustate = 0으로 업데이트 -->
+	<update id="rightUserDisabl1" parameterType="RUser">
+		update user_info set ustate = 0			 
+		where ucode=#{ucode}
+	</update>
+	<!-- 회원 탈퇴  ustate = 0으로 업데이트 -->
+	<update id="rightUserDisabl2" parameterType="RUser">
+		update board set bpermission = 'Nobody' 
+		where ucode = #{ucode}
+	</update>
+	<!-- 회원 탈퇴 change_info ustate = 0으로 업데이트 -->
+	<update id="rightUserDisabl3" parameterType="RUser">
+		update user_info set ustate = 0			 
+		where ucode=#{ucode}
+	</update>
+	<!-- 2단계인증 user_info uidentify = 1으로 업데이트 -->
+	<update id="rightupdouble" parameterType="int">
+		update user_info set uidentify = 1 
+		where ucode=#{ucode}
+	</update>
+	<!-- pw check ajax가 하고싶었다... -->
+	<select id="checkPw" parameterType="String" resultType="int">
+		select count(*) from user_info where ucode = #{ucode}
+										and  upassword = #{upassword}
+	</select>
+	<!-- change_info에 바뀐 Pw insert -->
+	<insert id="rightPwchange1" parameterType="String">
+		insert into change_info 
+							values(to_char(sysdate,'yyyy/mm/dd hh24:mi:ss'),to_number(#{ucode}),
+									null,null,null,null,null,null,null,#{pwd},
+									null,null,null,null,null,null )
+	</insert>
+	<!-- change_info에 기존 데이터 update -->
+	<update id="rightPwchange2" parameterType="String">
+		update change_info c set (cpassword) 
+						= (select upassword 
+						 from user_info ui 
+						 where ui.ucode = to_number(#{ucode})) 
+		where c.ucode = to_number(#{ucode}) and cpassword2 = #{pwd}
+	</update>
+	<!-- user_info에 바뀐 데이터 update -->
+	<update id="rightPwchange3" parameterType="String">
+		update user_info set upassword = #{pwd}		 
+		where ucode=to_number(#{ucode})
+	</update>
+	<!-- interest 관심사 조회 및 변경 -->
+	<!-- interest 관심사 checked 조회 -->
+	<select id="rightInterestSelect" parameterType="int" resultType="RInterest">
+		select d.icontent, i.icode,i.ucode from interest i, interest_detail d where i.icode = d.icode and i.ucode = #{ucode}
+	</select>
+	<!-- interest 모든 관심사 조회 -->
+	<select id="rightInterestSelectAll" resultType="RInterest_d">
+		select * from interest_detail
+	</select>
+	<!-- interest에 바뀐 데이터 update -->
+	<delete id="rightInterestdelete" parameterType="int">
+		delete from interest where ucode = #{ucode}
+	</delete>
+	<!-- interest에 바뀐 데이터 update -->
+	<insert id="rightInterestchange1" parameterType="RInterest">
+       		insert into interest values(#{ucode},#{icode1})
+	</insert>
+	<insert id="rightInterestchange2" parameterType="RInterest">
+       		insert into interest values(#{ucode},#{icode2})
+	</insert>
+	<insert id="rightInterestchange3" parameterType="RInterest">
+       		insert into interest values(#{ucode},#{icode3})
+	</insert>
+	<!-- block 조회 -->
+	<select id="rightBlockSelect" resultType="RBlock">
+		select b.blcode, b.bopcode, u.uatid, u.uimage, u.unickname from block b , user_info u where b.bopcode = u.ucode and b.ucode=#{ucode}
+	</select>
+	<select id="rightBlockSelect2" resultType="RBlock">
+		select blcode, bhashtag, bword from block where ucode=#{ucode}
+	</select>
+	<!-- block 해제 -->
+	<delete id="rightDeleteblock" parameterType="int">
+		delete from block where blcode = #{blcode}
+	</delete>
+	<!-- block에 데이터 insert -->
+	<insert id="rightaddBHash" parameterType="String">
+       		insert into block values(block_blcode.nextval,#{ucode},null,#{bhashtag},null)
+	</insert>
+	<insert id="rightaddBWord" parameterType="String">
+       		insert into block values(block_blcode.nextval,#{ucode},null,null,#{bword})
+	</insert>
+	<!-- change_info에 바뀐 ustate insert -->	
+	<insert id="rightupdateUstate1" parameterType="RUser">
+		insert into change_info 
+							values(to_char(sysdate,'yyyy/mm/dd hh24:mi:ss'),#{ucode},
+									null,null,null,null,null,null,0,null,
+									null,null,null,null,null,1)
+	</insert>
+	<!-- user_info에 바뀐 데이터 update -->
+	<update id="rightupdateUstate2" parameterType="RUser">
+		update user_info set ustate = 1		 
+		where ucode=#{ucode}
+	</update>
+</mapper>

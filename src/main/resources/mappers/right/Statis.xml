@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.bom.right.StatisDao">
+<!-- 10대 통계 가져오기 -->
+<select id="rightSearch1" resultType="Statis">
+select 
+			search, count(*) as count
+		from search
+    where ucode between 1 and 20
+		group by search
+		order by count desc
+</select>
+<!-- 20대 통계 가져오기 -->
+<select id="rightSearch2" resultType="Statis">
+select 
+			search, count(*) as count
+		from search
+    where ucode between 21 and 30
+		group by search
+		order by count desc
+</select>
+<!-- 30대 통계 가져오기 -->
+<select id="rightSearch3" resultType="Statis">
+select 
+			search, count(*) as count
+		from search
+    where ucode between 31 and 40
+		group by search
+		order by count desc
+</select>
+<!-- 남자 통계 가져오기 -->
+<select id="rightSearchm" resultType="Statis">
+select 
+			s.search,u.ugender, count(*) as count
+		from search s, user_info u
+    where s.ucode = u.ucode and u.ugender = 'm'
+		group by s.search, u.ugender
+		order by count desc
+</select>
+<!-- 여자 통계 가져오기 -->
+<select id="rightSearchw" resultType="Statis">
+select 
+			s.search,u.ugender, count(*) as count
+		from search s, user_info u
+    where s.ucode = u.ucode and u.ugender = 'w'
+		group by s.search, u.ugender
+		order by count desc
+</select>
+</mapper>

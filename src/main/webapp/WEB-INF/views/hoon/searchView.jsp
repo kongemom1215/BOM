@@ -27,11 +27,11 @@
 
 
 <!-- Bootstrap core JavaScript -->
- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
 	integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-	crossorigin="anonymous"></script> 
-	<!-- <script src="https://code.jquery.com/jquery-3.5.1.js"></script> -->
-	
+	crossorigin="anonymous"></script>
+<!-- <script src="https://code.jquery.com/jquery-3.5.1.js"></script> -->
+
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
 	integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
@@ -63,20 +63,26 @@
 				<img src="/img/logo2.jpg" width="150" height="150">
 			</div>
 			<div class="list-group list-group-flush">
-				<a href="/iron/timeline" class="list-group-item list-group-item-action"> <img
+				<a href="/iron/timeline"
+					class="list-group-item list-group-item-action"> <img
 					src="/img/home.svg" width="15" height="15"> 타임라인
-				</a> <a href="explore" class="list-group-item list-group-item-action">
-					<img src="/img/search.svg" width="15" height="15"> 검색하기
-				</a> <a href="#" class="list-group-item list-group-item-action"> <img
-					src="/img/bell.svg" width="15" height="15"> 알림 <span
+				</a> <a href="/hoon/explore"
+					class="list-group-item list-group-item-action"> <img
+					src="/img/search.svg" width="15" height="15"> 검색하기
+				</a> <a href="alarm" class="list-group-item list-group-item-action">
+					<img src="/img/bell.svg" width="15" height="15"> 알림 <span
 					class="badge badge-success">1</span>
-				</a> <a href="/bear/chat" class="list-group-item list-group-item-action"> <img
-					src="/img/send.svg" width="15" height="15"> 쪽지
-				</a> <a href="#" class="list-group-item list-group-item-action"> <img
-					src="/img/bookmark.svg" width="15" height="15"> 북마크
-				</a> <a href="#" class="list-group-item list-group-item-action"> <img
+				</a>
+				<!-- bear1 -->
+				<a href="/bear/chat" class="list-group-item list-group-item-action">
+					<img src="/img/send.svg" width="15" height="15"> 쪽지
+				</a> <a href="bookmark" class="list-group-item list-group-item-action">
+					<img src="/img/bookmark.svg" width="15" height="15"> 북마크
+				</a> <a href="/iron/profile/uatid=${user.uatid }"
+					class="list-group-item list-group-item-action"> <img
 					src="/img/user.svg" width="15" height="15"> 프로필
-				</a> <a href="#" class="list-group-item list-group-item-action"> <img
+				</a> <a href="/right/moreSee"
+					class="list-group-item list-group-item-action"> <img
 					src="/img/more.svg" width="15" height="15"> 더보기
 				</a> <a href="#" class="list-group-item list-group-item-action">
 					<button type="button" class="btn btn-outline-success">
@@ -107,11 +113,12 @@
 			<nav
 				class="navbar navbar-expand-lg navbar-light bg-light border-bottom fixed-top"
 				style="left: 241px; right: 241px; z-index: 5;">
-				<form class="well form-search" action="searchView" method="get" id="jh_form" >
+				<form class="well form-search" action="searchView" method="get"
+					id="jh_form">
 					<div class="input-group">
 						<input type="text" ID="datebox" Class="form-control" name="search"
 							data-toggle="dropdown" required="required" placeholder="봄 검색"></input>
-				
+
 						<table id="demolist" class="dropdown-menu" style="z-index: 5;">
 							<tr>
 								<td style="font-weight: normal;">최근</td>
@@ -136,7 +143,7 @@
 					</div>
 				</form>
 			</nav>
-		<script type="text/javascript">
+			<script type="text/javascript">
 					$("#del_ajax").click(function(){
 								var ucode = ${loginUser.ucode}
 								console.log('ucode !!: ' + ucode);
@@ -155,7 +162,7 @@
 			</script>
 			<nav
 				class="navbar navbar-expand-lg navbar-light bg-light border-bottom fixed-top"
-				style="left: 241px; right: 241px; margin-top: 50px;  z-index: 3;  padding-bottom: 0px;">
+				style="left: 241px; right: 241px; margin-top: 50px; z-index: 3; padding-bottom: 0px;">
 				<ul class="nav nav-tabs nav-justified col-md-25" id="myTab"
 					role="tablist" style="width: 800px;">
 					<li class="nav-item mr-5" role="presentation"><a
@@ -171,17 +178,16 @@
 						role="tab" aria-controls="new" aria-selected="false">최신글</a></li>
 
 					<li class="nav-item mr-5" role="presentation"><a
-						class="nav-link" id="contact-tab" data-toggle="tab"	href="#image" 
+						class="nav-link" id="contact-tab" data-toggle="tab" href="#image"
 						role="tab" aria-controls="image" aria-selected="false">사진</a></li>
 
 					<li class="nav-item mr-5" role="presentation"><a
-						class="nav-link" id="contact-tab" data-toggle="tab"	href="#video" 
+						class="nav-link" id="contact-tab" data-toggle="tab" href="#video"
 						role="tab" aria-controls="video" aria-selected="false">동영상</a></li>
 				</ul>
 			</nav>
 			<p>
 				<!--글 정렬-->
-				
 			<div class="tab-content" id="myTabContent">
 				<!-- 인기  -->
 				<div class="tab-pane fade show active" id="fame" role="tabpanel"
@@ -199,22 +205,25 @@
 									class="card-subtitle mb-2 text-muted" style="font-size: 12px;">${junghun.bregdate }</a>
 								<a href="#" class="card-text" style="margin-top: 10px;">${junghun.bcontent }
 								</a>
-								
+
 								<div align="center">
 									<div class="btn-group col-md-12" role="group"
 										aria-label="Button group with nested dropdown">
 										<button type="button" class="btn btn-secondary mr-3 btn-light"
-											data-toggle="tooltip" data-placement="top" title="답글" style="font-size: 12px;">
+											data-toggle="tooltip" data-placement="top" title="답글"
+											style="font-size: 12px;">
 											<img src="/img/speech-bubble.svg" width="20" height="20">
 											&ensp;${junghun.breplycount }
 										</button>
 										<button type="button" class="btn btn-secondary btn-light mr-3"
-											data-toggle="tooltip" data-placement="top" title="스크랩 or 인용" style="font-size: 12px;" >
+											data-toggle="tooltip" data-placement="top" title="스크랩 or 인용"
+											style="font-size: 12px;">
 											<img src="/img/bring.svg" width="20" height="20">
 											&ensp;${junghun.bquotecount }
 										</button>
 										<button type="button" class="btn btn-secondary btn-light mr-3"
-											data-toggle="tooltip" data-placement="top" title="좋아요" style="font-size: 12px;">
+											data-toggle="tooltip" data-placement="top" title="좋아요"
+											style="font-size: 12px;">
 											<img src="/img/heart.svg" width="20" height="20">
 											&ensp;${junghun.blikecount }
 										</button>
@@ -281,17 +290,20 @@
 									<div class="btn-group col-md-12" role="group"
 										aria-label="Button group with nested dropdown">
 										<button type="button" class="btn btn-secondary mr-3 btn-light"
-											data-toggle="tooltip" data-placement="top" title="답글" style="font-size: 12px;">
+											data-toggle="tooltip" data-placement="top" title="답글"
+											style="font-size: 12px;">
 											<img src="/img/speech-bubble.svg" width="20" height="20">
 											&ensp;${junghun.breplycount }
 										</button>
 										<button type="button" class="btn btn-secondary btn-light mr-3"
-											data-toggle="tooltip" data-placement="top" title="스크랩 or 인용" style="font-size: 12px;" >
+											data-toggle="tooltip" data-placement="top" title="스크랩 or 인용"
+											style="font-size: 12px;">
 											<img src="/img/bring.svg" width="20" height="20">
 											&ensp;${junghun.bquotecount }
 										</button>
 										<button type="button" class="btn btn-secondary btn-light mr-3"
-											data-toggle="tooltip" data-placement="top" title="좋아요" style="font-size: 12px;">
+											data-toggle="tooltip" data-placement="top" title="좋아요"
+											style="font-size: 12px;">
 											<img src="/img/heart.svg" width="20" height="20">
 											&ensp;${junghun.blikecount }
 										</button>
@@ -319,50 +331,58 @@
 					</c:if>
 					<c:forEach var="junghun" items="${listSearch }">
 						<div class="card">
-						<c:if test="${junghun.battachType =='image' && junghun.battach != null}">
-							<div class="card-body">
-								<button type="button" class="btn btn-light float-right">⋯</button>
-								<img src="/img/teemo.jpg" class="rounded-circle" width="50"
-									width="50"> <a class="card-title text-dark">${junghun.uNickName}</a>
-								<a class="card-subtitle mb-2 text-muted">@${junghun.uatId}</a> <a
-									class="card-subtitle mb-2 text-muted" style="font-size: 12px">${junghun.bregdate }</a>
-								<p class="card-text" style="margin-top: 10px;">${junghun.bcontent }</p>
+							<c:if
+								test="${junghun.battachType =='image' && junghun.battach != null}">
+								<div class="card-body">
+									<button type="button" class="btn btn-light float-right">⋯</button>
+									<img src="/img/teemo.jpg" class="rounded-circle" width="50"
+										width="50"> <a class="card-title text-dark">${junghun.uNickName}</a>
+									<a class="card-subtitle mb-2 text-muted">@${junghun.uatId}</a>
+									<a class="card-subtitle mb-2 text-muted"
+										style="font-size: 12px">${junghun.bregdate }</a>
+									<p class="card-text" style="margin-top: 10px;">${junghun.bcontent }</p>
 									<c:if test="${junghun.battachType=='image' }">
 										<img src="/img/media/${junghun.battachSrc }">
 									</c:if>
-								
-								<div align="center">
-									<div class="btn-group col-md-12" role="group"
-										aria-label="Button group with nested dropdown">
-										<button type="button" class="btn btn-secondary mr-3 btn-light"
-											data-toggle="tooltip" data-placement="top" title="답글" style="font-size: 12px;">
-											<img src="/img/speech-bubble.svg" width="20" height="20">
-											&ensp;${junghun.breplycount }
-										</button>
-										<button type="button" class="btn btn-secondary btn-light mr-3"
-											data-toggle="tooltip" data-placement="top" title="스크랩 or 인용" style="font-size: 12px;" >
-											<img src="/img/bring.svg" width="20" height="20">
-											&ensp;${junghun.bquotecount }
-										</button>
-										<button type="button" class="btn btn-secondary btn-light mr-3"
-											data-toggle="tooltip" data-placement="top" title="좋아요" style="font-size: 12px;">
-											<img src="/img/heart.svg" width="20" height="20">
-											&ensp;${junghun.blikecount }
-										</button>
-										<button type="button"
-											class="btn btn-secondary btn-light mr-3 dropdown-toggle caret-off"
-											data-toggle="dropdown" aria-haspopup="true"
-											aria-expanded="false">
-											<img src="/img/share.svg" width="20" height="20">
-										</button>
-										<div class="dropdown-menu">
-											<a class="dropdown-item" href="#">북마크 추가/삭제</a> <a
-												class="dropdown-item" href="#">URL담아가기</a>
+
+									<div align="center">
+										<div class="btn-group col-md-12" role="group"
+											aria-label="Button group with nested dropdown">
+											<button type="button"
+												class="btn btn-secondary mr-3 btn-light"
+												data-toggle="tooltip" data-placement="top" title="답글"
+												style="font-size: 12px;">
+												<img src="/img/speech-bubble.svg" width="20" height="20">
+												&ensp;${junghun.breplycount }
+											</button>
+											<button type="button"
+												class="btn btn-secondary btn-light mr-3"
+												data-toggle="tooltip" data-placement="top" title="스크랩 or 인용"
+												style="font-size: 12px;">
+												<img src="/img/bring.svg" width="20" height="20">
+												&ensp;${junghun.bquotecount }
+											</button>
+											<button type="button"
+												class="btn btn-secondary btn-light mr-3"
+												data-toggle="tooltip" data-placement="top" title="좋아요"
+												style="font-size: 12px;">
+												<img src="/img/heart.svg" width="20" height="20">
+												&ensp;${junghun.blikecount }
+											</button>
+											<button type="button"
+												class="btn btn-secondary btn-light mr-3 dropdown-toggle caret-off"
+												data-toggle="dropdown" aria-haspopup="true"
+												aria-expanded="false">
+												<img src="/img/share.svg" width="20" height="20">
+											</button>
+											<div class="dropdown-menu">
+												<a class="dropdown-item" href="#">북마크 추가/삭제</a> <a
+													class="dropdown-item" href="#">URL담아가기</a>
+											</div>
 										</div>
 									</div>
 								</div>
-							</div>
-							</c:if>		
+							</c:if>
 						</div>
 					</c:forEach>
 				</div>
@@ -374,55 +394,64 @@
 					</c:if>
 					<c:forEach var="junghun" items="${listSearch }">
 						<div class="card">
-						<c:if test="${junghun.battachType =='video' && junghun.battach != null}">
-							<div class="card-body">
-								<button type="button" class="btn btn-light float-right">⋯</button>
-								<img src="/img/teemo.jpg" class="rounded-circle" width="50"
-									width="50"> <a class="card-title text-dark">${junghun.uNickName}</a>
-								<a class="card-subtitle mb-2 text-muted">@${junghun.uatId}</a> <a
-									class="card-subtitle mb-2 text-muted" style="font-size: 12px">${junghun.bregdate }</a>
-								<p class="card-text" style="margin-top: 10px;">${junghun.bcontent }</p>
+							<c:if
+								test="${junghun.battachType =='video' && junghun.battach != null}">
+								<div class="card-body">
+									<button type="button" class="btn btn-light float-right">⋯</button>
+									<img src="/img/teemo.jpg" class="rounded-circle" width="50"
+										width="50"> <a class="card-title text-dark">${junghun.uNickName}</a>
+									<a class="card-subtitle mb-2 text-muted">@${junghun.uatId}</a>
+									<a class="card-subtitle mb-2 text-muted"
+										style="font-size: 12px">${junghun.bregdate }</a>
+									<p class="card-text" style="margin-top: 10px;">${junghun.bcontent }</p>
 									<c:if test="${junghun.battachType=='video' }">
 										<img src="/img/media/${junghun.battachSrc }">
 									</c:if>
-								
-								<div align="center">
-									<div class="btn-group col-md-12" role="group"
-										aria-label="Button group with nested dropdown">
-										<button type="button" class="btn btn-secondary mr-3 btn-light"
-											data-toggle="tooltip" data-placement="top" title="답글" style="font-size: 12px;">
-											<img src="/img/speech-bubble.svg" width="20" height="20">
-											&ensp;${junghun.breplycount }
-										</button>
-										<button type="button" class="btn btn-secondary btn-light mr-3"
-											data-toggle="tooltip" data-placement="top" title="스크랩 or 인용" style="font-size: 12px;" >
-											<img src="/img/bring.svg" width="20" height="20">
-											&ensp;${junghun.bquotecount }
-										</button>
-										
-										
-										<button type="button" class="btn btn-secondary btn-light mr-3" id="searchLikeBtn${status.index }" 
-										onclick="searchLikeBtn(${junghun.bcode},${status.index }); return false;"
-										data-toggle="tooltip" data-placement="top" title="좋아요" style="font-size: 12px;">
-											<img src="/img/heart.svg" width="20" height="20">
-											&ensp;${junghun.blikecount }
-										</button>
-										
-										
-										<button type="button"
-											class="btn btn-secondary btn-light mr-3 dropdown-toggle caret-off"
-											data-toggle="dropdown" aria-haspopup="true"
-											aria-expanded="false">
-											<img src="/img/share.svg" width="20" height="20">
-										</button>
-										<div class="dropdown-menu">
-											<a class="dropdown-item" href="#">북마크 추가/삭제</a> <a
-												class="dropdown-item" href="#">URL담아가기</a>
+
+									<div align="center">
+										<div class="btn-group col-md-12" role="group"
+											aria-label="Button group with nested dropdown">
+											<button type="button"
+												class="btn btn-secondary mr-3 btn-light"
+												data-toggle="tooltip" data-placement="top" title="답글"
+												style="font-size: 12px;">
+												<img src="/img/speech-bubble.svg" width="20" height="20">
+												&ensp;${junghun.breplycount }
+											</button>
+											<button type="button"
+												class="btn btn-secondary btn-light mr-3"
+												data-toggle="tooltip" data-placement="top" title="스크랩 or 인용"
+												style="font-size: 12px;">
+												<img src="/img/bring.svg" width="20" height="20">
+												&ensp;${junghun.bquotecount }
+											</button>
+
+
+											<button type="button"
+												class="btn btn-secondary btn-light mr-3"
+												id="searchLikeBtn${status.index }"
+												onclick="searchLikeBtn(${junghun.bcode},${status.index }); return false;"
+												data-toggle="tooltip" data-placement="top" title="좋아요"
+												style="font-size: 12px;">
+												<img src="/img/heart.svg" width="20" height="20">
+												&ensp;${junghun.blikecount }
+											</button>
+
+
+											<button type="button"
+												class="btn btn-secondary btn-light mr-3 dropdown-toggle caret-off"
+												data-toggle="dropdown" aria-haspopup="true"
+												aria-expanded="false">
+												<img src="/img/share.svg" width="20" height="20">
+											</button>
+											<div class="dropdown-menu">
+												<a class="dropdown-item" href="#">북마크 추가/삭제</a> <a
+													class="dropdown-item" href="#">URL담아가기</a>
+											</div>
 										</div>
 									</div>
 								</div>
-							</div>
-							</c:if>		
+							</c:if>
 						</div>
 					</c:forEach>
 				</div>
@@ -430,7 +459,7 @@
 		</div>
 	</div>
 	<!-- /#page-content-wrapper -->
-<script type="text/javascript">
+	<script type="text/javascript">
 	function searchLikeBtn(bcode,btnIndex){
 		event.stopPropagation();
 		var index = btnIndex;
@@ -457,17 +486,19 @@
 	<!-- 오른쪽 사이드바 -->
 	<div class="bg-light border-left" id="sidebar-wrapper2">
 		<div class="list-group list-group-flush">
-		<!-- 검색창 -->
+			<!-- 검색창 -->
 			<div class="list-group-item list-group-item-action bg-light">
 				<div id="drop_the_text">
 					<!-- 엔터치면 searchData() 실행 -->
-					<form class="well form-search" action="searchView" method="get" id="jh_form" >
-					<input class="form-control" id="search" placeholder="봄 검색" name="search"
-						onkeypress="if( event.keyCode == 13 ){searchData();}">
-						</form>
+					<form class="well form-search" action="searchView" method="get"
+						id="jh_form">
+						<input class="form-control" id="search" placeholder="봄 검색"
+							name="search"
+							onkeypress="if( event.keyCode == 13 ){searchData();}">
+					</form>
 				</div>
 			</div>
-		
+
 			<div class="list-group-item list-group-item-action bg-light"
 				style="padding: 5px;">
 				<div class="card bg-light mb-3">
@@ -517,8 +548,7 @@
 								<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
 									${status.count }위
 									<div>
-										${Junghun.search }
-										<span class="float-right"><fmt:formatNumber
+										${Junghun.search } <span class="float-right"><fmt:formatNumber
 												value="${Junghun.scount }" groupingUsed="true"></fmt:formatNumber>
 											봄</span>
 									</div>

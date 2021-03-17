@@ -134,7 +134,7 @@ function viewBoardOptions(bbcode,bindex){
 					src="/img/home.svg" width="15" height="15"> 타임라인
 				</a> 
 				
-				<a href="search" class="list-group-item list-group-item-action"> <img
+				<a href="/hoon/explore" class="list-group-item list-group-item-action"> <img
 					src="/img/search.svg" width="15" height="15"> 검색하기
 				</a> 
 				
@@ -142,8 +142,8 @@ function viewBoardOptions(bbcode,bindex){
 					src="/img/bell.svg" width="15" height="15"> 알림 <span
 					class="badge badge-success">1</span>
 				</a>
-				
-				<a href="chat" class="list-group-item list-group-item-action"> <img
+				<!-- bear1 -->
+				<a href="/bear/chat" class="list-group-item list-group-item-action"> <img
 					src="/img/send.svg" width="15" height="15"> 쪽지
 				</a>
 				
@@ -151,11 +151,11 @@ function viewBoardOptions(bbcode,bindex){
 					src="/img/bookmark.svg" width="15" height="15"> 북마크
 				</a> 
 				
-				<a href="/iron/profile" class="list-group-item list-group-item-action"> <img
+				<a href="/iron/profile/uatid=${user.uatid }" class="list-group-item list-group-item-action"> <img
 					src="/img/user.svg" width="15" height="15"> 프로필
 				</a> 
 				
-				<a href="more" class="list-group-item list-group-item-action"> <img
+				<a href="/right/moreSee" class="list-group-item list-group-item-action"> <img
 					src="/img/more.svg" width="15" height="15"> 더보기
 				</a> 
 				

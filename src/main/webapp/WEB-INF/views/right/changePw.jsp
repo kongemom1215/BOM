@@ -1,8 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -22,19 +20,14 @@
 <!-- Custom styles for this template -->
 <link href="/css/simple-sidebar.css" rel="stylesheet">
 
-<!-- junghun style -->
-<link href="/css/junghun.css" rel="stylesheet">
-
 <!-- Bootstrap core JavaScript -->
-<!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
 	integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-	crossorigin="anonymous"></script> -->
+	crossorigin="anonymous"></script>
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
 	integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
 	crossorigin="anonymous"></script>
-<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
 	integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
@@ -47,10 +40,68 @@
 	display: none;
 }
 </style>
+<!-- 기존 비밀번호 check -->
+		<%
+		 	request.setCharacterEncoding("UTF-8");
+			String context = request.getContextPath();
+			System.out.println("context->"+context);
+		%>
+		<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+		<script type="text/javascript">
+		 var contextPath='${pageContext.request.contextPath}';
+		 
+			// 비밀번호 일치 검사(1 = 일치 / 0 != 일치)
+			$(document).ready(function(){
+			$("#upassword").blur(function(){
+				//function pwCh(){
+					var upassword = $('#upassword').val();
+					console.log(upassword);
+					$.ajax({
+						url : "<%=context%>/right/pwCheck",
+						data: {upassword : upassword},
+						dataType:'text',
+						success : function(data){						
+							
+							if (data==='1'){
+									// 1 : 기존 비밀번호 일치!
+									$('#pw_check').html('비밀번호가 일치합니다!');
+									$('#pw_check').css('color', 'green');
+									$('#pwd').attr('disabled', false);
+									$('#pwd2').attr('disabled', false);
 
+							}else{
+								$('#pw_check').html('비밀번호가 불일치합니다! :p');
+								$('#pw_check').css('color', 'red'); 
+								$('#pwd').attr('disabled', true);
+								$('#pwd2').attr('disabled', true);
+								}
+							}
+						});
+					});
+				});
+			</script>
+			<script type="text/javascript">
+			$(document).ready(function(){
+				$("#pwd2").blur(function(){
+							//function chk(){
+								if($('#pwd').val() != $('#pwd2').val()){
+									$('#pw_doublecheck').text('비밀번호가 맞지않습니다!');
+									$('#pw_doublecheck').css('color', 'red'); 
+									$('#pwd2').focus();	
+									$('#reg_submit').attr('disabled', true);
+								}else{
+									$('#pw_doublecheck').text('비밀번호가 일치합니다!');
+									$('#pw_doublecheck').css('color', 'green'); 
+									$("#reg_submit").attr("disabled", false);
+								}
+								//}
+							//}
+				});
+			});
+			</script>
 </head>
 
-<body class="pt-5">
+<body>
 
 	<div class="d-flex" id="wrapper">
 
@@ -88,119 +139,57 @@
 				</a>
 				<div class="card">
 					<div class="card-body">
-						<div class="form-row">
-							<img src="/img/teemo.jpg" class="rounded-circle" width="50"
-								width="50">
-							<div class="form-col ml-2">
-								<a class="card-title text-dark" style="font-size: 0.8em">${login.uNickname}</a><br>
-								<a class="card-subtitle mb-2 text-muted"
-									style="font-size: 0.8em">@${login.uAtid}</a>
-							</div>
-						</div>
+						 <img src="${ui.uimage }" class="rounded-circle" width="50" width="50"> 
+                     <div class="form-col ml-2">
+                     <a class="card-title text-dark" style="font-size:0.8em">${ui.unickname }</a><br> 
+                     <a class="card-subtitle mb-2 text-muted" style="font-size:0.8em">@${ui.uatid }</a>
 					</div>
 					<button type="button" class="btn btn-success">로그아웃</button>
 				</div>
 			</div>
 		</div>
+		</div>
 
 		<!-- /#sidebar-wrapper -->
+
 		<!-- Page Content -->
 		<div id="page-content-wrapper">
-			<nav
-				class="navbar navbar-expand-lg navbar-light bg-light border-bottom fixed-top"
-				style="left: 241px; right: 241px; z-index: 5;">
-				<form class="well form-search" action="searchView" method="get"
-					id="jh_form">
-					<div class="input-group">
-						<input type="text" ID="datebox" Class="form-control" name="search"
-							data-toggle="dropdown" required="required" placeholder="봄 검색"
-							style="width: 475px;"></input>
-
-						<table id="demolist" class="dropdown-menu"
-							style="z-index: 5; width: 475px;">
-							<tr>
-								<td style="font-weight: normal; padding-bottom: 15px;">최근
-									<button type="reset" id="del_ajax"
-										style="font-size: 12px; float: right">전체지우기</button>
-								</td>
-							</tr>
-							<c:forEach var="Junghun" items="${searchkeyword }" begin="0"
-								end="10">
-								<tr id="searchkeyword">
-									<td class="dropdown-li"
-										style="padding: 5px; border: 1px solid; border-collapse: collapse; width: 470px;"><c:choose>
-											<c:when test="${Junghun.search.contains('#')}">
-												${Junghun.search }
-											</c:when>
-											<c:otherwise>
-												<a id="row" href="searchView?search=${Junghun.search }">${Junghun.search }</a>
-											</c:otherwise>
-										</c:choose></td>
-								</tr>
-							</c:forEach>
-						</table>
-					</div>
-				</form>
+			<nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+					<button class="btn btn-success" id="menu-toggle" onclick="location.href='updateEv'">←</button>
 			</nav>
-			<script type="text/javascript">
-			<%String context = request.getContextPath();%>
-					$("#del_ajax").click(function(){
-								var ucode = ${loginUser.ucode}
-								console.log('ucode !!: ' + ucode);
-							$.ajax({
-							url:"<%=context%>
-				/deleteRow",
-								data : {
-									ucode : ucode
-								},
-								dataType : 'text',
-								success : function(data) {
-									alret(data);
-								},
-								error : function(request, status, error) {
-									alert("code-" + request.status + " mas-"
-											+ request.responseText + " error-"
-											+ error);
-								}
-							});
-						});
-			</script>
 			<div class="container-fluid">
-				<!--글 정렬-->
-				<div class="panel panel-default">
-					<!-- Table -->
-					<table class="table">
-						<tr>
-							<td class="table-title">-</td>
-							<td class="table-title">-</td>
-						</tr>
-						<c:forEach var="Junghun" items="${listCount }" varStatus="status"
-							begin="0" end="2">
-							<tr>
-								<td>${status.count }.${Junghun.search }</td>
-								<td>${status.count }.${Junghun.search }</td>
-							</tr>
-						</c:forEach>
-					</table>
-					<table class="table">
-						<tr>
-							<td class="table-title">트랜드 추천</td>
-						</tr>
-						<c:forEach var="Junghun" items="${listHash }">
-							<tr>
-								<td><a class="table-content"
-									href="searchView?search=${Junghun.search }"
-									style="text-align: center;">${Junghun.search }<br> <c:choose>
-											<c:when test="${Junghun.scount > 4999 }">
-												<fmt:formatNumber value="${Junghun.scount }"
-													groupingUsed="true"></fmt:formatNumber> 봄</c:when>
-											<c:when test="${Junghun.scount <4999}">
-											</c:when>
-										</c:choose>
-								</a></td>
-							</tr>
-						</c:forEach>
-					</table>
+				<p>
+				<div class="card">
+					<div align="center">
+					<form action="changePwPro" method="post">
+						<input type="hidden" name="upassword" value="${ui.upassword }">
+						<input type="hidden" name="uemail" value="${ui.uemail }">
+						<input type="hidden" name="uidentify" value="${ui.uidentify }">
+						<input type="hidden" name="pwd" value="${pwd }">
+						<p>
+						<h2>비밀번호 변경</h2>
+						<div class="input-group mb-3">
+							<label for="upassword">기존 비밀번호</label><br>
+									<input type="password" class="form-control" id="upassword" name="upassword" placeholder="기존 비밀번호를 입력해주세요." required="required"><br>
+									<!-- <button class="btn btn-outline-secondary" type="button" id="button-addon2" onclick="pwCh()">비밀번호확인</button>	 -->						
+							<div id="pw_check"></div>
+						</div>
+						<div class="form-group">
+						<div class="input-group mb-3">
+						<label for="pwd">새로운 비밀번호</label><br>
+	  							<input type="password" class="form-control"  name="pwd" id="pwd" placeholder="새로운 비밀번호를 입력해주세요." aria-label="새로운 비밀번호를 입력해주세요." aria-describedby="button-addon2" required="required"><br>
+	  					<label for="pwd2">새로운 비밀번호 확인</label><br>		
+	  							<input type="password" class="form-control"  name="pwd2" id="pwd2" placeholder="한번 더 입력해주세요." aria-label="한번 더  입력해주세요." aria-describedby="button-addon2" required="required"><br>
+	  							<!--  <button class="btn btn-outline-secondary" type="button" id="button-addon2" onclick="chk()">비밀번호확인</button>  -->	
+								<div id="pw_doublecheck"></div>
+						</div>
+						</div>
+						<div class="form-group">
+							<input type="reset" value="취소" class="btn btn-outline-secondary" style="margin-right: 0.5%;'"> 
+							<input type="submit" value="완료" class="btn btn-outline-success" id="reg_submit">
+						</div>
+					</form>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -259,19 +248,31 @@
 					<div class="card bg-light mb-3">
 						<div class="card-header">실시간 트랜드</div>
 						<div class="card-body" style="padding: 5px;">
-							<div class="card-hover">
-								<c:forEach var="Junghun" items="${listTrend }" begin="0" end="2"
-									varStatus="status">
-									<div class="card-body"
-										style="font-size: 0.8rem; padding: 10px;">
-										${status.count }위
-										<div>
-											${Junghun.search } <span class="float-right"><fmt:formatNumber
-													value="${Junghun.scount }" groupingUsed="true"></fmt:formatNumber>
-												봄</span>
-										</div>
+							<div class="card">
+								<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
+									1위
+									<div>
+										<a href="#">#사랑해티모</a> <span class="float-right">11,333
+											봄</span>
 									</div>
-								</c:forEach>
+								</div>
+							</div>
+							<div class="card">
+								<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
+									2위
+									<div>
+										<a href="#">#티세구</a> <span class="float-right">2,301 봄</span>
+									</div>
+								</div>
+							</div>
+							<div class="card">
+								<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
+									3위
+									<div>
+										<a href="#">#롤하고싶다</a> <span class="float-right">1,300
+											봄</span>
+									</div>
+								</div>
 							</div>
 						</div>
 					</div>

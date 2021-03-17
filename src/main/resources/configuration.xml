@@ -45,8 +45,21 @@
 			type="com.spring.bom.model.coffee.ReportUser_infoBoard"
 			alias="CoffeeReportUser_infoBoard" />
 
-		<!-- hoon -->
+		<!-- hoon(warm) -->
 		<typeAlias type="com.spring.bom.model.hoon.Junghun"
 			alias="Junghun" />
+
+		<!-- yoon(right) -->
+		<typeAlias type="com.spring.bom.model.right.RUser_Info"
+			alias="RUser" />
+		<typeAlias type="com.spring.bom.model.right.RInterest"
+			alias="RInterest" />
+		<typeAlias type="com.spring.bom.model.right.RInterestDetail"
+			alias="RInterest_d" />
+		<typeAlias type="com.spring.bom.model.right.RBlock"
+			alias="RBlock" />
+		<typeAlias type="com.spring.bom.model.right.Statis"
+			alias="Statis" />
+
 	</typeAliases>
 </configuration>
