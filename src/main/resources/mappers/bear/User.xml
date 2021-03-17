@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="User">
+	<select id="listOnline" parameterType="User" resultType="User">
+		select unickname,uatid
+		from user_info
+		where uonline = 2
+	</select>
+
+<select id="selectcode" parameterType="String" resultType="String">
+	select ucode
+	from user_info
+	where uatid = #{atid}
+
+
+</select>
+
+<select id="userinfo" parameterType="User" resultType="User">
+		select *
+		from user_info
+		where ucode = #{kiwoong}
+</select>
+
+
+
+</mapper>

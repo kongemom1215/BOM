@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Report">
+	<select id="accusationSelectReportUser_infoBoard" resultType="CoffeeReportUser_infoBoard">
+		SELECT  r.rcode, r.rucode, r.rbcode, r.ropcode, r.rcontent, r.rdatetime, r.rtype, r.raction,
+        <!-- u.ucode, --> u.uemail, u.upassword, u.uatid, u.unickname, u.ubirth, u.ugender, u.unation, u.uidentify, u.uchat,
+        u.ualarm, u.uprivate, u.uregdate, u.uintro, u.uloc, u.uimage, u.ubg, u.uprofilelink, u.ustate, u.ureportcount,
+        u.uonline, u.ulogincount,
+        <!-- -1 bcode, --> -1 ucode , '' bcontent, '' bregdate, '' btype, -1 banchor, '' bpermission, -1 bbcode, '' battach, -1 bvotecode,
+        -1 blikecount, -1 bexpcount, -1 bjoincount, -1 bstate, -1 breportcount, -1 breplycount, -1 bquotecount, -1 bsaveorrsvd,
+        <!-- ru.ucode, --> ru.uemail uemail_1, ru.upassword upassword_1, ru.uatid uatid_1, ru.unickname unickname_1, ru.ubirth ubirth_1, ru.ugender ugender_1, ru.unation unation_1, ru.uidentify uidentify_1, ru.uchat uchat_1,
+        ru.ualarm ualarm_1, ru.uprivate uprivate_1, ru.uregdate uregdate_1, ru.uintro uintro_1, ru.uloc uloc_1, ru.uimage uimage_1, ru.ubg ubg_1, ru.uprofilelink uprofilelink_1, ru.ustate ustate_1, ru.ureportcount ureportcount_1,
+        ru.uonline uonline_1, ru.ulogincount ulogincount_1
+        
+		FROM     report r, user_info u, user_info ru  
+		WHERE    r.ropcode = ru.ucode   
+		and      u.ucode = r.rucode(+)
+ 		and		 r.rucode != 0
+ 		and 	 u.ustate != 0
+		UNION 
+		SELECT  r.rcode, r.rucode, r.rbcode, r.ropcode, r.rcontent, r.rdatetime, r.rtype, r.raction,
+        <!-- u.ucode, --> u.uemail, u.upassword, u.uatid, u.unickname, u.ubirth, u.ugender, u.unation, u.uidentify, u.uchat,
+        u.ualarm, u.uprivate, u.uregdate, u.uintro, u.uloc, u.uimage, u.ubg, u.uprofilelink, u.ustate, u.ureportcount,
+        u.uonline, u.ulogincount,
+        <!-- b.bcode, --> b.ucode, b.bcontent,
+			case when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))/365) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))/365)||'년 전'
+	     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))/31) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))/31)||'달 전'
+	     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss')))||'일 전'
+	     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24)||'시간 전'
+	     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24*60) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24*60)||'분 전'
+	     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24*60*60) >=0 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24*60*60)||'초 전'
+	    	  end as bregdate 
+			, b.btype, b.banchor, b.bpermission, b.bbcode, b.battach, b.bvotecode,
+        b.blikecount, b.bexpcount, b.bjoincount, b.bstate, b.breportcount, b.breplycount, b.bquotecount, b.bsaveorrsvd,
+        <!-- ru.ucode, --> ru.uemail uemail_1, ru.upassword upassword_1, ru.uatid uatid_1, ru.unickname unickname_1, ru.ubirth ubirth_1, ru.ugender ugender_1, ru.unation unation_1, ru.uidentify uidentify_1, ru.uchat uchat_1,
+        ru.ualarm ualarm_1, ru.uprivate uprivate_1, ru.uregdate uregdate_1, ru.uintro uintro_1, ru.uloc uloc_1, ru.uimage uimage_1, ru.ubg ubg_1, ru.uprofilelink uprofilelink_1, ru.ustate ustate_1, ru.ureportcount ureportcount_1,
+        ru.uonline uonline_1, ru.ulogincount ulogincount_1
+           
+		FROM     report r,  user_info ru,  board b, user_info u
+		WHERE    r.ropcode = ru.ucode
+		and      b.ucode = u.ucode  
+		and      b.bcode = r.rbcode (+)
+		and		 b.ucode != 0
+		and 	 b.bstate != 0
+		ORDER BY rdatetime desc
+ 
+	</select>
+	<select id="accusationSelectReportUser_infoBoardSearch" parameterType="String" resultType="CoffeeReportUser_infoBoard">
+		SELECT  r.rcode, r.rucode, r.rbcode, r.ropcode, r.rcontent, r.rdatetime, r.rtype, r.raction,
+        <!-- u.ucode, --> u.uemail, u.upassword, u.uatid, u.unickname, u.ubirth, u.ugender, u.unation, u.uidentify, u.uchat,
+        u.ualarm, u.uprivate, u.uregdate, u.uintro, u.uloc, u.uimage, u.ubg, u.uprofilelink, u.ustate, u.ureportcount,
+        u.uonline, u.ulogincount,
+        <!-- -1 bcode, --> -1 ucode , '' bcontent, '' bregdate, '' btype, -1 banchor, '' bpermission, -1 bbcode, '' battach, -1 bvotecode,
+         -1 blikecount, -1 bexpcount, -1 bjoincount, -1 bstate, -1 breportcount, -1 breplycount, -1 bquotecount, -1 bsaveorrsvd,
+        <!-- ru.ucode, --> ru.uemail uemail_1, ru.upassword upassword_1, ru.uatid uatid_1, ru.unickname unickname_1, ru.ubirth ubirth_1, ru.ugender ugender_1, ru.unation unation_1, ru.uidentify uidentify_1, ru.uchat uchat_1,
+        ru.ualarm ualarm_1, ru.uprivate uprivate_1, ru.uregdate uregdate_1, ru.uintro uintro_1, ru.uloc uloc_1, ru.uimage uimage_1, ru.ubg ubg_1, ru.uprofilelink uprofilelink_1, ru.ustate ustate_1, ru.ureportcount ureportcount_1,
+        ru.uonline uonline_1, ru.ulogincount ulogincount_1
+        
+		FROM     report r, user_info u, user_info ru  
+		WHERE    r.ropcode = ru.ucode   
+		and      u.ucode = r.rucode(+)
+ 		and		 r.rucode != 0
+ 		and 	 u.ustate != 0
+ 		AND		(u.uatid LIKE '%'||#{search}||'%' OR u.unickname LIKE '%'||#{search}||'%' OR u.uintro LIKE '%'||#{search}||'%'
+				OR ru.uatid LIKE '%'||#{search}||'%' OR ru.unickname LIKE '%'||#{search}||'%' OR r.rcontent LIKE '%'||#{search}||'%')
+
+		UNION 
+		SELECT  r.rcode, r.rucode, r.rbcode, r.ropcode, r.rcontent, r.rdatetime, r.rtype, r.raction,
+        <!-- u.ucode, --> u.uemail, u.upassword, u.uatid, u.unickname, u.ubirth, u.ugender, u.unation, u.uidentify, u.uchat,
+        u.ualarm, u.uprivate, u.uregdate, u.uintro, u.uloc, u.uimage, u.ubg, u.uprofilelink, u.ustate, u.ureportcount,
+        u.uonline, u.ulogincount,
+        <!-- b.bcode, --> b.ucode, b.bcontent,
+			case when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))/365) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))/365)||'년 전'
+	     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))/31) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))/31)||'달 전'
+	     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss')))||'일 전'
+	     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24)||'시간 전'
+	     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24*60) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24*60)||'분 전'
+	     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24*60*60) >=0 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24*60*60)||'초 전'
+	    	  end as bregdate 
+			, b.btype, b.banchor, b.bpermission, b.bbcode, b.battach, b.bvotecode,
+        b.blikecount, b.bexpcount, b.bjoincount, b.bstate, b.breportcount, b.breplycount, b.bquotecount, b.bsaveorrsvd,
+        <!-- ru.ucode, --> ru.uemail uemail_1, ru.upassword upassword_1, ru.uatid uatid_1, ru.unickname unickname_1, ru.ubirth ubirth_1, ru.ugender ugender_1, ru.unation unation_1, ru.uidentify uidentify_1, ru.uchat uchat_1,
+        ru.ualarm ualarm_1, ru.uprivate uprivate_1, ru.uregdate uregdate_1, ru.uintro uintro_1, ru.uloc uloc_1, ru.uimage uimage_1, ru.ubg ubg_1, ru.uprofilelink uprofilelink_1, ru.ustate ustate_1, ru.ureportcount ureportcount_1,
+        ru.uonline uonline_1, ru.ulogincount ulogincount_1
+           
+		FROM     report r,  user_info ru, board b, user_info u
+		WHERE    r.ropcode = ru.ucode
+		and      b.ucode = u.ucode   
+		and      b.bcode = r.rbcode (+)
+		and		 b.ucode != 0
+		and 	 b.bstate != 0
+		AND		(b.bcontent LIKE '%'||#{search}||'%' OR u.uatid LIKE '%'||#{search}||'%' OR u.unickname LIKE '%'||#{search}||'%'
+				OR ru.uatid LIKE '%'||#{search}||'%' OR ru.unickname LIKE '%'||#{search}||'%' OR r.rcontent LIKE '%'||#{search}||'%')
+		ORDER BY rdatetime desc
+ 
+	</select>
+	<select id="coffeeSensorFollowingReport" parameterType="int" resultType="int">
+		SELECT COUNT(*) FROM follow where ucode = #{rucode}
+   	</select>
+   	<select id="coffeeSensorFollowerReport" parameterType="int" resultType="int">
+		SELECT COUNT(*) FROM follow where fopcode = #{rucode}
+   	</select>
+	
+	<select id="accusationSelectUncensoredReportUser_infoBoard" resultType="CoffeeReportUser_infoBoard">
+		SELECT  r.rcode, r.rucode, r.rbcode, r.ropcode, r.rcontent, r.rdatetime, r.rtype, r.raction,
+        <!-- u.ucode, --> u.uemail, u.upassword, u.uatid, u.unickname, u.ubirth, u.ugender, u.unation, u.uidentify, u.uchat,
+        u.ualarm, u.uprivate, u.uregdate, u.uintro, u.uloc, u.uimage, u.ubg, u.uprofilelink, u.ustate, u.ureportcount,
+        u.uonline, u.ulogincount,
+        <!-- -1 bcode, --> -1 ucode , '' bcontent, '' bregdate, '' btype, -1 banchor, '' bpermission, -1 bbcode, '' battach, -1 bvotecode,
+         -1 blikecount, -1 bexpcount, -1 bjoincount, -1 bstate, -1 breportcount, -1 breplycount, -1 bquotecount, -1 bsaveorrsvd,
+        <!-- ru.ucode, --> ru.uemail uemail_1, ru.upassword upassword_1, ru.uatid uatid_1, ru.unickname unickname_1, ru.ubirth ubirth_1, ru.ugender ugender_1, ru.unation unation_1, ru.uidentify uidentify_1, ru.uchat uchat_1,
+        ru.ualarm ualarm_1, ru.uprivate uprivate_1, ru.uregdate uregdate_1, ru.uintro uintro_1, ru.uloc uloc_1, ru.uimage uimage_1, ru.ubg ubg_1, ru.uprofilelink uprofilelink_1, ru.ustate ustate_1, ru.ureportcount ureportcount_1,
+        ru.uonline uonline_1, ru.ulogincount ulogincount_1
+        
+		FROM     report r, user_info u, user_info ru 
+		WHERE    r.ropcode = ru.ucode   
+		and      u.ucode = r.rucode(+)
+		and		 r.rucode != 0
+		and		 r.raction = 0
+		and 	 u.ustate != 0
+		  
+		UNION 
+		SELECT  r.rcode, r.rucode, r.rbcode, r.ropcode, r.rcontent, r.rdatetime, r.rtype, r.raction,
+        <!-- u.ucode, --> u.uemail, u.upassword, u.uatid, u.unickname, u.ubirth, u.ugender, u.unation, u.uidentify, u.uchat,
+        u.ualarm, u.uprivate, u.uregdate, u.uintro, u.uloc, u.uimage, u.ubg, u.uprofilelink, u.ustate, u.ureportcount,
+        u.uonline, u.ulogincount,
+        <!-- b.bcode, --> b.ucode, b.bcontent,
+			case when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))/365) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))/365)||'년 전'
+	     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))/31) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))/31)||'달 전'
+	     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss')))||'일 전'
+	     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24)||'시간 전'
+	     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24*60) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24*60)||'분 전'
+	     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24*60*60) >=0 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24*60*60)||'초 전'
+	    	  end as bregdate 
+			, b.btype, b.banchor, b.bpermission, b.bbcode, b.battach, b.bvotecode,
+        b.blikecount, b.bexpcount, b.bjoincount, b.bstate, b.breportcount, b.breplycount, b.bquotecount, b.bsaveorrsvd,
+        <!-- ru.ucode, --> ru.uemail uemail_1, ru.upassword upassword_1, ru.uatid uatid_1, ru.unickname unickname_1, ru.ubirth ubirth_1, ru.ugender ugender_1, ru.unation unation_1, ru.uidentify uidentify_1, ru.uchat uchat_1,
+        ru.ualarm ualarm_1, ru.uprivate uprivate_1, ru.uregdate uregdate_1, ru.uintro uintro_1, ru.uloc uloc_1, ru.uimage uimage_1, ru.ubg ubg_1, ru.uprofilelink uprofilelink_1, ru.ustate ustate_1, ru.ureportcount ureportcount_1,
+        ru.uonline uonline_1, ru.ulogincount ulogincount_1
+           
+		FROM     report r,  user_info ru,  board b, user_info u
+		WHERE    r.ropcode = ru.ucode
+		and      b.ucode = u.ucode   
+		and      b.bcode = r.rbcode (+)
+		and		 r.raction = 0
+		and		 b.ucode != 0
+		and 	 b.bstate != 0
+		
+		ORDER BY rdatetime desc
+ 
+	</select>
+	<select id="accusationSelectUncensoredReportUser_infoBoardSearch" resultType="CoffeeReportUser_infoBoard">
+		SELECT  r.rcode, r.rucode, r.rbcode, r.ropcode, r.rcontent, r.rdatetime, r.rtype, r.raction,
+        <!-- u.ucode, --> u.uemail, u.upassword, u.uatid, u.unickname, u.ubirth, u.ugender, u.unation, u.uidentify, u.uchat,
+        u.ualarm, u.uprivate, u.uregdate, u.uintro, u.uloc, u.uimage, u.ubg, u.uprofilelink, u.ustate, u.ureportcount,
+        u.uonline, u.ulogincount,
+        <!-- -1 bcode, --> -1 ucode , '' bcontent, '' bregdate, '' btype, -1 banchor, '' bpermission, -1 bbcode, '' battach, -1 bvotecode,
+         -1 blikecount, -1 bexpcount, -1 bjoincount, -1 bstate, -1 breportcount, -1 breplycount, -1 bquotecount, -1 bsaveorrsvd,
+        <!-- ru.ucode, --> ru.uemail uemail_1, ru.upassword upassword_1, ru.uatid uatid_1, ru.unickname unickname_1, ru.ubirth ubirth_1, ru.ugender ugender_1, ru.unation unation_1, ru.uidentify uidentify_1, ru.uchat uchat_1,
+        ru.ualarm ualarm_1, ru.uprivate uprivate_1, ru.uregdate uregdate_1, ru.uintro uintro_1, ru.uloc uloc_1, ru.uimage uimage_1, ru.ubg ubg_1, ru.uprofilelink uprofilelink_1, ru.ustate ustate_1, ru.ureportcount ureportcount_1,
+        ru.uonline uonline_1, ru.ulogincount ulogincount_1
+        
+		FROM     report r, user_info u, user_info ru 
+		WHERE    r.ropcode = ru.ucode   
+		and      u.ucode = r.rucode(+)
+		and		 r.rucode != 0
+		and		 r.raction = 0
+		and 	 u.ustate != 0
+		AND		(u.uatid LIKE '%'||#{search}||'%' OR u.unickname LIKE '%'||#{search}||'%' OR u.uintro LIKE '%'||#{search}||'%'
+				OR ru.uatid LIKE '%'||#{search}||'%' OR ru.unickname LIKE '%'||#{search}||'%' OR r.rcontent LIKE '%'||#{search}||'%')
+		 
+		UNION 
+		SELECT  r.rcode, r.rucode, r.rbcode, r.ropcode, r.rcontent, r.rdatetime, r.rtype, r.raction,
+        <!-- u.ucode, --> u.uemail, u.upassword, u.uatid, u.unickname, u.ubirth, u.ugender, u.unation, u.uidentify, u.uchat,
+        u.ualarm, u.uprivate, u.uregdate, u.uintro, u.uloc, u.uimage, u.ubg, u.uprofilelink, u.ustate, u.ureportcount,
+        u.uonline, u.ulogincount,
+        <!-- b.bcode, --> b.ucode, b.bcontent,
+			case when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))/365) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))/365)||'년 전'
+	     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))/31) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))/31)||'달 전'
+	     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss')))||'일 전'
+	     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24)||'시간 전'
+	     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24*60) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24*60)||'분 전'
+	     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24*60*60) >=0 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24*60*60)||'초 전'
+	    	  end as bregdate 
+			, b.btype, b.banchor, b.bpermission, b.bbcode, b.battach, b.bvotecode,
+        b.blikecount, b.bexpcount, b.bjoincount, b.bstate, b.breportcount, b.breplycount, b.bquotecount, b.bsaveorrsvd,
+        <!-- ru.ucode, --> ru.uemail uemail_1, ru.upassword upassword_1, ru.uatid uatid_1, ru.unickname unickname_1, ru.ubirth ubirth_1, ru.ugender ugender_1, ru.unation unation_1, ru.uidentify uidentify_1, ru.uchat uchat_1,
+        ru.ualarm ualarm_1, ru.uprivate uprivate_1, ru.uregdate uregdate_1, ru.uintro uintro_1, ru.uloc uloc_1, ru.uimage uimage_1, ru.ubg ubg_1, ru.uprofilelink uprofilelink_1, ru.ustate ustate_1, ru.ureportcount ureportcount_1,
+        ru.uonline uonline_1, ru.ulogincount ulogincount_1
+           
+		FROM     report r,  user_info ru,  board b, user_info u
+		WHERE    r.ropcode = ru.ucode
+		and      b.ucode = u.ucode   
+		and      b.bcode = r.rbcode (+)
+		and		 r.raction = 0
+		and		 b.ucode != 0
+		and 	 b.bstate != 0
+		AND		(b.bcontent LIKE '%'||#{search}||'%' OR u.uatid LIKE '%'||#{search}||'%' OR u.unickname LIKE '%'||#{search}||'%'
+				OR ru.uatid LIKE '%'||#{search}||'%' OR ru.unickname LIKE '%'||#{search}||'%' OR r.rcontent LIKE '%'||#{search}||'%')
+		
+		ORDER BY rdatetime desc
+ 
+	</select>
+ 	<update id="coffeeUpdateRaction" parameterType="CoffeeReportUser_infoBoard">
+   		UPDATE report SET raction = #{raction} WHERE rcode = #{rcode}
+   	</update>
+
+</mapper>

@@ -62,8 +62,13 @@ public class BroController {
 			System.out.println("controller uEamil-->"+uEmail);
 			bs.logout(uEmail);
 			return "bro/loginFail";
-		}else {
-		
+		}
+		else if(login.getuCode()==0){
+			session.setAttribute("login", login);
+			System.out.println("관리자계정 로그인!!");
+			return "/coffee/censorMemberManagerPage";
+		}
+		else {
 			System.out.println(login.getuCode());
 			session.setAttribute("ucode",login.getuCode());
 			System.out.println("login on");

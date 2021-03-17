@@ -189,8 +189,8 @@ label {
 					src="/img/bell.svg" width="15" height="15"> 알림 <span
 					class="badge badge-success">1</span>
 				</a>
-				
-				<a href="chat" class="list-group-item list-group-item-action"> <img
+				<!-- bear1 -->
+				<a href="/bear/chat" class="list-group-item list-group-item-action"> <img
 					src="/img/send.svg" width="15" height="15"> 쪽지
 				</a>
 				

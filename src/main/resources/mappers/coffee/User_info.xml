@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="CoffeeUser_info">
+	<select id="coffeeSensorSelectUser_info" resultType="CoffeeUser_info">
+		SELECT * FROM user_info WHERE ustate = 1 AND ucode != 0
+   	</select>
+	<select id="coffeeSensorSelectUser_infoSearch" parameterType="String" resultType="CoffeeUser_info">
+		SELECT * FROM user_info WHERE ustate = 1 AND ucode != 0
+		AND		(uatid LIKE '%'||#{search}||'%' OR unickname LIKE '%'||#{search}||'%' OR uintro LIKE '%'||#{search}||'%')
+   	</select>
+   	<select id="coffeeRestoreSelectUser_info" resultType="CoffeeUser_info">
+		SELECT * FROM user_info WHERE ustate = 2 AND ucode != 0 
+   	</select>
+   	<select id="coffeeRestoreSelectUser_infoSearch" parameterType="String" resultType="CoffeeUser_info">
+		SELECT * FROM user_info WHERE ustate = 2 AND ucode != 0 
+		AND		(uatid LIKE '%'||#{search}||'%' OR unickname LIKE '%'||#{search}||'%' OR uintro LIKE '%'||#{search}||'%')
+   	</select>
+   	<select id="coffeeAccusationSelectUser_info" resultType="CoffeeUser_info">
+		SELECT * FROM user_info WHERE ustate != 0 AND ureportcount >= 1 AND ucode != 0
+   	</select>
+   	<select id="coffeeAccusationSelectUser_infoSearch" parameterType="String" resultType="CoffeeUser_info">
+		SELECT * FROM user_info WHERE ustate != 0 AND ureportcount >= 1 AND ucode != 0
+		AND		(uatid LIKE '%'||#{search}||'%' OR unickname LIKE '%'||#{search}||'%' OR uintro LIKE '%'||#{search}||'%')
+   	</select>
+	<select id="coffeeSensorFollowing" parameterType="int" resultType="int">
+		SELECT COUNT(*) FROM follow where ucode = #{ucode}
+   	</select>
+   	<select id="coffeeSensorFollower" parameterType="int" resultType="int">
+		SELECT COUNT(*) FROM follow where fopcode = #{ucode}
+   	</select>
+   	<update id="coffeeUpdateUstate" parameterType="CoffeeUser_info">
+   		UPDATE user_info SET ustate = #{ustate} WHERE ucode = #{ucode}
+   	</update>
+   	<select id="coffeeSelectManager" parameterType="int" resultType="int">
+   		SELECT COUNT(*) FROM user_info WHERE ucode = 0 AND ucode = #{ucode}
+   	</select>
+   
+   
+   
+</mapper>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Chat">
+<insert id="insertmsg"  parameterType="Chat">
+	insert into CHAT_DETAIL
+		   VALUES (#{ccode},#{ucode},#{cdmessage},
+					TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS'))
+
+</insert>
+
+<select id="listId" parameterType="int" resultType="Chat">
+	select c.ccode ccode, c.ucode ucode, c.UOPCODE uopcode, d.CDMESSAGE cdmessage, ui.uimage uimage, ui.uatid uatid,
+	case when trunc((sysdate - to_date(d.cdtime,'yy/mm/dd hh24:mi:ss'))/365) >=1 then trunc((sysdate - to_date(d.cdtime,'yy/mm/dd hh24:mi:ss'))/365)||'년 전'
+             when trunc((sysdate - to_date(d.cdtime,'yy/mm/dd hh24:mi:ss'))/31) >=1 then trunc((sysdate - to_date(d.cdtime,'yy/mm/dd hh24:mi:ss'))/31)||'달 전'
+             when trunc((sysdate - to_date(d.cdtime,'yy/mm/dd hh24:mi:ss'))) >=1 then trunc((sysdate - to_date(d.cdtime,'yy/mm/dd hh24:mi:ss')))||'일 전'
+             when trunc((sysdate - to_date(d.cdtime,'yy/mm/dd hh24:mi:ss'))*24) >=1 then trunc((sysdate - to_date(d.cdtime,'yy/mm/dd hh24:mi:ss'))*24)||'시간 전'
+             when trunc((sysdate - to_date(d.cdtime,'yy/mm/dd hh24:mi:ss'))*24*60) >=1 then trunc((sysdate - to_date(d.cdtime,'yy/mm/dd hh24:mi:ss'))*24*60)||'분 전'
+             when trunc((sysdate - to_date(d.cdtime,'yy/mm/dd hh24:mi:ss'))*24*60*60) >=0 then trunc((sysdate - to_date(d.cdtime,'yy/mm/dd hh24:mi:ss'))*24*60*60)||'초 전'
+          end as cdtime
+	from chat c , chat_detail d, user_info ui
+	where c.ccode= d.ccode 
+      and ui.ucode = c.uopcode
+			and c.ucode= #{sessionId}  
+			and (d.ccode ,d.ucode,d.cdmessage,d.cdtime) in( select ccode,ucode,cdmessage,cdtime
+															from chat_detail
+															where (ccode, cdtime) in (
+																						select ccode, max(cdtime) as cdtime
+																						from chat_detail 
+																						group by ccode)
+																						
+																						
+																						)order by d.cdtime desc
+														
+
+
+</select>
+
+<select id="chainglist"	resultType="Chat" parameterType="Chat">
+	select *
+	from chat_detail
+	where ccode = #{ccode}
+	order by cdtime asc
+</select>
+
+<insert id="mycreate" parameterType="Chat">
+
+	     insert all
+				into chat  VALUES(ccode_seq.nextval ,#{ucode} ,#{uopcode} , null , null)
+				into chat  VALUES(ccode_seq.currval ,  #{uopcode}, #{ucode}, null , null )
+				into chat_detail values(ccode_seq.currval, #{ucode}, '채팅방생성되었습니다.',TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS'))
+  				into chat_detail values(ccode_seq.currval, #{uopcode} , '채팅방생성되었습니다.',TO_CHAR(SYSDATE-1/24/60/60, 'YYYY-MM-DD HH24:MI:SS'))
+  		select *
+  		from dual
+	
+
+</insert>
+
+<select id="selectck" resultType="Chat" parameterType="Chat">
+
+select ccode
+from chat
+where ucode = #{ucode} and uopcode = #{uopcode}
+
+</select>
+
+
+
+
+
+</mapper>

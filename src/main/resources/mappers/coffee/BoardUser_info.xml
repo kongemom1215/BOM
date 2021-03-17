@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="BoardUser_info">
+	<select id="coffeeSensorSelectBoardUser_info" resultType="CoffeeBoardUser_info">
+		SELECT  b.bcode, b.ucode, b.bcontent, 
+			case when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))/365) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))/365)||'년 전'
+	     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))/31) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))/31)||'달 전'
+	     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss')))||'일 전'
+	     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24)||'시간 전'
+	     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24*60) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24*60)||'분 전'
+	     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24*60*60) >=0 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24*60*60)||'초 전'
+	    	  end as bregdate 
+			, b.btype, b.banchor, b.bpermission, b.bbcode, b.battach, b.bvotecode,
+        b.blikecount, b.bexpcount, b.bjoincount, b.bstate, b.breportcount, b.breplycount, b.bquotecount, b.bsaveorrsvd,
+        <!-- u.ucode, --> u.uemail, u.upassword, u.uatid, u.unickname, u.ubirth, u.ugender, u.unation, u.uidentify, u.uchat,
+        u.ualarm, u.uprivate, u.uregdate, u.uintro, u.uloc, u.uimage, u.ubg, u.uprofilelink, u.ustate, u.ureportcount,
+        u.uonline, u.ulogincount
+		FROM    board b, user_info u
+		WHERE   b.ucode = u.ucode AND b.bstate = 1 AND u.ucode != 0
+		ORDER BY b.bregdate DESC
+   	</select>
+	<select id="coffeeSensorSelectBoardUser_infoSearch" parameterType="String" resultType="CoffeeBoardUser_info">
+		SELECT  b.bcode, b.ucode, b.bcontent, 
+			case when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))/365) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))/365)||'년 전'
+	     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))/31) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))/31)||'달 전'
+	     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss')))||'일 전'
+	     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24)||'시간 전'
+	     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24*60) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24*60)||'분 전'
+	     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24*60*60) >=0 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24*60*60)||'초 전'
+	    	  end as bregdate 
+			, b.btype, b.banchor, b.bpermission, b.bbcode, b.battach, b.bvotecode,
+        b.blikecount, b.bexpcount, b.bjoincount, b.bstate, b.breportcount, b.breplycount, b.bquotecount, b.bsaveorrsvd,
+        <!-- u.ucode, --> u.uemail, u.upassword, u.uatid, u.unickname, u.ubirth, u.ugender, u.unation, u.uidentify, u.uchat,
+        u.ualarm, u.uprivate, u.uregdate, u.uintro, u.uloc, u.uimage, u.ubg, u.uprofilelink, u.ustate, u.ureportcount,
+        u.uonline, u.ulogincount
+		FROM    board b, user_info u
+		WHERE   b.ucode = u.ucode AND b.bstate = 1 AND u.ucode != 0
+		AND		(b.bcontent LIKE '%'||#{search}||'%' OR u.uatid LIKE '%'||#{search}||'%' OR u.unickname LIKE '%'||#{search}||'%')
+		ORDER BY b.bregdate DESC
+   	</select>
+   	
+   	
+   	<select id="coffeeRestoreSelectBoardUser_info" parameterType="CoffeeBoardUser_info" resultType="CoffeeBoardUser_info">
+		SELECT  b.bcode, b.ucode, b.bcontent, 
+			case when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))/365) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))/365)||'년 전'
+	     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))/31) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))/31)||'달 전'
+	     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss')))||'일 전'
+	     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24)||'시간 전'
+	     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24*60) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24*60)||'분 전'
+	     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24*60*60) >=0 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24*60*60)||'초 전'
+	    	  end as bregdate 
+			, b.btype, b.banchor, b.bpermission, b.bbcode, b.battach, b.bvotecode,
+        b.blikecount, b.bexpcount, b.bjoincount, b.bstate, b.breportcount, b.breplycount, b.bquotecount, b.bsaveorrsvd,
+        <!-- u.ucode, --> u.uemail, u.upassword, u.uatid, u.unickname, u.ubirth, u.ugender, u.unation, u.uidentify, u.uchat,
+        u.ualarm, u.uprivate, u.uregdate, u.uintro, u.uloc, u.uimage, u.ubg, u.uprofilelink, u.ustate, u.ureportcount,
+        u.uonline, u.ulogincount
+		FROM    board b, user_info u
+		WHERE   b.ucode = u.ucode AND b.bstate = 2 AND u.ucode != 0
+		ORDER BY b.bregdate DESC
+   	</select>
+   	
+   	<select id="coffeeRestoreSelectBoardUser_infoSearch" parameterType="String" resultType="CoffeeBoardUser_info">
+		SELECT  b.bcode, b.ucode, b.bcontent, 
+			case when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))/365) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))/365)||'년 전'
+	     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))/31) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))/31)||'달 전'
+	     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss')))||'일 전'
+	     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24)||'시간 전'
+	     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24*60) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24*60)||'분 전'
+	     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24*60*60) >=0 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24*60*60)||'초 전'
+	    	  end as bregdate 
+			, b.btype, b.banchor, b.bpermission, b.bbcode, b.battach, b.bvotecode,
+        b.blikecount, b.bexpcount, b.bjoincount, b.bstate, b.breportcount, b.breplycount, b.bquotecount, b.bsaveorrsvd,
+        <!-- u.ucode, --> u.uemail, u.upassword, u.uatid, u.unickname, u.ubirth, u.ugender, u.unation, u.uidentify, u.uchat,
+        u.ualarm, u.uprivate, u.uregdate, u.uintro, u.uloc, u.uimage, u.ubg, u.uprofilelink, u.ustate, u.ureportcount,
+        u.uonline, u.ulogincount
+		FROM    board b, user_info u
+		WHERE   b.ucode = u.ucode AND b.bstate = 2 AND u.ucode != 0
+		AND		(b.bcontent LIKE '%'||#{search}||'%' OR u.uatid LIKE '%'||#{search}||'%' OR u.unickname LIKE '%'||#{search}||'%')
+		ORDER BY b.bregdate DESC
+   	</select>
+   	
+   	<select id="coffeeAccusationSelectBoardUser_info" parameterType="CoffeeBoardUser_info" resultType="CoffeeBoardUser_info">
+		SELECT  b.bcode, b.ucode, b.bcontent, 
+			case when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))/365) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))/365)||'년 전'
+	     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))/31) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))/31)||'달 전'
+	     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss')))||'일 전'
+	     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24)||'시간 전'
+	     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24*60) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24*60)||'분 전'
+	     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24*60*60) >=0 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24*60*60)||'초 전'
+	    	  end as bregdate 
+			, b.btype, b.banchor, b.bpermission, b.bbcode, b.battach, b.bvotecode,
+        b.blikecount, b.bexpcount, b.bjoincount, b.bstate, b.breportcount, b.breplycount, b.bquotecount, b.bsaveorrsvd,
+        <!-- u.ucode, --> u.uemail, u.upassword, u.uatid, u.unickname, u.ubirth, u.ugender, u.unation, u.uidentify, u.uchat,
+        u.ualarm, u.uprivate, u.uregdate, u.uintro, u.uloc, u.uimage, u.ubg, u.uprofilelink, u.ustate, u.ureportcount,
+        u.uonline, u.ulogincount
+		FROM    board b, user_info u
+		WHERE   b.ucode = u.ucode AND b.bstate != 0 AND b.breportcount >= 1 AND u.ucode != 0
+		ORDER BY b.bregdate DESC
+		
+   	</select>
+   	<select id="coffeeAccusationSelectBoardUser_infoSearch" parameterType="String" resultType="CoffeeBoardUser_info">
+		SELECT  b.bcode, b.ucode, b.bcontent, 
+			case when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))/365) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))/365)||'년 전'
+	     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))/31) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))/31)||'달 전'
+	     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss')))||'일 전'
+	     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24)||'시간 전'
+	     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24*60) >=1 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24*60)||'분 전'
+	     		when trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24*60*60) >=0 then trunc((sysdate - to_date(b.bregdate,'yy/mm/dd hh24:mi:ss'))*24*60*60)||'초 전'
+	    	  end as bregdate 
+			, b.btype, b.banchor, b.bpermission, b.bbcode, b.battach, b.bvotecode,
+        b.blikecount, b.bexpcount, b.bjoincount, b.bstate, b.breportcount, b.breplycount, b.bquotecount, b.bsaveorrsvd,
+        <!-- u.ucode, --> u.uemail, u.upassword, u.uatid, u.unickname, u.ubirth, u.ugender, u.unation, u.uidentify, u.uchat,
+        u.ualarm, u.uprivate, u.uregdate, u.uintro, u.uloc, u.uimage, u.ubg, u.uprofilelink, u.ustate, u.ureportcount,
+        u.uonline, u.ulogincount
+		FROM    board b, user_info u
+		WHERE   b.ucode = u.ucode AND b.bstate != 0 AND b.breportcount >= 1 AND u.ucode != 0
+		AND		(b.bcontent LIKE '%'||#{search}||'%' OR u.uatid LIKE '%'||#{search}||'%' OR u.unickname LIKE '%'||#{search}||'%')
+		ORDER BY b.bregdate DESC
+		
+   	</select>
+   	<update id="coffeeUpdateBstate" parameterType="CoffeeBoardUser_info">
+   		UPDATE board SET bstate = #{bstate} WHERE bcode = #{bcode}
+   	</update>
+   
+</mapper>
