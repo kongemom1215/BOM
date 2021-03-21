@@ -69,6 +69,12 @@
 			<version>1.1</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-mapper-asl</artifactId>
+			<version>1.9.13</version>
+		</dependency>
+		
 		<!-- 주혜추가 -->
 		<dependency>
 			<groupId>commons-io</groupId>
@@ -81,7 +87,7 @@
 			<artifactId>commons-fileupload</artifactId>
 			<version>1.2.2</version>
 		</dependency>
-		
+
 	</dependencies>
 
 	<build>

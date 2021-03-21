@@ -28,5 +28,21 @@ public class User_InfoDaoImpl implements User_InfoDao {
 		else System.out.println("[iron] User_InfoDaoImpl getLoginUserInfo -> exist!!");
 		return user;
 	}
+
+	@Override
+	public int getUserfollowCount(User_Info someone) {
+		System.out.println("[iron] User_InfoDaoImpl getUserfollowCount start...");
+		int result = session.selectOne("UserFollowCount", someone);
+		System.out.println("UserfollowCount -> "+result);
+		return result;
+	}
+
+	@Override
+	public int getUserfollowerCount(User_Info someone) {
+		System.out.println("[iron] User_InfoDaoImpl getUserfollowerCount start...");
+		int result = session.selectOne("UserFollowerCount", someone);
+		System.out.println("UserfollowerCount -> "+result);
+		return result;
+	}
 	
 }

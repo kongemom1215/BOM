@@ -98,6 +98,11 @@
 							//}
 				});
 			});
+			
+			function chk(){
+				alert(document.getElementById('#pwd'));
+				return true;
+			}
 			</script>
 </head>
 
@@ -161,11 +166,11 @@
 				<p>
 				<div class="card">
 					<div align="center">
-					<form action="changePwPro" method="post">
+					<form action="changePwPro" method="post" onsubmit="chk();">
 						<input type="hidden" name="upassword" value="${ui.upassword }">
 						<input type="hidden" name="uemail" value="${ui.uemail }">
 						<input type="hidden" name="uidentify" value="${ui.uidentify }">
-						<input type="hidden" name="pwd" value="${pwd }">
+						<!-- <input type="hidden" name="pwd" value="${pwd }"> -->
 						<p>
 						<h2>비밀번호 변경</h2>
 						<div class="input-group mb-3">
@@ -179,8 +184,7 @@
 						<label for="pwd">새로운 비밀번호</label><br>
 	  							<input type="password" class="form-control"  name="pwd" id="pwd" placeholder="새로운 비밀번호를 입력해주세요." aria-label="새로운 비밀번호를 입력해주세요." aria-describedby="button-addon2" required="required"><br>
 	  					<label for="pwd2">새로운 비밀번호 확인</label><br>		
-	  							<input type="password" class="form-control"  name="pwd2" id="pwd2" placeholder="한번 더 입력해주세요." aria-label="한번 더  입력해주세요." aria-describedby="button-addon2" required="required"><br>
-	  							<!--  <button class="btn btn-outline-secondary" type="button" id="button-addon2" onclick="chk()">비밀번호확인</button>  -->	
+	  							<input type="password" class="form-control"  name="pwd2" id="pwd2" placeholder="한번 더 입력해주세요." aria-label="한번 더  입력해주세요." aria-describedby="button-addon2" required="required"><br>	
 								<div id="pw_doublecheck"></div>
 						</div>
 						</div>

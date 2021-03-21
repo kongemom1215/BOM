@@ -27,6 +27,8 @@ public class RUser_InfoDaoImpl implements RUser_InfoDao {
 		RUser_Info ui = new RUser_Info();
 		try {
 			ui = session.selectOne("rightUserSelect", ucode);
+			System.out.println("ui.getPwd() -> " + ui.getPwd());
+			System.out.println("ui.getUpassword() " + ui.getUpassword());
 		} catch (Exception e) {
 			System.out.println("User_InfoDaoImpl detail Exception->"+e.getMessage());
 		}
@@ -170,8 +172,8 @@ public class RUser_InfoDaoImpl implements RUser_InfoDao {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("pwd", pwd);
 		map.put("ucode", u_code);
-		
 		System.out.println("User_InfoDaoImpl changePwinsert start..");
+		System.out.println("User_InfoDaoImpl changePwinsert() map -> "+map);
 		int result1 = 0;
 		try {
 			result1 = session.insert("rightPwchange1", map);
@@ -188,10 +190,11 @@ public class RUser_InfoDaoImpl implements RUser_InfoDao {
 		map.put("pwd", pwd);
 		map.put("ucode", u_code);
 		
-		System.out.println("User_InfoDaoImpl changePwupdate start..");
 		int result2 = 0;
 		try {
+			System.out.println("User_InfoDaoImpl changePwupdate()1 map -> " + map);
 			result2 = session.update("rightPwchange2", map);
+			System.out.println("User_InfoDaoImpl changePwupdate()2 map -> " + map);
 		} catch (Exception e) {
 			System.out.println("User_InfoDaoImpl changePwupdate Exception->"+e.getMessage());
 		}
@@ -200,14 +203,15 @@ public class RUser_InfoDaoImpl implements RUser_InfoDao {
 	@Override
 	public int editPw(int ucode, String pwd) {
 		String u_code = String.valueOf(ucode);
-		System.out.println("User_InfoDaoImpl userpwCheck start..");
+		System.out.println("User_InfoDaoImpl editPw start..");
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("pwd", pwd);
 		map.put("ucode", u_code);
-		System.out.println("User_InfoDaoImpl editPw start..");
 		int result3 = 0;
 		try {
+			System.out.println("User_InfoDaoImpl editPw() map -> "+map);
 			result3 = session.update("rightPwchange3", map);
+			System.out.println("User_InfoDaoImpl editPw() map -> "+map);
 		} catch (Exception e) {
 			System.out.println("User_InfoDaoImpl editPw Exception->"+e.getMessage());
 		}

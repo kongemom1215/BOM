@@ -25,6 +25,8 @@ public class User_Info {
 	private int uloginCount;	//로그인 시도횟수
 	private int uonline;	//온라인 여부
 	//Extra columns
+	private int followCount; //팔로우수
+	private int followerCount; //팔로워수
 	
 	public int getUcode() {
 		return ucode;
@@ -200,6 +202,22 @@ public class User_Info {
 
 	public void setUonline(int uonline) {
 		this.uonline = uonline;
+	}
+
+	public int getFollowCount() {
+		return followCount;
+	}
+
+	public void setFollowCount(int followCount) {
+		this.followCount = followCount;
+	}
+
+	public int getFollowerCount() {
+		return followerCount;
+	}
+
+	public void setFollowerCount(int followerCount) {
+		this.followerCount = followerCount;
 	}
 	
 }

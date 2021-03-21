@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%
+	String context = request.getContextPath();
+%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -65,8 +68,9 @@
 				<!-- bear1 -->
 				<a href="/bear/chat" class="list-group-item list-group-item-action">
 					<img src="/img/send.svg" width="15" height="15"> 쪽지
-				</a> <a href="bookmark" class="list-group-item list-group-item-action">
-					<img src="/img/bookmark.svg" width="15" height="15"> 북마크
+				</a> <a href="/yeah/bookmark"
+					class="list-group-item list-group-item-action"> <img
+					src="/img/bookmark.svg" width="15" height="15"> 북마크
 				</a> <a href="/iron/profile/uatid=${user.uatid }"
 					class="list-group-item list-group-item-action"> <img
 					src="/img/user.svg" width="15" height="15"> 프로필
@@ -80,146 +84,159 @@
 				</a>
 				<div class="card">
 					<div class="card-body">
-						 <img src="${ui.uImage }" class="rounded-circle" width="50" width="50"> 
-                     <div class="form-col ml-2">
-                     <a class="card-title text-dark" style="font-size:0.8em">${ui.uNickname }</a><br> 
-                     <a class="card-subtitle mb-2 text-muted" style="font-size:0.8em">@${ui.uAtid }</a>
+						<img src="<%=context %>/profile_image/${user.uimage }"
+							class="rounded-circle" width="50" width="50"> <a
+							class="card-title text-dark" style="font-size: 0.8em">${user.unickName }</a><br>
+						<a class="card-subtitle mb-2 text-muted" style="font-size: 0.8em">@${user.uatid }</a>
 					</div>
 					<button type="button" class="btn btn-success">로그아웃</button>
 				</div>
-			</div>
 		</div>
-		</div>
-		<!-- /#sidebar-wrapper -->
+	</div>
+	<!-- /#sidebar-wrapper -->
 
-		<!-- Page Content -->
-		<div id="page-content-wrapper">
-				<nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
-					<button class="btn btn-success" id="menu-toggle" onclick="location.href='updateEv'">←</button>
-				</nav>
-			<div class="container-fluid">
-				<p>
-				<div class="card">
+	<!-- Page Content -->
+	<div id="page-content-wrapper">
+		<nav
+			class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+			<button class="btn btn-success" id="menu-toggle"
+				onclick="location.href='updateEv'">←</button>
+		</nav>
+		<div class="container-fluid">
+			<p>
+			<div class="card">
 				<h2>차단 관리</h2>
-				 <div class="btn-group me-2" role="group" aria-label="Second group">
-				<button type="button" class="btn btn-secondary" onclick="location.href='block'">계정 관리</button>
-				<button type="button" class="btn btn-secondary" onclick="location.href='blockhash'">해시태그 관리</button>
-				<button type="button" class="btn btn-light" onclick="location.href='blockword'">단어 관리</button></div>
-					<div align="center">
-						<a href="/right/plusBword" class="list-group-item list-group-item-action"> <img
-							src="/img/plus-circle.svg" width="15" height="15"> 차단 추가
-						</a>
-						<c:forEach var="b" items="${bList}" varStatus="status">
-							<c:if test="${not empty b.bword}">
-								<input id="${b.blcode}" type="hidden" value="${b.blcode}">
-								<label for="${b.blcode}"><span>${b.bword}</span></label>
-							    <input id="${b.blcode}" type="button" class="btn btn-outline-danger" value="차단 취소" onclick="location.href='blockdelete?blcode=${b.blcode}'"><br>	
-							</c:if>
-						</c:forEach>
-						<form action="plusBwordRe" method="post">
-							<input type="text" name="bword" placeholder="차단할 단어를 입력해주세요." required="required">	
-							<input type="submit" class="btn btn-outline-success" value="저장">	
-							<input type="reset" class="btn btn-outline-danger" value="취소">
-						</form>
-					</div>
+				<div class="btn-group me-2" role="group" aria-label="Second group">
+					<button type="button" class="btn btn-secondary"
+						onclick="location.href='block'">계정 관리</button>
+					<button type="button" class="btn btn-secondary"
+						onclick="location.href='blockhash'">해시태그 관리</button>
+					<button type="button" class="btn btn-light"
+						onclick="location.href='blockword'">단어 관리</button>
 				</div>
+				<div align="center">
+					<a href="/right/plusBword"
+						class="list-group-item list-group-item-action"> <img
+						src="/img/plus-circle.svg" width="15" height="15"> 차단 추가
+					</a>
+					<c:forEach var="b" items="${bList}" varStatus="status">
+						<c:if test="${not empty b.bword}">
+							<div class="card">
+								<div class="card-body">
+									<input id="${b.blcode}" type="hidden" value="${b.blcode}">
+									<label for="${b.blcode}"><span>${b.bword}</span></label> <input
+										id="${b.blcode}" type="button" style="font-size: 0.7em;"
+										class="btn btn-outline-danger btn-sm float-right"
+										value="차단 취소"
+										onclick="location.href='blockdeleteword?blcode=${b.blcode}'"><br>
+								</div>
+							</div>
+						</c:if>
+					</c:forEach>
+					<form action="plusBwordRe" method="post">
+						<input type="text" name="bword" placeholder="차단할 단어를 입력해주세요."
+							required="required"> <input type="submit"
+							class="btn btn-outline-success" value="저장"> <input
+							type="reset" class="btn btn-outline-danger" value="취소">
+					</form>
+				</div>
+			</div>
 		</div>
-		</div>
-		<!-- /#page-content-wrapper -->
+	</div>
+	<!-- /#page-content-wrapper -->
 
-		<!-- 오른쪽 사이드바 -->
-		<div class="bg-light border-left" id="sidebar-wrapper2">
-			<div class="list-group list-group-flush">
-				<div class="list-group-item list-group-item-action bg-light">
-					<div id="drop_the_text">
-						<!-- 엔터치면 searchData() 실행 -->
-						<input class="form-control" id="search" placeholder="봄 검색"
-							onkeypress="if( event.keyCode == 13 ){searchData();}">
-					</div>
+	<!-- 오른쪽 사이드바 -->
+	<div class="bg-light border-left" id="sidebar-wrapper2">
+		<div class="list-group list-group-flush">
+			<div class="list-group-item list-group-item-action bg-light">
+				<div id="drop_the_text">
+					<!-- 엔터치면 searchData() 실행 -->
+					<input class="form-control" id="search" placeholder="봄 검색"
+						onkeypress="if( event.keyCode == 13 ){searchData();}">
 				</div>
-				<div class="list-group-item list-group-item-action bg-light"
-					style="padding: 5px;">
-					<div class="card bg-light mb-3">
-						<div class="card-header">팔로우 추천</div>
-						<div class="card-body" style="padding: 5px;">
-							<div class="card">
-								<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
-									<img src="/img/teemo.jpg" class="rounded-circle" width="20"
-										height="20"> <a class="card-title text-dark">닉네임</a> <a
-										class="card-subtitle mb-2 text-muted">@atid</a>
-									<button type="button"
-										class="btn btn-outline-success btn-sm float-right"
-										style="font-size: 0.8rem;">팔로우</button>
-								</div>
-							</div>
-							<div class="card">
-								<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
-									<img src="/img/teemo.jpg" class="rounded-circle" width="20"
-										height="20"> <a class="card-title text-dark">닉네임</a> <a
-										class="card-subtitle mb-2 text-muted">@atid</a>
-									<button type="button"
-										class="btn btn-outline-success btn-sm float-right"
-										style="font-size: 0.8rem;">팔로우</button>
-								</div>
-							</div>
-							<div class="card">
-								<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
-									<img src="/img/teemo.jpg" class="rounded-circle" width="20"
-										height="20"> <a class="card-title text-dark">닉네임</a> <a
-										class="card-subtitle mb-2 text-muted">@atid</a>
-									<button type="button"
-										class="btn btn-outline-success btn-sm float-right"
-										style="font-size: 0.8rem;">팔로우</button>
-								</div>
+			</div>
+			<div class="list-group-item list-group-item-action bg-light"
+				style="padding: 5px;">
+				<div class="card bg-light mb-3">
+					<div class="card-header">팔로우 추천</div>
+					<div class="card-body" style="padding: 5px;">
+						<div class="card">
+							<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
+								<img src="/img/teemo.jpg" class="rounded-circle" width="20"
+									height="20"> <a class="card-title text-dark">닉네임</a> <a
+									class="card-subtitle mb-2 text-muted">@atid</a>
+								<button type="button"
+									class="btn btn-outline-success btn-sm float-right"
+									style="font-size: 0.8rem;">팔로우</button>
 							</div>
 						</div>
-					</div>
-				</div>
-				<div class="list-group-item list-group-item-action bg-light"
-					style="padding: 5px;">
-					<div class="card bg-light mb-3">
-						<div class="card-header">실시간 트랜드</div>
-						<div class="card-body" style="padding: 5px;">
-							<div class="card">
-								<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
-									1위
-									<div>
-										<a href="#">#사랑해티모</a> <span class="float-right">11,333
-											봄</span>
-									</div>
-								</div>
-							</div>
-							<div class="card">
-								<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
-									2위
-									<div>
-										<a href="#">#티세구</a> <span class="float-right">2,301 봄</span>
-									</div>
-								</div>
-							</div>
-							<div class="card">
-								<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
-									3위
-									<div>
-										<a href="#">#롤하고싶다</a> <span class="float-right">1,300
-											봄</span>
-									</div>
-								</div>
+						<div class="card">
+							<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
+								<img src="/img/teemo.jpg" class="rounded-circle" width="20"
+									height="20"> <a class="card-title text-dark">닉네임</a> <a
+									class="card-subtitle mb-2 text-muted">@atid</a>
+								<button type="button"
+									class="btn btn-outline-success btn-sm float-right"
+									style="font-size: 0.8rem;">팔로우</button>
 							</div>
 						</div>
-					</div>
-				</div>
-				<div class="list-group-item list-group-item-action bg-light"
-					style="padding: 5px; font-size: 0.8rem;">
-					<div class="card">
-						<div class="card-body">
-							<a href="#">이용약관</a> <a href="#">개인정보처리방침</a> <a href="#">운영정책</a>
-							Copyright © Bom Corp. All rights reserved.
+						<div class="card">
+							<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
+								<img src="/img/teemo.jpg" class="rounded-circle" width="20"
+									height="20"> <a class="card-title text-dark">닉네임</a> <a
+									class="card-subtitle mb-2 text-muted">@atid</a>
+								<button type="button"
+									class="btn btn-outline-success btn-sm float-right"
+									style="font-size: 0.8rem;">팔로우</button>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
+			<div class="list-group-item list-group-item-action bg-light"
+				style="padding: 5px;">
+				<div class="card bg-light mb-3">
+					<div class="card-header">실시간 트랜드</div>
+					<div class="card-body" style="padding: 5px;">
+						<div class="card">
+							<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
+								1위
+								<div>
+									<a href="#">#사랑해티모</a> <span class="float-right">11,333
+										봄</span>
+								</div>
+							</div>
+						</div>
+						<div class="card">
+							<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
+								2위
+								<div>
+									<a href="#">#티세구</a> <span class="float-right">2,301 봄</span>
+								</div>
+							</div>
+						</div>
+						<div class="card">
+							<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
+								3위
+								<div>
+									<a href="#">#롤하고싶다</a> <span class="float-right">1,300 봄</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="list-group-item list-group-item-action bg-light"
+				style="padding: 5px; font-size: 0.8rem;">
+				<div class="card">
+					<div class="card-body">
+						<a href="#">이용약관</a> <a href="#">개인정보처리방침</a> <a href="#">운영정책</a>
+						Copyright © Bom Corp. All rights reserved.
+					</div>
+				</div>
+			</div>
 		</div>
+	</div>
 	</div>
 	<!-- 오른쪽 사이드바 끝 -->
 	<!-- /#wrapper -->

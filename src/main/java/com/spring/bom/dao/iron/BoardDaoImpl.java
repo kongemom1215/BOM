@@ -55,5 +55,35 @@ public class BoardDaoImpl implements BoardDao {
 		return list;
 	}
 
-	
+	@Override
+	public List<Board> getMyBoardList(Board myboard) {
+		System.out.println("[iron] BoardDaoImpl getMyBoardList start...");
+		List<Board> list = session.selectList("MyBoardList", myboard);
+		System.out.println("[iron] BoardDaoImpl list.size() -> " + list.size());
+		return list;
+	}
+
+	@Override
+	public List<Board> getMyReplyBoardList(Board myReplyBoard) {
+		System.out.println("[iron] BoardDaoImpl getMyReplyBoardList start...");
+		List<Board> list = session.selectList("MyReplyBoardList", myReplyBoard);
+		System.out.println("[iron] BoardDaoImpl list.size() -> " + list.size());
+		return list;
+	}
+
+	@Override
+	public List<Board> getMyMediaBoardList(Board myMediaBoard) {
+		System.out.println("[iron] BoardDaoImpl getMyMediaBoardList start...");
+		List<Board> list = session.selectList("MyMediaBoardList", myMediaBoard);
+		System.out.println("[iron] BoardDaoImpl list.size() -> " + list.size());
+		return list;
+	}
+
+	@Override
+	public List<Board> getMyLikeBoardList(Board myLikeBoard) {
+		System.out.println("[iron] BoardDaoImpl getMyLikeBoardList start...");
+		List<Board> list = session.selectList("MyLikeBoardList", myLikeBoard);
+		System.out.println("[iron] BoardDaoImpl list.size() -> " + list.size());
+		return list;
+	}
 }

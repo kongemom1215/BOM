@@ -105,6 +105,7 @@
 						<div class="d-grid gap-2">
 						 <p><button type="button" class="btn btn-outline-success" onclick="location.href='updateEv'">나의 봄 수정</button><p>
 						 	<button type="button" class="btn btn-outline-success" onclick="location.href='bomStatis'">나의 봄 통계</button><p>
+						 	<button type="button" class="btn btn-outline-success" onclick="location.href='follower'">팔로우</button><p>
 						</div>
 					</div>
 				</div>

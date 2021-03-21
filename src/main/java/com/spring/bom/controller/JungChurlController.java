@@ -48,23 +48,24 @@ public class JungChurlController {
 	private Like_BookmarkService lbs;
 
 	@GetMapping(value = "iron/timeline")
-	public String goTimeline(HttpServletRequest request,HttpSession session, Model model) {
+	public String goTimeline(HttpServletRequest request, HttpSession session, Model model) {
 		// System.out.println("[JungChurlController]");
 		System.out.println("[JungChurlController] goTimeline start...");
 		User_Info user = new User_Info();
-		
-		//From BroController
+
+		// From BroController
 		int ucode = Integer.parseInt(session.getAttribute("ucode").toString());
-		System.out.println("session ucode ? -> "+ucode);
+		System.out.println("session ucode ? -> " + ucode);
 		user.setUcode(ucode);
-	
+
 		System.out.println("[JungChurlController] Do -> us.getLoginUserInfo()");
 
-		// 임시 로그인 세팅
-		user = us.getLoginUserInfo(ucode); // DB에서 회원코드 21인 회원 정보 가져오기. 필요한것만!
+		// 로그인 세팅
+		user = us.getLoginUserInfo(ucode); // 로그인 회원 정보 가져오기.
 		session.setAttribute("user", user); // Session에 user 데이터 저장
+		model.addAttribute("user");
 		System.out.println("[JungChurlController] Result : " + user + " -> us.getLoginUserInfo()");
-		
+
 		/*
 		 * //업로드 파일경로 세션처리 String resourcePath =
 		 * request.getSession().getServletContext().getRealPath("");
@@ -88,7 +89,7 @@ public class JungChurlController {
 						+ bdlist.get(i).getBattachSrc());
 			}
 		}
-		
+
 		System.out.println("[JungChurlController] Setting Battach Type and Src -> done!!!");
 
 		model.addAttribute("tl_list_size", bdlist.size());
@@ -114,8 +115,8 @@ public class JungChurlController {
 		for (int i = 0; i < hashtagList.size(); i++)
 			hashtagList.get(i).setHrank(i + 1);
 		model.addAttribute("tag_list", hashtagList);
-		
-		//For Context
+
+		// For Context
 		model.addAttribute("context", request.getContextPath());
 		return "iron/timeline";
 	}
@@ -175,7 +176,7 @@ public class JungChurlController {
 		return lb;
 	}
 
-	//단일 게시물 출력
+	// 단일 게시물 출력
 	@RequestMapping(value = "iron/singleBoard")
 	public String goSingleBoard(@RequestParam String bcode, HttpSession session, Model model) {
 		System.out.println("[JungChurlController] goSingleBoard start...");
@@ -200,13 +201,13 @@ public class JungChurlController {
 			System.out.println("battach Data : " + board.getBattach());
 			board.setBattachType(board.getBattach().substring(0, 5));
 			board.setBattachSrc(board.getBattach().substring(6));
-			System.out.println("battach Type : " + board.getBattachType() + " / battach Source : "
-					+ board.getBattachSrc());
+			System.out.println(
+					"battach Type : " + board.getBattachType() + " / battach Source : " + board.getBattachSrc());
 		}
 		System.out.println("[JungChurlController] Setting Battach Type and Src -> done!!!");
 		model.addAttribute("board", board);
-		
-		//해당 댓글 가져오기
+
+		// 해당 댓글 가져오기
 		List<Board> replylist = bs.getReplyList(Integer.parseInt(bcode));
 		System.out.println("[JungChurlController] Result : listSize is " + replylist.size()
 				+ " -> bs.getTimelineBoard(user.getUcode()).size()");
@@ -225,8 +226,7 @@ public class JungChurlController {
 		System.out.println("[JungChurlController] Setting Battach Type and Src -> done!!!");
 		model.addAttribute("replylist_size", replylist.size());
 		model.addAttribute("replylist", replylist);
-		
-		
+
 		// 팔로우 추천2 나를 팔로우하는 유저 추천
 		System.out.println("[JungChurlController] Do -> fs.getSuggestFollowList()");
 		List<Follow> suggestFlist2 = fs.getSuggestFollowList2(user.getUcode());
@@ -237,10 +237,10 @@ public class JungChurlController {
 		// 실시간 해시태그 순위
 		System.out.println("[JungChurlController] Do -> hts.getHashTagRanking()");
 		List<HashTag> hashtagList = hs.getHashTagRanking();
-		
+
 		for (int i = 0; i < hashtagList.size(); i++)
 			hashtagList.get(i).setHrank(i + 1);
-		
+
 		model.addAttribute("tag_list", hashtagList);
 
 		return "iron/singleboard";
@@ -249,21 +249,113 @@ public class JungChurlController {
 	@GetMapping(value = "iron/profile")
 	public String goProfile(@RequestParam String uatid, Model model, HttpSession session) {
 		System.out.println("[JungChurlController] goProfile start...");
-		//user - 세션에 존재하는 로그인 유저의 정보
-		User_Info user = (User_Info)session.getAttribute("user");
-		//someone - param uatid에 대칭되는 유저
+
+		// 로그인유저정보 상시 업데이트
+		User_Info loginUser = (User_Info) session.getAttribute("user");
+		loginUser = us.getLoginUserInfo(loginUser.getUcode());
+		model.addAttribute("loginUser", loginUser);
+
 		User_Info someone = new User_Info();
 		someone.setUatid(uatid);
-		//someone 에 uatid 유저정보 저장 -> 저장 정보 : 
+		System.out.println("Set someone.uatid -> " + someone.getUatid());
+
+		// someone에 uatid 유저정보 저장
 		someone = us.getUserInfoUatid(someone);
-		
-		//uatid가 만약 존재하지 않다면 profile.jsp에서 존재하지 않는다고 출력한 뒤 login 중인 유저의 프로필 정보를 보여주자
-		
-		
-		model.addAttribute("user", user);
-		model.addAttribute("someone",someone);
-		
-		
+		System.out.println("check someone.ucode -> " + someone.getUcode());
+
+		// someone에 팔로우 수 저장
+		someone.setFollowerCount(us.getUserfollowCount(someone));
+		System.out.println("Set someone.followCount -> " + (someone.getFollowCount()));
+
+		// someone에 팔로워 수 저장
+		someone.setFollowerCount(us.getUserfollowerCount(someone));
+		System.out.println("Set someone.followerCount -> " + (someone.getFollowerCount()));
+
+		/*
+		 * 서버의 메모리 관리 부분으로 고민해보자.
+		 */
+		// 내글 가져오기
+		Board myBoard = new Board();
+		myBoard.setUcode(someone.getUcode());
+		System.out.println("Set myboard.ucode -> " + (myBoard.getUcode()));
+		List<Board> myBoardList = bs.getMyBoardList(myBoard);
+
+		//// 미디어파일 세부지정
+		System.out.println("[JungChurlController] Setting Battach Type and Source -> start...");
+		for (int i = 0; i < myBoardList.size(); i++) {
+			if (myBoardList.get(i).getBattach() != null) {
+				System.out.println("[" + i + "]" + " battach Data : " + myBoardList.get(i).getBattach());
+				myBoardList.get(i).setBattachType(myBoardList.get(i).getBattach().substring(0, 5));
+				myBoardList.get(i).setBattachSrc(myBoardList.get(i).getBattach().substring(6));
+				System.out.println("battach Type : " + myBoardList.get(i).getBattachType() + " / battach Source : "
+						+ myBoardList.get(i).getBattachSrc());
+			}
+		}
+		System.out.println("[JungChurlController] Setting Battach Type and Src -> done!!!");
+		System.out.println("MyBoardList size -> " + myBoardList.size());
+
+		// 내 댓글 가져오기
+		Board myReplyBoard = new Board();
+		myReplyBoard.setUcode(someone.getUcode());
+		System.out.println("Set myboard.ucode -> " + (myReplyBoard.getUcode()));
+		List<Board> myReplyBoardList = bs.getMyReplyBoardList(myReplyBoard);
+		//// 미디어파일 세부지정
+		System.out.println("[JungChurlController] R Setting Battach Type and Source -> start...");
+		for (int i = 0; i < myReplyBoardList.size(); i++) {
+			if (myReplyBoardList.get(i).getBattach() != null) {
+				System.out.println("[" + i + "]" + " battach Data : " + myReplyBoardList.get(i).getBattach());
+				myReplyBoardList.get(i).setBattachType(myReplyBoardList.get(i).getBattach().substring(0, 5));
+				myReplyBoardList.get(i).setBattachSrc(myReplyBoardList.get(i).getBattach().substring(6));
+				System.out.println("battach Type : " + myReplyBoardList.get(i).getBattachType() + " / battach Source : "
+						+ myReplyBoardList.get(i).getBattachSrc());
+			}
+		}
+		System.out.println("[JungChurlController] R Setting Battach Type and Src -> done!!!");
+		System.out.println("MyBoardList size -> " + myReplyBoardList.size());
+
+		// 내 미디어 글 가져오기
+		Board myMediaBoard = new Board();
+		myMediaBoard.setUcode(someone.getUcode());
+		System.out.println("Set myboard.ucode -> " + (myMediaBoard.getUcode()));
+		List<Board> myMediaBoardList = bs.getMyMediaBoardList(myMediaBoard);
+		//// 미디어파일 세부지정
+		System.out.println("[JungChurlController] M Setting Battach Type and Source -> start...");
+		for (int i = 0; i < myMediaBoardList.size(); i++) {
+			if (myMediaBoardList.get(i).getBattach() != null) {
+				System.out.println("[" + i + "]" + " battach Data : " + myMediaBoardList.get(i).getBattach());
+				myMediaBoardList.get(i).setBattachType(myMediaBoardList.get(i).getBattach().substring(0, 5));
+				myMediaBoardList.get(i).setBattachSrc(myMediaBoardList.get(i).getBattach().substring(6));
+				System.out.println("battach Type : " + myMediaBoardList.get(i).getBattachType() + " / battach Source : "
+						+ myMediaBoardList.get(i).getBattachSrc());
+			}
+		}
+		System.out.println("[JungChurlController] M Setting Battach Type and Src -> done!!!");
+		System.out.println("MyBoardList size -> " + myMediaBoardList.size());
+
+		// 유저가 좋아요한 글 가져오기
+		Board myLikeBoard = new Board();
+		myLikeBoard.setUcode(someone.getUcode());
+		System.out.println("Set myboard.ucode -> " + (myLikeBoard.getUcode()));
+		List<Board> myLikeBoardList = bs.getMyLikeBoardList(myLikeBoard);
+		//// 미디어파일 세부지정
+		System.out.println("[JungChurlController] L Setting Battach Type and Source -> start...");
+		for (int i = 0; i < myLikeBoardList.size(); i++) {
+			if (myLikeBoardList.get(i).getBattach() != null) {
+				System.out.println("[" + i + "]" + " battach Data : " + myLikeBoardList.get(i).getBattach());
+				myLikeBoardList.get(i).setBattachType(myLikeBoardList.get(i).getBattach().substring(0, 5));
+				myLikeBoardList.get(i).setBattachSrc(myLikeBoardList.get(i).getBattach().substring(6));
+				System.out.println("battach Type : " + myLikeBoardList.get(i).getBattachType() + " / battach Source : "
+						+ myLikeBoardList.get(i).getBattachSrc());
+			}
+		}
+		System.out.println("[JungChurlController] L Setting Battach Type and Src -> done!!!");
+		System.out.println("MyBoardList size -> " + myLikeBoardList.size());
+
+		model.addAttribute("someone", someone);
+		model.addAttribute("myBoardList", myBoardList);
+		model.addAttribute("myReplyBoardList", myReplyBoardList);
+		model.addAttribute("myMediaBoardList", myMediaBoardList);
+		model.addAttribute("myLikeBoardList", myLikeBoardList);
 		return "iron/profile";
 	}
 }

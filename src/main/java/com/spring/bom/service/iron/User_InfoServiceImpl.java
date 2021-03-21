@@ -31,4 +31,16 @@ public class User_InfoServiceImpl implements User_InfoService {
 		return user;
 	}
 
+	@Override
+	public int getUserfollowCount(User_Info someone) {
+		System.out.println("[iron] User_InfoServiceImpl getUserfollowCount start...");
+		return ud.getUserfollowCount(someone);
+	}
+
+	@Override
+	public int getUserfollowerCount(User_Info someone) {
+		System.out.println("[iron] User_InfoServiceImpl getfollowerCount start...");
+		return ud.getUserfollowerCount(someone);
+	}
+
 }

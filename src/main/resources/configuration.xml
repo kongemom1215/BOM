@@ -52,14 +52,31 @@
 		<!-- yoon(right) -->
 		<typeAlias type="com.spring.bom.model.right.RUser_Info"
 			alias="RUser" />
+
 		<typeAlias type="com.spring.bom.model.right.RInterest"
 			alias="RInterest" />
+
 		<typeAlias type="com.spring.bom.model.right.RInterestDetail"
 			alias="RInterest_d" />
+
 		<typeAlias type="com.spring.bom.model.right.RBlock"
 			alias="RBlock" />
+
 		<typeAlias type="com.spring.bom.model.right.Statis"
 			alias="Statis" />
 
+		<typeAlias type="com.spring.bom.model.right.RFollow"
+			alias="RFollow" />
+
+		<!-- yerin -->
+		<typeAlias
+			type="com.spring.bom.model.yeah.UserBookmarkBoard"
+			alias="UserBookmarkBoard" />
+		<typeAlias type="com.spring.bom.model.yeah.YeahBoard"
+			alias="YeahBoard" />
+		<typeAlias type="com.spring.bom.model.yeah.YeahUser_Info"
+			alias="YeahUser_Info" />
+		<typeAlias type="com.spring.bom.model.yeah.YeahFollow"
+			alias="YeahFollow" />
 	</typeAliases>
 </configuration>

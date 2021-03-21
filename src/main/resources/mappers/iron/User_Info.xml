@@ -9,12 +9,12 @@
 	</select>
 	<select id="getUserInfoUatid" parameterType="Iron_User_Info"
 		resultType="Iron_User_Info">
-		select ui.ucode ucode, ui.uemail uemail, ui.unickName unickName,
-		ui.ubirth ubirth, ui.ugender ugender, ui.unation unation, ui.uchat, ui.ualarm ualarm,
-		ui.uprivate uprivate, ui.uregDate uregDate, ui.uintro uintro, ui.ubg ubg, ui.uprofileLink, ui.ustate ustate,
-		ui.ureportCount ureportCount, ui.uonline uonline, count(f.ucode) followCount
-		from user_info ui, follow f,
-		where ui.uatid = #{uatid}
-		and ui.ucode = f.ucode
+		select * from user_info where uatid = #{uatid}
+	</select>
+	<select id="UserFollowCount" parameterType="Iron_User_Info" resultType="int">
+		select count(*) from follow where ucode=#{ucode}
+	</select>
+	<select id="UserFollowerCount" parameterType="Iron_User_Info" resultType="int">
+		select count(*) from follow where fopcode=#{ucode}
 	</select>
 </mapper>

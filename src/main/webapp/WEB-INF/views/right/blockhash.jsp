@@ -112,11 +112,15 @@
 						src="/img/plus-circle.svg" width="15" height="15"> 차단 추가
 					</a>
 						<c:forEach var="b" items="${bList}" varStatus="status">
-							<c:if test="${not empty b.bhashtag}">
+						<c:if test="${not empty b.bhashtag}">
+						<div class="card">
+							<div class="card-body">
 								<input id="${b.blcode}" type="hidden" value="${b.blcode}">
-								<label for="${b.blcode}"><span>${b.bhashtag}</span></label>
-							    <input id="${b.blcode}" type="button" class="btn btn-outline-danger" value="차단 취소" onclick="location.href='blockdelete?blcode=${b.blcode}'"><br>	
-							</c:if>
+								<label for="${b.blcode}"><span>#${b.bhashtag}</span></label>
+							    <input id="${b.blcode}" type="button" class="btn btn-outline-danger btn-sm float-right" value="차단 취소" style="font-size:0.7em;" onclick="location.href='blockdeletehash?blcode=${b.blcode}'"><br>	
+							</div>
+						</div>
+						</c:if>
 						</c:forEach>
 					</div>
 				</div>

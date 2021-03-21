@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Bookmark">
+   <select id="ubmBoardListMapper" parameterType="int" resultType="UserBookmarkBoard">
+		SELECT  lb.ucode ucode, b.bcontent bcontent, b.blikecount blikecount, ui.uatid uatid, ui.unickname unickname, 
+		                ui.uimage uimage, b.ucode ucode, b.bcode bcode, b.battach battach, b.bbcode, b.btype,
+		                lb.ltype ltype, lb.bbtype bbtype, lb.ldate ldate, lb.bdate bdate, b.breplycount breplycount, b.bquotecount bquotecount,
+		         -- 원글(105번글) bbcode(100번글)의 작성자 정보
+		        NVL2(b.bbcode, get_user_info(1,b.ucode), '없음') uimage,
+		        NVL2(b.bbcode, get_user_info(2,b.ucode), '없음') unickname,
+		        NVL2(b.bbcode, get_user_info(3,b.ucode), '없음') uatid,
+		        b.bregdate
+		FROM    user_info ui, like_bookmark lb, board b 
+		WHERE   lb.ucode = #{ucode}
+		AND	 	  lb.bbtype = #{ucode}
+		AND     lb.bcode = b.bcode
+		AND     b.ucode = ui.ucode
+		order by lb.bdate desc
+      
+   </select>
+   
+   
+
+    <delete id="delete" parameterType="YeahBoard">
+       delete 
+       from like_bookmark 
+       where ucode = #{ucode}
+       and  bcode = #{bcode}
+    
+    </delete>
+
+    <delete id="deleteAll" parameterType="String">
+      delete
+      from like_bookmark
+      where ucode = #{ucode}
+      
+    </delete> 
+ 
+ 
+      
+    <select id="ubmQuoteBoard" parameterType="int" resultType="UserBookmarkBoard">
+   select b.bcode, b.bcontent, b.battach, u.unickname, u.uatid, u.uimage,b.bregdate
+       
+       from board b, user_info u
+       where b.bcode = #{bbcode}
+       and   b.ucode = u.ucode
+    </select>
+   
+      
+ 
+
+
+</mapper>

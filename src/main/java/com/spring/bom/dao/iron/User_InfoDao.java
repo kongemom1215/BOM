@@ -8,4 +8,8 @@ public interface User_InfoDao {
 
 	User_Info getUserInfoUatid(User_Info user);
 
+	int getUserfollowCount(User_Info someone);
+
+	int getUserfollowerCount(User_Info someone);
+
 }

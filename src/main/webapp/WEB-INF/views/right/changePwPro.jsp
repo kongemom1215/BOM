@@ -19,6 +19,7 @@
 </head>
 <body onload="runChecknum();">
  <c:if test="${ui.uidentify==0}">
+ 
 	<form action="changePw1" method="post" id="frm">
 		<input type="hidden" name="pwd" value="${pwd}">
 	</form>

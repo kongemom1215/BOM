@@ -108,15 +108,15 @@
 					<div align="center">
 						<c:forEach var="b" items="${bListP}" varStatus="status">
 								<input id="${b.blcode}" type="hidden" value="${b.blcode}">
+								<div class="card">
 								<div class="card-body">
 								 <div class="form-center">
-				                     <img src="${b.uimage}" class="rounded-circle" width="50" width="50"> 
-				                     <div class="form-col ml-2">
+				                     <img src="${resourcePath }/profile_image/${b.uimage}" class="rounded-circle" width="20" width="20"> 
 				                     <a class="card-title text-dark" style="font-size:0.8em">${b.unickname }</a><br> 
 				                     <a class="card-subtitle mb-2 text-muted" style="font-size:0.8em">@${b.uatid }</a>
-				                     </div>
-				                      <input id="${b.blcode}" type="button" class="btn btn-outline-danger" value="차단 취소" onclick="location.href='blockdelete?blcode=${b.blcode}'">	
+				                      <input id="${b.blcode}" type="button" class="btn btn-outline-danger btn-sm float-right" value="차단 취소" style="font-size: 0.7rem" onclick="location.href='blockdelete?blcode=${b.blcode}'">	
 			                      </div>
+			                     </div>
 			                     </div>
 						</c:forEach>
 					</div>

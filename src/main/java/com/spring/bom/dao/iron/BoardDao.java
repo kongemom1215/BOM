@@ -12,4 +12,12 @@ public interface BoardDao {
 
 	List<Board> getReplyList(int bcode);
 
+	List<Board> getMyBoardList(Board myboard);
+
+	List<Board> getMyReplyBoardList(Board myReplyBoard);
+
+	List<Board> getMyMediaBoardList(Board myMediaBoard);
+
+	List<Board> getMyLikeBoardList(Board myLikeBoard);
+
 }

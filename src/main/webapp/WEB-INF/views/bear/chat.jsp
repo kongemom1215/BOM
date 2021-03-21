@@ -3,7 +3,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
  <%
     request.setCharacterEncoding("UTF-8");
-    String httpsession = (String)request.getAttribute("kiwoong");
  	String context = request.getContextPath();
   %>
 <!DOCTYPE html>
@@ -92,7 +91,7 @@ img{ max-width:100%;}
 }
 .chat_ib {
   float: left;
-  padding: 0 0 0 15px;
+  padding: 0 0 0 20px;
   width: 88%;
 }
 
@@ -174,12 +173,15 @@ img{ max-width:100%;}
   top: 11px;
   width: 33px;
 }
+
 .messaging { padding: 0 0 50px 0;}
 .msg_history {
   height: 516px;
   overflow-y: auto;
 }
-#msgsize {	 width:340px;
+#msgsize {	 
+		height : 20px;
+		width:440px;
 		 overflow:hidden; 
 		 text-overflow:ellipsis; 
 		 white-space:nowrap;
@@ -187,10 +189,13 @@ img{ max-width:100%;}
 		 
 #k123 {float: right;}
 .chat_list:hover{
-				background: #CBEBAD;
+				background: #CBEBAD; 
 }
 .inbox_chat{
 background: white;}
+
+
+
 </style>
 </head>
 
@@ -199,8 +204,36 @@ background: white;}
 
 	window.onload = function(){
 		getRoom();
-		//createRoom();	
+		//notice();
+		
+		
 	}
+	
+	//알림메세지 10초단위로 확인하기 sessionId는 세션에저장되어있는 ucode를 넣습니다.
+	
+	function notice(){
+		var sessionId = ${ucode};
+		$.ajax({
+			
+			url: "<%=context%>/bear/notice",
+			data: {ucode :  sessionId},
+			dataType : 'text',
+			success:function (data){
+			
+				$("#notice").append(data);
+			}
+			
+			
+		});
+		
+	}
+	
+	//-----------------------------------------------
+	
+	
+	
+	
+	
 	
 	//socket 구간
 	function wsOpen(number){
@@ -252,12 +285,6 @@ background: white;}
 			}
 		}
 
-		/* document.addEventListener("keypress", function(e){
-			if(e.keyCode == 13){ //enter press
-				send();
-			}
-		}); */
-	
 		
 	
 	}	
@@ -299,7 +326,6 @@ background: white;}
 		
 	
 
-		//timerID = setTimeout("getRoom()", 2000); // 2초 단위로 갱신 처리
 	});
 	}
 	
@@ -328,9 +354,11 @@ background: white;}
 								
 								if(kkk == 0 ){
 									alert("방이 존재합니다")
+									
 									}
 								else{
 									alert($('#roomName').val() + "님 과 채팅방이생성되었습니다." )
+									 location.reload();
 								}
 								
 								
@@ -338,7 +366,8 @@ background: white;}
 						
 						
 					});$("#roomName").empty();
-					$("#roomName").attr("placeholder","Search1");
+					
+					
 					
 					
 						
@@ -364,19 +393,22 @@ background: white;}
 	function clear(){
 		$("#messagelist").empty();
 		$("#messagetest").empty();
+		$(".chat_list").css({'background-color' : 'white'});
+		
 	}
 
 	function goRoom(number){
-		//location.href="moveChating?roomNumber="+number;
+		console.log("goRoom 참여 하기 ")
+	
+		
 		var msg = {roomnumber : number};
-		console.log(msg)
 		wsOpen(number);
 		clear();
+		
 		
 		var kdsf = "<input onkeyup="+"enterkey("+number+")"+" type="+"'text'"+" class="+"'write_msg'"+" placeholder="+"'새 쪽지 작성하기'"+" id="+"'chatting'"+" />"+
 	    "<button class="+"'msg_send_btn'"+" type="+"button"+" onclick="+"send("+number+")><i class="+"'fa fa-paper-plane-o'"+" aria-hidden="+"true"+"></i></button>";
 	    
-	    console.log(kdsf);
 	    
 		$.ajax({
 			url: "<%=context%>/bear/moveChating",
@@ -409,29 +441,54 @@ background: white;}
 					 
 			  }); $("#messagelist").append(tag);
 			  $("#messagetest").append(kdsf);
+			  document.getElementById(number).style.backgroundColor ="#CBEBAD";
 				
 			}
 			}); 
 	}
 
 	function createChatingRoom(res){
-		console.log(res)
-		if(res != null){
+		if (res == "") {
+			
+		 	console.log("채팅방 리스트가 비어있습니다 .")
+			var tag = "<h1>텅</h1>";
+			
+			$("#chatingpage").css({
+				"text-align": "center",
+				"padding-top": "100px"	
+			});
+			$("#chatingpage").append(tag);
+			 
+		}
+		else{
+			//비어있다가 새로 방만들면 기존에있는 css와 내용없앨려고 만듬 
+			$("#chatingpage").empty();
+			$("#chatingpage").css({
+				"text-align" : "",
+				"padding-top": ""});
+			// ---------------------------------------
+			console.log("채팅방 리스트 값은 -> " +res)
 			var tag = ""; 
-				  
+			  
 			res.forEach(function(d){
+				
+		
+				
 				var uopcode = d.uopcode ;
 				var roomNumber = d.ccode;
 				var msg = d.cdmessage;
 				var cdtime = d.cdtime;
 				var uimage = d.uimage;
 				var uatid = d.uatid;
-				tag +=    "<div class=chat_list >" +
+				
+				    
+				    
+				tag +=    "<div class=chat_list  id="+roomNumber+" >" +
 		         		 "<div class=chat_people>" +
 		         		"<div class="+"chat_img"+"><img src="+"/img/teemo.jpg"+" class="+"rounded-circle"+" width="+"100"+" height="+"50"+"></div>"+
 		          			 	 "<div class=chat_ib>"+
 		            			  "<h5><b>" +uatid+ "</b><span class=chat_date><b>" +cdtime+ "</b></span></h5>"+
-		             				 "<h5"+" id='msgsize'>"+ msg+"<span id = 'k123'>"+"<button type='button' class="+"'btn btn-success'"+" onclick='goRoom(\""+roomNumber+"\")'>참여</button>"+"</span></h5> "+
+		             				 "<h5"+" id='msgsize'>"+ msg+"<span id = 'k123'>"+"</span></h5><div class="+"'boxsize'"+"  align="+"'right'"+"><button type='button' class="+"'btn btn-success'"+" onclick='goRoom(\""+roomNumber+"\")'>참여</button>"+"</div> "+
 		           				 "</div>"+
 		        		      "</div>"+
 		                  "</div>";
@@ -440,6 +497,7 @@ background: white;}
 					//<div class="chat_img"> <img src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="sunil"> </div> 프로필사진 넣을때 people 다음으로넣기
 			});
 			$("#chatingpage").append(tag);
+			
 		}
 
 		
@@ -479,46 +537,35 @@ background: white;}
 				<img src="/img/logo2.jpg" width="150" height="150">
 			</div>
 			<div class="list-group list-group-flush">
-				<a href="/iron/timeline" class="list-group-item list-group-item-action"> <img
+				<a href="#" class="list-group-item list-group-item-action"> <img
 					src="/img/home.svg" width="15" height="15"> 타임라인
-				</a> 
-				
-				<a href="/hoon/explore" class="list-group-item list-group-item-action"> <img
+				</a> <a href="#" class="list-group-item list-group-item-action"> <img
 					src="/img/search.svg" width="15" height="15"> 검색하기
-				</a> 
-				
-				<a href="alarm" class="list-group-item list-group-item-action"> <img
+				</a> <a href="#" class="list-group-item list-group-item-action"> <img
 					src="/img/bell.svg" width="15" height="15"> 알림 <span
-					class="badge badge-success">1</span>
-				</a>
-				<!-- bear1 -->
-				<a href="/bear/chat" class="list-group-item list-group-item-action"> <img
+					class="badge badge-success" id="notice" >1</span>
+				</a> <a href="#" class="list-group-item list-group-item-action"> <img
 					src="/img/send.svg" width="15" height="15"> 쪽지
-				</a>
-				
-				<a href="bookmark" class="list-group-item list-group-item-action"> <img
+				</a> <a href="#" class="list-group-item list-group-item-action"> <img
 					src="/img/bookmark.svg" width="15" height="15"> 북마크
-				</a> 
-				
-				<a href="/iron/profile/uatid=${user.uatid }" class="list-group-item list-group-item-action"> <img
+				</a> <a href="#" class="list-group-item list-group-item-action"> <img
 					src="/img/user.svg" width="15" height="15"> 프로필
-				</a> 
-				
-				<a href="/right/moreSee" class="list-group-item list-group-item-action"> <img
+				</a> <a href="#" class="list-group-item list-group-item-action"> <img
 					src="/img/more.svg" width="15" height="15"> 더보기
-				</a> 
-				<!-- 	
 				</a> <a href="#" class="list-group-item list-group-item-action">
 					<button type="button" class="btn btn-outline-success">
 						<img src="/img/write.svg" width="15" height="15"> 글 쓰기
 					</button>
 				</a>
-				 -->
 				<div class="card">
 					<div class="card-body">
-						<img src="<%=context %>/profile_image/${user.uimage}>" class="rounded-circle" width="50"
-							width="50"> <a class="card-title text-dark">${user.unickName}</a> 
-							<a class="card-subtitle mb-2 text-muted">@${user.uatid }</a>
+						<img src="/img/teemo.jpg" class="rounded-circle" width="50"
+							width="50"> <a class="card-title text-dark">닉네임</a> 
+							<a class="card-subtitle mb-2 text-muted">
+													<c:forEach var="info" items="${userinfo}">
+								@<c:out value="${info.uatid }" /> 
+							</c:forEach>
+						</a>
 					</div>
 					<button type="button" class="btn btn-success">로그아웃</button>
 					<input type="hidden" id="sessionId" value="${ucode }">
@@ -532,7 +579,8 @@ background: white;}
 		
 
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" type="text/css" rel="stylesheet">
-<div class="container">
+<div id="page-content-wrapper" style="padding: 10px">
+
 <br>
 <h3 class=" text-center">쪽지방</h3>
 <div class="messaging">
@@ -544,12 +592,13 @@ background: white;}
         </div>
         <div class="srch_bar">
           <div class="stylish-input-group">
-            <input type="text" class="search-bar"  placeholder="@빼고 아이디적기"  id="roomName">
+            <input type="text" class="search-bar"  placeholder="@아이디"  id="roomName">
             <span class="input-group-addon">
             <button type="button" onclick="selectcode()"> <i class="fa fa-search" aria-hidden="true" ></i> </button>
             </span> </div>
         </div>
       </div>
+
       
       
       <!-- 채팅방 목록 -->
@@ -567,7 +616,7 @@ background: white;}
           <!-- <div class="incoming_msg_img"> </div> 이미지넣을곳--> 
 
     </div>     
-      <div class="type_msg">
+      <div class="type_msg"  >
         <div class="input_msg_write" id="messagetest">
         <input type="text" class="write_msg" placeholder="Type a message" />
           <button class="msg_send_btn" type="button"><i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
@@ -620,7 +669,7 @@ background: white;}
 									<img src="/img/teemo.jpg" class="rounded-circle" width="20"
 										height="20"> <a class="card-title text-dark">닉네임</a> <a
 										class="card-subtitle mb-2 text-muted">@atid</a>
-									<button type="button"
+									<button type="button" 
 										class="btn btn-outline-success btn-sm float-right"
 										style="font-size: 0.8rem;">팔로우</button>
 								</div>

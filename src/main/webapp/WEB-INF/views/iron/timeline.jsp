@@ -109,6 +109,10 @@ label {
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <script type="text/javascript" >
 	
+	function goProfile(){
+		location.href = "../iron/profile?uatid="+${user.uatid};
+	}
+	
 	window.onload = function(){	//주혜
 		clickWriteBtn();
 		clickSaveBtn();
@@ -177,37 +181,31 @@ label {
 				<img src="/img/logo2.jpg" width="150" height="150">
 			</div>
 			<div class="list-group list-group-flush">
-				<a href="/iron/timeline" class="list-group-item list-group-item-action"> <img
+				<a href="/iron/timeline"
+					class="list-group-item list-group-item-action"> <img
 					src="/img/home.svg" width="15" height="15"> 타임라인
-				</a> 
-				
-				<a href="/hoon/explore" class="list-group-item list-group-item-action"> <img
+				</a> <a href="/hoon/explore"
+					class="list-group-item list-group-item-action"> <img
 					src="/img/search.svg" width="15" height="15"> 검색하기
-				</a> 
-				
-				<a href="alarm" class="list-group-item list-group-item-action"> <img
-					src="/img/bell.svg" width="15" height="15"> 알림 <span
+				</a> <a href="alarm" class="list-group-item list-group-item-action">
+					<img src="/img/bell.svg" width="15" height="15"> 알림 <span
 					class="badge badge-success">1</span>
 				</a>
 				<!-- bear1 -->
-				<a href="/bear/chat" class="list-group-item list-group-item-action"> <img
-					src="/img/send.svg" width="15" height="15"> 쪽지
+				<a href="/bear/chat" class="list-group-item list-group-item-action">
+					<img src="/img/send.svg" width="15" height="15"> 쪽지
+				</a> <a href="/yeah/bookmark" class="list-group-item list-group-item-action">
+					<img src="/img/bookmark.svg" width="15" height="15"> 북마크
+				</a> <a href="/iron/profile?uatid=${user.uatid }"
+					class="list-group-item list-group-item-action"> <img
+					src="/img/user.svg" width="15" height="15"> 프로필
+				</a> <a href="/right/moreSee"
+					class="list-group-item list-group-item-action"> <img
+					src="/img/more.svg" width="15" height="15"> 더보기
 				</a>
 				
-				<a href="bookmark" class="list-group-item list-group-item-action"> <img
-					src="/img/bookmark.svg" width="15" height="15"> 북마크
-				</a> 
-				
-				<a href="/iron/profile/uatid=${user.uatid }" class="list-group-item list-group-item-action"> <img
-					src="/img/user.svg" width="15" height="15"> 프로필
-				</a> 
-				
-				<a href="/right/moreSee" class="list-group-item list-group-item-action"> <img
-					src="/img/more.svg" width="15" height="15"> 더보기
-				</a> 
-				
 				<div class="list-group-item list-group-item-action">
-              		 <!--주혜 -->
+              	<!--주혜 -->
            	    <button type="button" class="btn btn-outline-success" id="writeBtn"
            	       data-toggle="modal" data-target="#writeForm">
             	      <img src="/img/write.svg" width="15" height="15"> 글 쓰기
@@ -242,6 +240,7 @@ label {
 			
 			<div class="container-fluid">
 				<p>
+				<!-- 기본기능 완성 후 업그레이드 후보
 				<div class="card">
 					<div class="card-header">글쓰기</div>
 					<div class="card-body">
@@ -258,7 +257,7 @@ label {
 						<button type="submit" class="btn btn-success float-right">등록</button>
 					</div>
 				</div>
-				
+				 -->
 				<!--글 정렬-->
 				
 				<c:forEach var="tl_element" items="${tl_list }" varStatus="status">
@@ -266,11 +265,9 @@ label {
 						<div class="card-body" id="singleBoard" onclick="goSingleBoard(${tl_element.bcode},${status.index });">
 							<button type="button" class="btn btn-light dropdown-toggle caret-off float-right">⋯</button>
 							<div class="dropdown-menu">
-										<%-- <c:if test="${tl_element.loginUcode == user.ucode }">
+										<c:if test="${tl_element.loginUcode == user.ucode }">
 												<a class="dropdown-item" href="#">봄 삭제</a>
-										</c:if> --%>
-										<a class="dropdown-item" href="#">봄 신고</a>
-										<a class="dropdown-item" href="#">봄 분석</a>
+										</c:if> 
 							</div>
 							<img src="<%=context %>/profile_image/${tl_element.uimage }" alt="no_image" class="rounded-circle" width="50"
 								width="50"> <a class="card-title text-dark">${tl_element.unickName }</a>
@@ -279,7 +276,7 @@ label {
 								 <p class="card-text" style="margin-top:10px;" onclick="goSingleBoard(${tl_element.bcode}, ${tl_element_ucode});">${tl_element.bcontent }
 								 
 								 <c:if test="${btype=='quote' }">
-								 	<>
+								 	<!--  -->
 								 </c:if>
 								 
 								 </p>

@@ -8,6 +8,7 @@ var result    = '${savedName}';
 var delResult = '${delResult}';
 
 parent.addFilePath(result);
+location.href="interestForm";
 
 </script>
 

@@ -7,5 +7,9 @@ public interface User_InfoService {
 	User_Info getLoginUserInfo(int ucode);
 
 	User_Info getUserInfoUatid(User_Info user);
+
+	int getUserfollowCount(User_Info someone);
+
+	int getUserfollowerCount(User_Info someone);
 	
 }
