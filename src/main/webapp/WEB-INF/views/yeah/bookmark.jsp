@@ -7,7 +7,7 @@
 <%
 	String context = request.getContextPath();
 %>
-<html lang="en">
+<html lang="ko">
 
 <head>
 
@@ -85,23 +85,28 @@
 				</a> <a href="/right/moreSee"
 					class="list-group-item list-group-item-action"> <img
 					src="/img/more.svg" width="15" height="15"> 더보기
-				</a> <a href="#" class="list-group-item list-group-item-action">
-					<button type="button" class="btn btn-outline-success">
-						<img src="/img/write.svg" width="15" height="15"> 글 쓰기
-					</button>
 				</a>
+				
+				<div class="list-group-item list-group-item-action">
+              	<!--주혜 -->
+           	    <button type="button" class="btn btn-outline-success" id="writeBtn"
+           	       data-toggle="modal" data-target="#writeForm">
+            	      <img src="/img/write.svg" width="15" height="15"> 글 쓰기
+            	   </button>
+           		 </div>
+				
 				<div class="card">
-					<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
-						<img src="/img/profile/${user.uimage}" class="rounded-circle"
-							width="20"> <a class="card-title text-dark">${user.unickName }</a>
-						<a class="card-subtitle mb-2 text-muted">@${user.uatid }</a>
+					<div class="card-body">
+						<img src="<%=context %>/profile_image/${user.uimage}" alt="no_image" class="rounded-circle" width="50"
+							width="50"> <a class="card-title text-dark">${user.unickName }</a> <a
+							class="card-subtitle mb-2 text-muted">@${user.uatid }</a>
 					</div>
 					<button type="button" class="btn btn-success">로그아웃</button>
 				</div>
 			</div>
 		</div>
 
-
+		<!-- Sidbar End -->
 
 		<div id="page-content-wrapper">
 
@@ -148,7 +153,7 @@
 						<div class="card">
 							<div class="card-body">
 								<!-- <button type="button" class="btn btn-light float-right">⋯</button> -->
-								<img src="/img/profile/${bookmark.uimage }"
+								<img src="<%=context %>/profile_image/${bookmark.uimage }"
 									class="rounded-circle" width="50"> <a
 									class="card-title text-dark">${bookmark.unickname }</a> <a
 									class="card-subtitle mb-2 text-muted">@${bookmark.uatid }</a> <a
@@ -194,14 +199,14 @@
 								<p class="card-text" style="margin-top: 10px;">${bookmark.bcontent }</p>
 
 								<c:if test="${bookmark.battachType == 'image' }">
-									<img src="/img/media/${bookmark.battachSrc }" width="200">
+									<img src="<%=context %>/image/${bookmark.battachSrc }" width="200">
 								</c:if>
 
 								<c:if test="${bookmark.battachType == 'video' }">
 									<video controls width="300">
-										<source src="/img/media/${bookmark.battachSrc }"
+										<source src="<%=context %>/video/${bookmark.battachSrc }"
 											type="video/mp4" />
-										<source src="/img/media/${bookmark.battachSrc }"
+										<source src="<%=context %>/video/${bookmark.battachSrc }"
 											type="video/webm">
 									</video>
 								</c:if>

@@ -23,19 +23,24 @@ public class Yeah_Controller {
 
 	@RequestMapping(value = "yeah/bookmark")
 	public String bookmark(Model model, HttpSession session) {
-		System.out.println("Yeah_Controller yeah/bookmark 조회 Start...");
-
 		User_Info user = (User_Info) session.getAttribute("user");
-		model.addAttribute("user");
-		System.out.println("[JungChurlController] Result : " + user + " -> us.getLoginUserInfo()");
-		System.out.println("Yeah_Controller bookmark Start...");
-		System.out.println("Yeah_Controller bookmark ucode->" + user.getUcode());
+		model.addAttribute("user", user);
 
-		List<UserBookmarkBoard> ubmBoardList = bms.ubmBoardList(user.getUcode());
+		System.out.println("Yeah_Controller yeah/bookmark 조회 Start...");
+		int int_ucode = user.getUcode();
+		System.out.println("Yeah_Controller yeah/bookmark int_ucode -> " + int_ucode);
+		System.out.println("Yeah_Controller bookmark Start...");
+		System.out.println("Yeah_Controller bookmark ucode->" + int_ucode);
+
+		List<UserBookmarkBoard> ubmBoardList = bms.ubmBoardList(int_ucode);
 
 		System.out.println("Yeah_Controller ubmBoardList.size()" + ubmBoardList.size());
-		
+		model.addAttribute("ucode", int_ucode);
+		model.addAttribute("ubmBoardList", ubmBoardList);
+
 		for (int i = 0; i < ubmBoardList.size(); i++) {
+			// ubmBoardList.set(i,
+			// ubmBoardList.get(i)).setBattachSrc(ubmBoardList.get(i).getBattach().substring(6));
 			if (ubmBoardList.get(i).getBattach() != null) {
 				ubmBoardList.get(i).setBattachSrc(ubmBoardList.get(i).getBattach().substring(6));
 				ubmBoardList.get(i).setBattachType(ubmBoardList.get(i).getBattach().substring(0, 5));
@@ -43,8 +48,7 @@ public class Yeah_Controller {
 				System.out.println("setBattachType -> " + ubmBoardList.get(i).getBattachType());
 			}
 		}
-		model.addAttribute("ucode", user.getUcode());
-		model.addAttribute("ubmBoardList", ubmBoardList);
+
 		return "yeah/bookmark";
 	}
 
@@ -63,7 +67,9 @@ public class Yeah_Controller {
 	@RequestMapping(value = "/yeah/deleteAll", method = RequestMethod.GET)
 	public String deleteAll(@RequestParam("ucode") String ucode, Model model) {
 		bms.deleteAll(ucode);
+
 		return "yeah/bookmark";
+
 	}
 
 }

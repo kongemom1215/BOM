@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.spring.bom.model.yeah.YeahBoard;
+import com.spring.bom.model.yeah.YeahBookmark;
 import com.spring.bom.model.yeah.UserBookmarkBoard;
 
 

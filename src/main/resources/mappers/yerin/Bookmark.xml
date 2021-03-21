@@ -3,7 +3,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="Bookmark">
+<mapper namespace="YeahBookmark">
    <select id="ubmBoardListMapper" parameterType="int" resultType="UserBookmarkBoard">
 		SELECT  lb.ucode ucode, b.bcontent bcontent, b.blikecount blikecount, ui.uatid uatid, ui.unickname unickname, 
 		                ui.uimage uimage, b.ucode ucode, b.bcode bcode, b.battach battach, b.bbcode, b.btype,
@@ -15,7 +15,7 @@
 		        b.bregdate
 		FROM    user_info ui, like_bookmark lb, board b 
 		WHERE   lb.ucode = #{ucode}
-		AND	 	  lb.bbtype = #{ucode}
+		AND	 	lb.bbtype = 1
 		AND     lb.bcode = b.bcode
 		AND     b.ucode = ui.ucode
 		order by lb.bdate desc
@@ -29,6 +29,7 @@
        from like_bookmark 
        where ucode = #{ucode}
        and  bcode = #{bcode}
+  
     
     </delete>
 
