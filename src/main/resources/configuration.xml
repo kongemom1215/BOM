@@ -27,11 +27,14 @@
 			alias="GodBoard" />
 		<typeAlias type="com.spring.bom.model.god.JHVote"
 			alias="GodVote" />
+		<typeAlias type="com.spring.bom.model.god.JHHashtag"
+			alias="GodHash" />
+		<typeAlias type="com.spring.bom.model.god.JHUser_info"
+			alias="GodUser" />
 
 		<!-- bear -->
 		<typeAlias type="com.spring.bom.model.bear.Chat"
 			alias="Chat" />
-
 		<typeAlias type="com.spring.bom.model.bear.User"
 			alias="User" />
 

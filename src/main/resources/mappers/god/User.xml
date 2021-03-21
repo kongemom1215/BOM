@@ -1,0 +1,15 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="GodUser">
+	<select id="JHgetfollowlist" parameterType="int" resultType="GodUser">
+		select ucode, unickname, uatid, uimage 
+		from user_info
+		where ucode in (select fopcode from follow where ucode=#{ucode})
+		ORDER BY REGEXP_REPLACE(uatid, '[0-9]')
+	</select>
+	<select id="JHgetSearchUserlist" parameterType="java.lang.String" resultType="GodUser">
+		select unickname, uatid, ucode, uimage 
+		from user_info
+		where uatid like '%'||#{search_value}||'%' 
+		or unickname like '%'||#{search_value}||'%'
+	</select>
+</mapper>

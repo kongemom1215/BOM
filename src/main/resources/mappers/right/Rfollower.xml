@@ -34,7 +34,7 @@ delete from follow where ucode = #{ucode} and fopcode = #{fopcode}
 </delete>
 <!-- 팔로우 팔로잉 추가 -->
 <insert id="rightaddfollowing" parameterType="RFollow">
-insert into follow values(#{ucode},#{fopcode},to_char(sysdate,'yyyy/mm/dd hh24:mi:ss'),null )
+insert into follow values(#{ucode},#{fopcode},to_char(sysdate,'yyyy-mm-dd hh24:mi:ss'),null )
 </insert>
 
 </mapper>

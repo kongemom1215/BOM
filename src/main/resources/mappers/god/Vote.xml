@@ -18,5 +18,9 @@
 			#{vselect1}, #{vselect2}, #{vselect3}, #{vselect4}, 
 			#{vendtime}, #{vmulti})
 	</insert>
+	<select id="JHselectVote" parameterType="int" resultType="GodVote">
+		select * from vote 
+		where vcode=#{bvotecode}
+	</select>
 </mapper>
 

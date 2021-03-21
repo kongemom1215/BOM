@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.spring.bom.model.god.JHBoard;
+import com.spring.bom.model.god.JHUser_info;
 
 @Repository
 public class JHUserDaoImpl implements JHUserDao {
@@ -55,6 +56,28 @@ public class JHUserDaoImpl implements JHUserDao {
 			System.out.println("GOD UserDaoImpl getSaveList -> "+e.getMessage());
 		}
 		return list;
+	}
+
+	@Override
+	public List<JHUser_info> getFollowerList(int ucode) {
+		List<JHUser_info> followList=null;
+		try {
+			followList=session.selectList("JHgetfollowlist", ucode);
+		} catch (Exception e) {
+			System.out.println("GOD UserDaoImpl getFollowerList -> "+e.getMessage());
+		}
+		return followList;
+	}
+
+	@Override
+	public List<JHUser_info> getSearchList(String search_value) {
+		List<JHUser_info> userList=null;
+		try {
+			userList=session.selectList("JHgetSearchUserlist", search_value);
+		} catch (Exception e) {
+			System.out.println("GOD UserDaoImpl getSearchList -> "+e.getMessage());
+		}
+		return userList;
 	}
 
 }

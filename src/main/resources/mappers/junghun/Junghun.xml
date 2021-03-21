@@ -5,17 +5,22 @@
 	<!-- 글검색 -->
 	<select id="searchfame" parameterType="Junghun"
 		resultType="Junghun">		
-		
-		select b.bcontent , b.blikecount ,b.breplycount
+		<choose>
+			<when test='search.contains("@")'>
+		select CONCAT('@',uatid) , unickname , uintro , uimage
+		from user_info
+		where (
+		uatid like
+		'%'||#{search}||'%' or unickname like '%'||#{search}||'%')
+		and ucode not in (select bopcode from block where ucode=${loginUcode} and bopcode is not null)
+
+		</when>
+			
+			
+		<otherwise>
+		select b.bcontent , b.blikecount ,b.breplycount, b.bregdate
 		,b.bquotecount , u.uatid , u.unickname ,
-		b.ucode , b.battach ,b.bcode,
-		case when trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))/365) >=1 then trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))/365)||'년 전'
-     		when trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))/31) >=1 then trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))/31)||'달 전'
-     		when trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))) >=1 then trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss')))||'일 전'
-     		when trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))*24) >=1 then trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))*24)||'시간 전'
-     		when trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))*24*60) >=1 then trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))*24*60)||'분 전'
-     		when trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))*24*60*60) >=0 then trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))*24*60*60)||'초 전'
-    	  end as bregdate
+		b.ucode , b.battach ,b.bcode, u.uimage, b.bbcode
 		from board b, user_info u <!-- like.book 조인 -->
 		where b.uCode = u.uCode
 		and
@@ -26,9 +31,27 @@
 		b.ucode not in(select bopcode from block where
 		ucode=${loginUcode} and bopcode is not null) <!-- 유저코드 -->
 		ORDER BY b.blikecount DESC
+		</otherwise>
+		</choose>
+		
+	</select>
+	<!-- 회원모든글 -->
+	
+	<select id="searchlistall" parameterType="Junghun"
+		resultType="Junghun">
+		select b.bcontent , b.blikecount ,b.breplycount, b.bregdate
+		,b.bquotecount , u.uatid , u.unickname ,
+		b.ucode , b.battach ,b.bcode, u.uimage
+		from board b, user_info u 
+		where b.uCode = u.uCode
+        and u.ucode in (select ucode
+		from user_info
+		where (uatid like'%'||'${search}'||'%' or unickname like '%'||'${search}'||'%')
+		)
 		
 		
 	</select>
+	<!-- 차단유저 -->
 	<select id="searchblock" parameterType="Junghun" resultType="Junghun">
 		select bword
 		from block
@@ -48,9 +71,8 @@
 		stime = to_char(sysdate,'yy/mm/dd hh24:mi:ss')
 		WHEN
 		NOT MATCHED THEN
-		INSERT (search, UCODE,
-		SAGE, STYPE, STIME,
-		SRECORD,SCOUNT)
+		INSERT 
+		(search, UCODE,	SAGE, STYPE, STIME,	SRECORD,SCOUNT)
 		VALUES (trim('${search}'),${loginUcode},10,
 		<choose>
 			<when test='search.contains("#")'>'hash'</when>
@@ -63,7 +85,7 @@
 	<!-- 회원검색 -->
 	<select id="searchuser" parameterType="Junghun"
 		resultType="Junghun">
-		select uatid , unickname , uintro
+		select uatid , unickname , uintro , uimage
 		from user_info
 		where (
 		uatid like
@@ -76,16 +98,9 @@
 		resultType="Junghun">
 		select b.bcontent , b.blikecount ,b.breplycount
 		,b.bquotecount , u.uatid , u.unickname ,
-		b.ucode , b.battach ,
-		case when trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))/365) >=1 then trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))/365)||'년 전'
-     		when trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))/31) >=1 then trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))/31)||'달 전'
-     		when trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))) >=1 then trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss')))||'일 전'
-     		when trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))*24) >=1 then trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))*24)||'시간 전'
-     		when trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))*24*60) >=1 then trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))*24*60)||'분 전'
-     		when trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))*24*60*60) >=0 then trunc((sysdate - to_date(bregdate,'yy/mm/dd hh24:mi:ss'))*24*60*60)||'초 전'
-    	  end as bregdate
-		from board b,
-		user_info u
+		b.ucode , b.battach ,b.bcode, u.uimage,
+		b.bregdate
+		from board b, user_info u <!-- like.book 조인 -->
 		where b.uCode = u.uCode
 		and
 		b.bcontent
@@ -96,8 +111,38 @@
 		ucode=${loginUcode} and bopcode is not null) <!-- 유저코드 -->
 		ORDER BY bregdate DESC
 	</select>
+
+	<!-- 사진 검색 -->
+	<select id="searchbattach" parameterType="Junghun" resultType="Junghun">
+				select b.bcontent , b.blikecount ,b.breplycount, b.bregdate
+					,b.bquotecount , u.uatid , u.unickname , b.battach,
+					b.ucode , b.battach ,b.bcode, u.uimage
+				from board b, user_info u 
+				where b.uCode = u.uCode
+					and b.bcontent like '%'||#{search}||'%' 
+					and b.ucode not in(select bopcode from block where
+					ucode=${loginUcode} and bopcode is not null)
+					and b.battach is not null
+					and b.battach like 'image'||'%'
+				ORDER BY b.blikecount DESC
+	</select>
 	
+	<!-- 동영상검색  -->
+	<select id="searchbattachvideo" parameterType="Junghun" resultType="Junghun">
 	
+				select b.bcontent , b.blikecount ,b.breplycount, b.bregdate
+					,b.bquotecount , u.uatid , u.unickname , b.battach,
+					b.ucode , b.battach ,b.bcode, u.uimage
+				from board b, user_info u 
+				where b.uCode = u.uCode
+					and b.bcontent like '%'||#{search}||'%' 
+					and b.ucode not in(select bopcode from block where
+					ucode=${loginUcode} and bopcode is not null)
+					and b.battach is not null
+					and b.battach like 'video'||'%'
+				ORDER BY b.blikecount DESC
+	</select>
+		
 	<!-- explore 검색어순위 -->
 	<select id="searchcount" parameterType="Junghun"
 		resultType="Junghun">
@@ -123,12 +168,11 @@
 	<!-- 해쉬태그 순위 -->
 	<select id="searchTrend" parameterType="Junghun"
 		resultType="Junghun">
-		<![CDATA[
-		select * from search
-		where search like '<'||'%'
-		ORDER BY
-		scount DESC
-		]]>
+		select 
+			hname, count(*) as hcount
+		from hashtag
+		group by hname
+		order by hcount desc
 	</select>
 
 	<!-- 검색기록 -->
@@ -148,8 +192,43 @@
 	</delete>
 	
 	<!-- 좋아요  -->
-	<update id="searchlike" parameterType="Junghun" >
+	<!--<update id="searchlike" parameterType="Junghun" >
 		insert into like_bookmark(ucode, bcode, ltype, ldate) 
          values(${loginUcode}, #{bCode}, '1', to_char(sysdate, 'yy/mm/dd hh24:mi:ss'))
-	</update>
+	</update> -->
+	
+	<!-- 팔로우 -->
+	<select id="followWhoIknow" parameterType="Junghun" resultType="Junghun">
+		select 
+			ui.ucode uucode,
+			ui.uatid uatid, ui.unickName unickName, ui.ubirth ubirth, 
+			ui.unation unation, ui.uintro uintro, ui.uloc uloc, ui.uimage uimage, ui.ustate ustate, ui.uonline uonline, f.fblockstate fblockstate
+		from (select * from follow 
+      			where fopcode = #{ucode} <!-- A를 팔로우하는 사람-->
+      			and ucode NOT in ( select fopcode from follow where  ucode = #{ucode} )) f <!--A가 팔로우하는 사람이 아닌-->
+      			, user_info ui
+		where ui.ucode = f.ucode
+	</select>
+	
+	<select id="followWhoSameTrend" parameterType="Junghun" resultType="Junghun">
+		select 
+			ui.ucode uucode,
+			ui.uatid uatid, ui.unickName unickName, ui.ubirth ubirth, 
+			ui.unation unation, ui.uintro uintro, ui.uloc uloc, ui.uimage uimage, ui.ustate ustate, ui.uonline uonline, f.fblockstate fblockstate
+		from (select * from follow 
+      			where fopcode = #{ucode} <!-- A를 팔로우하는 사람-->
+      			and ucode NOT in ( select fopcode from follow where  ucode = #{ucode} )) f <!--A가 팔로우하는 사람이 아닌-->
+      			, user_info ui
+		where ui.ucode = f.ucode
+	</select>
+	
+	<!-- 인용글 가져오기 -->
+	<select id="QuoteBoard" parameterType="int"
+		resultType="Iron_Board">
+		select b.bcode, b.bcontent, b.battach, u.unickname, u.uatid,
+		u.uimage,b.bregdate
+		from board b, user_info u
+		where b.bcode = #{bbcode}
+		and b.ucode = u.ucode
+	</select>
 </mapper>

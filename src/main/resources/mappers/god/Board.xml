@@ -26,7 +26,7 @@
 		values
 			(#{bcode}, #{ucode}, #{bcontent}, 
 			null, #{btype},
-			#{banchor}, #{bpermission}, null, #{battach, jdbcType=VARCHAR},
+			#{banchor}, #{bpermission}, #{bbcode}, #{battach, jdbcType=VARCHAR},
 			null, 0,
 			0,0,0,1,
 			0,0,0)
@@ -45,7 +45,7 @@
 		values
 			(#{bcode}, #{ucode}, #{bcontent}, 
 			#{bregdate}, #{btype},
-			#{banchor}, #{bpermission}, null, #{battach, jdbcType=VARCHAR},
+			#{banchor}, #{bpermission}, #{bbcode}, #{battach, jdbcType=VARCHAR},
 			null, 1,
 			0,0,0,1,
 			0,0,0)
@@ -64,7 +64,7 @@
 		values
 			(#{bcode}, #{ucode}, #{bcontent}, 
 			to_char(sysdate, 'yy/mm/dd hh24:mi:ss'), #{btype},
-			#{banchor}, #{bpermission}, null, #{battach, jdbcType=VARCHAR},
+			#{banchor}, #{bpermission}, #{bbcode}, #{battach, jdbcType=VARCHAR},
 			null, null,
 			0,0,0,1,
 			0,0,0)
@@ -83,7 +83,7 @@
 		values
 			(#{bcode}, #{ucode}, #{bcontent}, 
 			to_char(sysdate, 'yy/mm/dd hh24:mi:ss'), #{btype},
-			#{banchor}, #{bpermission}, null, #{battach, jdbcType=VARCHAR},
+			#{banchor}, #{bpermission}, #{bbcode}, #{battach, jdbcType=VARCHAR},
 			#{bvotecode}, null,
 			0,0,0,1,
 			0,0,0)
@@ -97,7 +97,7 @@
 			bregdate=<if test="bregdate == null"> to_char(sysdate, 'yy/mm/dd hh24:mi:ss')</if>
 			<if test="bregdate != null">#{bregdate}</if>,
 			btype=#{btype},
-			banchor=#{banchor}, bpermission=#{bpermission}, BBCODE=null, 
+			banchor=#{banchor}, bpermission=#{bpermission}, BBCODE=#{bbcode}, 
 			battach=#{battach, jdbcType=VARCHAR}, 
 			bvotecode=null, BSAVEORRSVD=1, 
 			blikecount=0, bexpcount=0, bjoincount=0, bstate=1,
@@ -110,7 +110,7 @@
 			bregdate=<if test="bregdate == null"> to_char(sysdate, 'yy/mm/dd hh24:mi:ss')</if>
 			<if test="bregdate != null">#{bregdate}</if>,
 			btype=#{btype},
-			banchor=#{banchor}, bpermission=#{bpermission}, BBCODE=null, 
+			banchor=#{banchor}, bpermission=#{bpermission}, BBCODE=#{bbcode}, 
 			battach=#{battach, jdbcType=VARCHAR}, 
 			bvotecode=null, BSAVEORRSVD=null, 
 			blikecount=0, bexpcount=0, bjoincount=0, bstate=1,
@@ -125,4 +125,31 @@
 			#{bcode}
 		</foreach>
 	</update>
+	<update id="JHupBreplycount" parameterType="GodBoard">
+		update board set
+  			breplycount=breplycount+1
+		where bcode=#{bbcode}
+	</update>
+	<update id="JHupScrapcount" parameterType="GodBoard">
+		update board set
+  			BQUOTECOUNT=BQUOTECOUNT+1
+		where bcode=#{bbcode}
+	</update>
+	<select id="JHgetScrapBoard" parameterType="int" resultType="GodBoard">
+		select b.*, u.unickname, u.uatid, u.uimage 
+		from board b, user_info u 
+		where bcode=#{bcode} and 
+		b.ucode=u.ucode
+	</select>
+	<select id="JHgetToAtid" parameterType="int" resultType="java.lang.String">
+		select u.uatid 
+		from user_info u, board b 
+		where b.bcode=#{bbcode} and b.ucode=u.ucode
+	</select>
+	<select id="JHgetQuote" parameterType="int" resultType="GodBoard">
+		select b.*, u.unickname, u.uatid, u.uimage 
+		from board b, user_info u 
+		where bcode=#{bbcode} and 
+		b.ucode=u.ucode 
+	</select>
 </mapper>

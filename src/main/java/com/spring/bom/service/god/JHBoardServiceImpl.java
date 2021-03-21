@@ -1,5 +1,7 @@
 package com.spring.bom.service.god;
 
+import java.util.ArrayList;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -34,6 +36,24 @@ public class JHBoardServiceImpl implements JHBoardService {
 	public int deleteSaveWrite(int[] bcodes) {
 		// TODO Auto-generated method stub
 		return bd.deleteSaveWrite(bcodes);
+	}
+
+	@Override
+	public int upBreplyCount(JHBoard board) {
+		// TODO Auto-generated method stub
+		return bd.upBreplyCount(board);
+	}
+
+	@Override
+	public int upScrapCount(JHBoard board) {
+		// TODO Auto-generated method stub
+		return bd.upScrapCount(board);
+	}
+
+	@Override
+	public JHBoard getScrapBoard(int bcode) {
+		// TODO Auto-generated method stub
+		return bd.getScrapBoard(bcode);
 	}
 
 }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.spring.bom.dao.hoon.JunghunDao;
 import com.spring.bom.model.hoon.Junghun;
+import com.spring.bom.model.iron.Follow;
 
 @Service
 public class JunghunServiceImpl implements JunghunService {
@@ -45,8 +46,8 @@ public class JunghunServiceImpl implements JunghunService {
 	}
 
 	@Override
-	public List<Junghun> listTrend(Junghun junghun) {
-		return jd.listTrend(junghun);
+	public List<Junghun> listTrend() {
+		return jd.listTrend();
 	}
 
 	@Override
@@ -71,5 +72,33 @@ public class JunghunServiceImpl implements JunghunService {
 		return jd.searchlike(junghun);
 	}
 
+	@Override
+	public List<Junghun> searchlistall(Junghun junghun) {
+		// TODO Auto-generated method stub
+		return jd.searchlistall(junghun);
+	}
+	@Override
+	public List<Follow> getSuggestFollowList1(int ucode) {
+		List<Follow> suggestFlist = jd.getSuggestFollowList1(ucode);
+		return suggestFlist;
+	}
+	
+	@Override
+	public List<Follow> getSuggestFollowList2(int ucode) {
+		List<Follow> suggestFlist = jd.getSuggestFollowList2(ucode);
+		return suggestFlist;
+	}
+
+	@Override
+	public List<Junghun> searchbattach(Junghun junghun) {
+		// TODO Auto-generated method stub
+		return jd.searchbattach(junghun);
+	}
+
+	@Override
+	public List<Junghun> searchbattachvideo(Junghun junghun) {
+		// TODO Auto-generated method stub
+		return jd.searchbattachvideo(junghun);
+	}
 
 }

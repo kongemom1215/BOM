@@ -68,9 +68,7 @@ public class BookmarkDaoImpl implements BookmarkDao{
 		} catch (Exception e) {
 			System.out.println("BookmarkDaoImpl Exception =>" +e.getMessage());
 		}  
-		
-		
-		
+
 		return delete;
 	}
 

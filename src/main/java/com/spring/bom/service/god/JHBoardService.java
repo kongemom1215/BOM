@@ -1,5 +1,7 @@
 package com.spring.bom.service.god;
 
+import java.util.ArrayList;
+
 import org.springframework.stereotype.Service;
 
 import com.spring.bom.model.god.JHBoard;
@@ -14,5 +16,11 @@ public interface JHBoardService {
 	JHBoard getBoard(int bcode);
 
 	int deleteSaveWrite(int[] bcodes);
+
+	int upBreplyCount(JHBoard board);
+
+	int upScrapCount(JHBoard board);
+
+	JHBoard getScrapBoard(int bcode);
 
 }

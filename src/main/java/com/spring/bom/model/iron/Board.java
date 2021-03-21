@@ -36,6 +36,15 @@ public class Board {
 	//Not DTO
 	private String battachType;
 	private String battachSrc;
+	//For Quote
+	private String q_uimage;
+	private String q_nickname;
+	private String q_atid;
+	private String q_content;
+	private String q_attach;
+	private String q_attachsrc;
+	private String q_attachtype;
+	private String q_regdate;
 	
 	public String getUimage() {
 		return uimage;
@@ -219,6 +228,55 @@ public class Board {
 	}
 	public void setOrderData(String orderData) {
 		this.orderData = orderData;
+	}
+	//For quote getter/setter
+	public String getQ_uimage() {
+		return q_uimage;
+	}
+	public void setQ_uimage(String q_uimage) {
+		this.q_uimage = q_uimage;
+	}
+	public String getQ_nickname() {
+		return q_nickname;
+	}
+	public void setQ_nickname(String q_nickname) {
+		this.q_nickname = q_nickname;
+	}
+	public String getQ_atid() {
+		return q_atid;
+	}
+	public void setQ_atid(String q_atid) {
+		this.q_atid = q_atid;
+	}
+	public String getQ_content() {
+		return q_content;
+	}
+	public void setQ_content(String q_content) {
+		this.q_content = q_content;
+	}
+	public String getQ_attach() {
+		return q_attach;
+	}
+	public void setQ_attach(String q_attach) {
+		this.q_attach = q_attach;
+	}
+	public String getQ_attachsrc() {
+		return q_attachsrc;
+	}
+	public void setQ_attachsrc(String q_attachsrc) {
+		this.q_attachsrc = q_attachsrc;
+	}
+	public String getQ_attachtype() {
+		return q_attachtype;
+	}
+	public void setQ_attachtype(String q_attachtype) {
+		this.q_attachtype = q_attachtype;
+	}
+	public String getQ_regdate() {
+		return q_regdate;
+	}
+	public void setQ_regdate(String q_regdate) {
+		this.q_regdate = q_regdate;
 	}
 	
 	

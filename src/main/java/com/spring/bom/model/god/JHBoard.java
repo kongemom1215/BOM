@@ -22,7 +22,81 @@ public class JHBoard {
 	
 	//조회용
 	private String savebcode;
+	private String unickname;
+	private String uimage;
+	private String uatid;
+	private String ctx;
 	
+	//답글
+	private String touatid;
+	
+	//인용글
+	private String qprofileimage;
+	private String qnickname;
+	private String qatid;
+	private String qcontent;
+	private String qattach;
+	
+	public String getCtx() {
+		return ctx;
+	}
+	public void setCtx(String ctx) {
+		this.ctx = ctx;
+	}
+	public String getQprofileimage() {
+		return qprofileimage;
+	}
+	public void setQprofileimage(String qprofileimage) {
+		this.qprofileimage = qprofileimage;
+	}
+	public String getQnickname() {
+		return qnickname;
+	}
+	public void setQnickname(String qnickname) {
+		this.qnickname = qnickname;
+	}
+	public String getQatid() {
+		return qatid;
+	}
+	public void setQatid(String qatid) {
+		this.qatid = qatid;
+	}
+	public String getQcontent() {
+		return qcontent;
+	}
+	public void setQcontent(String qcontent) {
+		this.qcontent = qcontent;
+	}
+	public String getQattach() {
+		return qattach;
+	}
+	public void setQattach(String qattach) {
+		this.qattach = qattach;
+	}
+	public String getTouatid() {
+		return touatid;
+	}
+	public void setTouatid(String touatid) {
+		this.touatid = touatid;
+	}
+	public String getUnickname() {
+		return unickname;
+	}
+	public void setUnickname(String unickname) {
+		this.unickname = unickname;
+	}
+	public String getUimage() {
+		return uimage;
+	}
+	public void setUimage(String uimage) {
+		this.uimage = uimage;
+	}
+	public String getUatid() {
+		return uatid;
+	}
+	public void setUatid(String uatid) {
+		this.uatid = uatid;
+	}
 	public String getSavebcode() {
 		return savebcode;
 	}
