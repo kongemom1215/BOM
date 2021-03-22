@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.spring.bom.model.bear.Chat;
 import com.spring.bom.model.bear.User;
+import com.spring.bom.model.iron.Follow;
 
 @Repository
 public class ChatDaoImpl implements ChatDao {
@@ -95,7 +96,7 @@ public class ChatDaoImpl implements ChatDao {
 		System.out.println("chatDaoImpl userinfo 진행 - > ucode " +kiwoong);
 		return session.selectList("userinfo", kiwoong);
 	}
-	
+
 		
 
 }

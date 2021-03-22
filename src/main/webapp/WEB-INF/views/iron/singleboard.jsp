@@ -40,6 +40,14 @@
 <script src="/js/bootstrap.bundle.min.js"></script>
 <script src="/js/bootstrap.bundle.js"></script>
 <style>
+#bearsize {
+	width: 550px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	text-align: left;
+}
+
 .dropdown-toggle.caret-off::after {
 	display: none;
 }
@@ -189,6 +197,39 @@ function viewBoardOptions(bbcode,bindex){
 			alert(".ajax viewBoardOptions str->"+str);
 		}
 	});
+}
+
+//팔로우 하는 로직
+function followchk(number){
+	
+	//name 에 k + number 쓰는 태그를찾아서 text변경
+	var textareaVal = $("button[name=k"+number+"]").text();
+	console.log("textareaVal + textareaVal" + textareaVal)
+	
+	var msg = { uopcode :number};
+	$.ajax({
+		url: '<%=context%>/bear/followchk',
+		data: msg,
+		type: "post",
+
+		success: function (res) {
+			console.log("저장성공 - > " +res)
+			
+			if(res == "1"){
+				console.log("저장성공")
+				  $("button[name=k"+number+"]").text("팔로잉");
+				  $("button[name=k"+number+"]").attr("class","btn btn-success btn-sm float-right");
+		
+			}else 
+				{console.log("저장실패")}
+				
+			 
+		}
+});	 
+}
+
+function closemodal(){
+	location.href="../iron/timeline";
 }
 </script>
 </head>
@@ -357,9 +398,8 @@ function viewBoardOptions(bbcode,bindex){
 									onclick="scrap_click('${board.bcode}',1,'${board.unickName }','${board.uatid }','<%=context %>/profile_image/${board.uimage }','${board.battachType}','${board.battachSrc}','<%=context %>');"
 									class="scrapSetting btn btn-secondary mr-3 btn-light"
 									data-toggle="modal" data-target="#writeForm">
-									<input type="hidden" value="${board.bcontent}"
-										id="tagContent1"> <img
-										src="/img/bring.svg" width="20" height="20">
+									<input type="hidden" value="${board.bcontent}" id="tagContent1">
+									<img src="/img/bring.svg" width="20" height="20">
 									<c:if test="${board.bquoteCount ne 0}">
 												${board.bquoteCount }
 											</c:if>
@@ -413,46 +453,46 @@ function viewBoardOptions(bbcode,bindex){
 								class="card-subtitle mb-2 text-muted">${reply.bregDate }</a>
 							<p class="card-text" style="margin-top: 10px;"
 								onclick="goSingleBoard(${reply.bcode}, ${reply_ucode});">${reply.bcontent }</p>
-								
-								<!-- 우선 인용문이 있을 때-->
-									<c:if test="${reply.btype=='quote' }">
-										<div class="col-12 float-left" id="QuoteArea"
-											style="font-size: 0.8em;">
-											<div class='card'>
-												<div class='card-body'>
-													<img id="quote_profile"
-														src="<%=context %>/profile_image/${reply.q_uimage}"
-														alt='no_image' class='rounded-circle' width='30'> <a
-														class='card-title text-dark' id="quote_nickname">${reply.q_nickname}</a>
-													<a class='card-subtitle mb-2 text-muted' id="quote_atid">${reply.q_atid}</a>
-													<a class='card-subtitle mb-2 text-muted' id="quote_regdate">${reply.q_regdate}</a>
-													<p class='card-text mt-2 mb-0' style="height: 100%;"
-														id="quote_content">${reply.q_content}</p>
-													<c:if test="${reply.q_attach != ''}">
-														<div class="quote_file mt-2">
-															<c:if test="${reply.q_attachtype eq 'image'}">
-																<img id="quote_img"
-																	src="<%=context %>/image/${reply.q_attachsrc }"
-																	class="img-fluid" />
-															</c:if>
-															<c:if test="${reply.q_attachtype eq 'video'}">
-																<div id="show_quote_video"
-																	class="embed-responsive embed-responsive-16by9">
-																	<video controls id="quote_video"
-																		src="<%=context %>/video/${reply.q_attachsrc }">
-																	</video>
-																</div>
-															</c:if>
+
+							<!-- 우선 인용문이 있을 때-->
+							<c:if test="${reply.btype=='quote' }">
+								<div class="col-12 float-left" id="QuoteArea"
+									style="font-size: 0.8em;">
+									<div class='card'>
+										<div class='card-body'>
+											<img id="quote_profile"
+												src="<%=context %>/profile_image/${reply.q_uimage}"
+												alt='no_image' class='rounded-circle' width='30'> <a
+												class='card-title text-dark' id="quote_nickname">${reply.q_nickname}</a>
+											<a class='card-subtitle mb-2 text-muted' id="quote_atid">${reply.q_atid}</a>
+											<a class='card-subtitle mb-2 text-muted' id="quote_regdate">${reply.q_regdate}</a>
+											<p class='card-text mt-2 mb-0' style="height: 100%;"
+												id="quote_content">${reply.q_content}</p>
+											<c:if test="${reply.q_attach != ''}">
+												<div class="quote_file mt-2">
+													<c:if test="${reply.q_attachtype eq 'image'}">
+														<img id="quote_img"
+															src="<%=context %>/image/${reply.q_attachsrc }"
+															class="img-fluid" />
+													</c:if>
+													<c:if test="${reply.q_attachtype eq 'video'}">
+														<div id="show_quote_video"
+															class="embed-responsive embed-responsive-16by9">
+															<video controls id="quote_video"
+																src="<%=context %>/video/${reply.q_attachsrc }">
+															</video>
 														</div>
 													</c:if>
-
 												</div>
-											</div>
+											</c:if>
+
 										</div>
-									</c:if>
-								
-								
-								
+									</div>
+								</div>
+							</c:if>
+
+
+
 							<c:if test="${reply.battach!=null }">
 								<c:if test="${reply.battachType=='image'}">
 									<img class="img-thumnail" width="300"
@@ -472,28 +512,28 @@ function viewBoardOptions(bbcode,bindex){
 								<div class="btn-group col-md-12" role="group"
 									aria-label="Button group with nested dropdown">
 									<!-- 답글 -->
-										<button type="button"
-											class="replySetting btn btn-secondary mr-3 btn-light"
-											data-toggle="modal" data-target="#writeForm"
-											onclick="reply_click('${reply.bcode}','${reply.uatid }');">
-											<img src="/img/speech-bubble.svg" width="20" height="20">
-											<c:if test="${reply.breplyCount ne 0}">
+									<button type="button"
+										class="replySetting btn btn-secondary mr-3 btn-light"
+										data-toggle="modal" data-target="#writeForm"
+										onclick="reply_click('${reply.bcode}','${reply.uatid }');">
+										<img src="/img/speech-bubble.svg" width="20" height="20">
+										<c:if test="${reply.breplyCount ne 0}">
 												${reply.breplyCount }
 											</c:if>
-										</button>
+									</button>
 
-										<!-- 인용 -->
-										<button type="button"
-											onclick="scrap_click('${reply.bcode}',${status.index },'${reply.unickName }','${reply.uatid }','<%=context %>/profile_image/${reply.uimage }','${reply.battachType}','${reply.battachSrc}','<%=context %>');"
-											class="scrapSetting btn btn-secondary mr-3 btn-light"
-											data-toggle="modal" data-target="#writeForm">
-											<input type="hidden" value="${reply.bcontent}"
-												id="tagContent${status.index}"> <img
-												src="/img/bring.svg" width="20" height="20">
-											<c:if test="${reply.bquoteCount ne 0}">
+									<!-- 인용 -->
+									<button type="button"
+										onclick="scrap_click('${reply.bcode}',${status.index },'${reply.unickName }','${reply.uatid }','<%=context %>/profile_image/${reply.uimage }','${reply.battachType}','${reply.battachSrc}','<%=context %>');"
+										class="scrapSetting btn btn-secondary mr-3 btn-light"
+										data-toggle="modal" data-target="#writeForm">
+										<input type="hidden" value="${reply.bcontent}"
+											id="tagContent${status.index}"> <img
+											src="/img/bring.svg" width="20" height="20">
+										<c:if test="${reply.bquoteCount ne 0}">
 												${reply.bquoteCount }
 											</c:if>
-										</button>
+									</button>
 
 
 									<button id="likeBtn2${status.index }" type="button"
@@ -556,7 +596,8 @@ function viewBoardOptions(bbcode,bindex){
 						<div class="card-header">팔로우 추천</div>
 						<div class="card-body" style="padding: 5px;">
 							<c:if test="${suggestFlist2_size>0 }">
-								<c:forEach var="justFollowMe" items="${suggestFlist2 }">
+								<c:forEach var="justFollowMe" items="${suggestFlist2 }"
+									begin="0" end="2">
 									<div class="card">
 										<div class="card-body"
 											style="font-size: 0.8rem; padding: 10px;">
@@ -566,7 +607,9 @@ function viewBoardOptions(bbcode,bindex){
 												class="card-subtitle mb-2 text-muted">@${justFollowMe.uatid}</a>
 											<button type="button"
 												class="btn btn-outline-success btn-sm float-right"
-												style="font-size: 0.8rem;">팔로우</button>
+												style="font-size: 0.8rem;"
+												onclick="followchk(${justFollowMe.uucode})"
+												name=k${justFollowMe.uucode}>팔로우</button>
 										</div>
 									</div>
 								</c:forEach>
@@ -577,7 +620,8 @@ function viewBoardOptions(bbcode,bindex){
 									<div class="card">
 										<div class="card-body"
 											style="font-size: 0.8rem; padding: 10px;">
-											<img src="/img/profile_image/${justFollowMe.uimage}"
+											<img
+												src="${resourcePath }/profile_image/${justFollowMe.uimage}"
 												class="rounded-circle" width="20" height="20"> <a
 												class="card-title text-dark">${justFollowMe.unickName}</a> <a
 												class="card-subtitle mb-2 text-muted">@${justFollowMe.uatid}</a>
@@ -589,8 +633,15 @@ function viewBoardOptions(bbcode,bindex){
 								</c:forEach>
 							</c:if>
 						</div>
+						<c:if test="${suggestFlist2_size>0 }">
+							<button type="button" class="btn btn-outline-success"
+								id="writeBtn" data-toggle="modal" data-target="#morebtn">더보기
+							</button>
+						</c:if>
+
 					</div>
 				</div>
+
 				<div class="list-group-item list-group-item-action bg-light"
 					style="padding: 5px;">
 					<div class="card bg-light mb-3">
@@ -1768,6 +1819,58 @@ function viewBoardOptions(bbcode,bindex){
 		</script>
 	<!--GOD 글쓰기 기능 끝-->
 
+	<!--BEAR 더보기 창  -->
+	<div class="modal fade" id="morebtn" data-backdrop="static"
+		data-keyboard="false" tabindex="-1"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<div class="modal-body col-12">
+						<div class="card-header">
+							<h4 style="text-align: center;">
+								팔로우 추천
+								<button style="float: right;" onclick="closemodal()">x</button>
+							</h4>
+							<div class="card-body" style="padding: 5px;">
+								<div class="card">
+									<div class="card-body"
+										style="font-size: 0.8rem; padding: 10px;">
+										<c:forEach var="justFollowMe1" items="${suggestFlist2 }">
+											<div class="card">
+												<div class="card-body"
+													style="font-size: 0.8rem; padding: 10px;">
+													<img
+														src="<%=context %>/profile_image/${justFollowMe1.uimage}"
+														class="rounded-circle" width="40" height="40"> <a
+														class="card-title text-dark">${justFollowMe1.unickName}</a>
+													<a class="card-subtitle mb-2 text-muted">@${justFollowMe1.uatid}</a>
+													<c:if test="${justFollowMe1.uonline eq 1 }">
+														<img src="<%=context%>/image/online.png" width="20"
+															height="20">
+													</c:if>
+													<div>
+														<button type="button"
+															class="btn btn-outline-success btn-sm float-right"
+															style="font-size: 1.2rem;"
+															onclick="followchk(${justFollowMe1.uucode})"
+															name="k${justFollowMe1.uucode}">팔로우</button>
+
+													</div>
+													<h3 id="bearsize" style="padding-left: 40px">&nbsp&nbsp${justFollowMe1.uintro}</h3>
+
+												</div>
+											</div>
+										</c:forEach>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 
 </body>
 

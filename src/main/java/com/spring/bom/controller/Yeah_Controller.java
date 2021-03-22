@@ -1,7 +1,9 @@
 package com.spring.bom.controller;
 
+import java.util.Collections;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +13,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.spring.bom.model.yeah.YeahBoard;
+import com.spring.bom.model.iron.Follow;
+import com.spring.bom.model.iron.HashTag;
 import com.spring.bom.model.iron.User_Info;
 import com.spring.bom.model.yeah.UserBookmarkBoard;
+import com.spring.bom.service.iron.FollowService;
+import com.spring.bom.service.iron.HashTagService;
 import com.spring.bom.service.yeah.BookmarkService;
 
 @Controller
@@ -21,8 +27,14 @@ public class Yeah_Controller {
 	@Autowired
 	private BookmarkService bms;
 
+	@Autowired
+	private FollowService fs;
+
+	@Autowired
+	private HashTagService hs;
+	
 	@RequestMapping(value = "yeah/bookmark")
-	public String bookmark(Model model, HttpSession session) {
+	public String bookmark(Model model, HttpSession session, HttpServletRequest request) {
 		User_Info user = (User_Info) session.getAttribute("user");
 		model.addAttribute("user", user);
 
@@ -36,7 +48,6 @@ public class Yeah_Controller {
 
 		System.out.println("Yeah_Controller ubmBoardList.size()" + ubmBoardList.size());
 		model.addAttribute("ucode", int_ucode);
-		model.addAttribute("ubmBoardList", ubmBoardList);
 
 		for (int i = 0; i < ubmBoardList.size(); i++) {
 			// ubmBoardList.set(i,
@@ -49,6 +60,29 @@ public class Yeah_Controller {
 			}
 		}
 
+		// 팔로우 추천2 나를 팔로우하는 유저 추천
+		System.out.println("[JungChurlController] Do -> fs.getSuggestFollowList()");
+		List<Follow> suggestFlist2 = fs.getSuggestFollowList2(user.getUcode());
+		System.out.println("[JungChurlController] Result : listSize is " + suggestFlist2.size());
+		model.addAttribute("suggestFlist2_size", suggestFlist2.size());
+		model.addAttribute("suggestFlist2", suggestFlist2);
+
+		// 리스트 suggestFlist2 에 있는 값들을 랜덤으로 돌림
+		Collections.shuffle(suggestFlist2); // 팔로우 추천 랜덤
+
+		model.addAttribute("suggestFlist2_size", suggestFlist2.size());
+		model.addAttribute("suggestFlist2", suggestFlist2);
+
+		// 실시간 해시태그 순위
+		System.out.println("[JungChurlController] Do -> hts.getHashTagRanking()");
+		List<HashTag> hashtagList = hs.getHashTagRanking();
+		for (int i = 0; i < hashtagList.size(); i++)
+			hashtagList.get(i).setHrank(i + 1);
+		model.addAttribute("tag_list", hashtagList);
+
+		// For Context
+		model.addAttribute("context", request.getContextPath());
+		model.addAttribute("ubmBoardList", ubmBoardList);
 		return "yeah/bookmark";
 	}
 

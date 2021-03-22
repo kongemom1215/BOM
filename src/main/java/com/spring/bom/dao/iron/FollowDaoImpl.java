@@ -29,4 +29,10 @@ public class FollowDaoImpl implements FollowDao {
 		return suggestFlist;
 	}
 
+	@Override
+	public int fwInsert(Follow follow) {
+		System.out.println("[kiwoong] FollowDaoImpl fwInsert start....");
+		return session.insert("fwInsert",follow);
+	}
+
 }

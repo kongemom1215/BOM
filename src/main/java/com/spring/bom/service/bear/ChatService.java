@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.spring.bom.model.bear.Chat;
 import com.spring.bom.model.bear.User;
+import com.spring.bom.model.iron.Follow;
 
 public interface ChatService {
 

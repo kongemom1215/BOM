@@ -49,6 +49,14 @@
 <script src="/js/bootstrap.bundle.js"></script>
 
 <style>
+#bearsize {
+	width: 550px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	text-align: left;
+}
+
 .dropdown-toggle.caret-off::after {
 	display: none;
 }
@@ -582,9 +590,11 @@ function viewBoardOptions(bbcode,bindex){
 				<div class="tab-pane fade" id="new" role="tabpanel"
 					aria-labelledby="contact-tab">
 					<c:if test="${listNew.size() == 0 }">
-						<c:forEach var="junghun" items="${searchlistall }" varStatus="status">
+						<c:forEach var="junghun" items="${searchlistall }"
+							varStatus="status">
 							<div class="card">
-								<div class="card-body" onclick="goSingleBoard(${junghun.bcode},${status.index });">
+								<div class="card-body"
+									onclick="goSingleBoard(${junghun.bcode},${status.index });">
 									<button type="button" class="btn btn-light float-right">⋯</button>
 									<img src="<%=context %>/profile_image/${junghun.uimage }"
 										alt="no_image" class="rounded-circle" width="50" width="50">
@@ -692,7 +702,8 @@ function viewBoardOptions(bbcode,bindex){
 					</c:if>
 					<c:forEach var="junghun" items="${listNew }" varStatus="status">
 						<div class="card">
-							<div class="card-body" onclick="goSingleBoard(${junghun.bcode},${status.index });">
+							<div class="card-body"
+								onclick="goSingleBoard(${junghun.bcode},${status.index });">
 								<button type="button" class="btn btn-light float-right">⋯</button>
 								<img src="<%=context %>/profile_image/${junghun.uimage }"
 									alt="no_image" class="rounded-circle" width="50" width="50">
@@ -706,28 +717,28 @@ function viewBoardOptions(bbcode,bindex){
 									<div class="btn-group col-md-12" role="group"
 										aria-label="Button group with nested dropdown">
 										<!-- 답글 -->
-											<button type="button"
-												class="replySetting btn btn-secondary mr-3 btn-light"
-												data-toggle="modal" data-target="#writeForm"
-												onclick="reply_click('${junghun.bcode}','${junghun.uatid }');">
-												<img src="/img/speech-bubble.svg" width="20" height="20">
-												<c:if test="${junghun.breplycount ne 0}">
+										<button type="button"
+											class="replySetting btn btn-secondary mr-3 btn-light"
+											data-toggle="modal" data-target="#writeForm"
+											onclick="reply_click('${junghun.bcode}','${junghun.uatid }');">
+											<img src="/img/speech-bubble.svg" width="20" height="20">
+											<c:if test="${junghun.breplycount ne 0}">
 												${junghun.breplycount }
 											</c:if>
-											</button>
+										</button>
 
-											<!-- 인용 -->
-											<button type="button"
-												onclick="scrap_click('${junghun.bcode}',${status.index },'${junghun.uNickName }','${junghun.uatid }','<%=context %>/profile_image/${junghun.uimage }','${junghun.battachType}','${junghun.battachSrc}','<%=context %>');"
-												class="scrapSetting btn btn-secondary mr-3 btn-light"
-												data-toggle="modal" data-target="#writeForm">
-												<input type="hidden" value="${junghun.bcontent}"
-													id="tagContent${status.index}"> <img
-													src="/img/bring.svg" width="20" height="20">
-												<c:if test="${junghun.bqutoecount ne 0}">
+										<!-- 인용 -->
+										<button type="button"
+											onclick="scrap_click('${junghun.bcode}',${status.index },'${junghun.uNickName }','${junghun.uatid }','<%=context %>/profile_image/${junghun.uimage }','${junghun.battachType}','${junghun.battachSrc}','<%=context %>');"
+											class="scrapSetting btn btn-secondary mr-3 btn-light"
+											data-toggle="modal" data-target="#writeForm">
+											<input type="hidden" value="${junghun.bcontent}"
+												id="tagContent${status.index}"> <img
+												src="/img/bring.svg" width="20" height="20">
+											<c:if test="${junghun.bqutoecount ne 0}">
 												${junghun.bqutoecount }
 											</c:if>
-											</button>
+										</button>
 										<button type="button" class="btn btn-secondary btn-light mr-3"
 											data-toggle="tooltip" data-placement="top" title="좋아요"
 											style="font-size: 12px;">
@@ -759,7 +770,8 @@ function viewBoardOptions(bbcode,bindex){
 					<c:forEach var="junghun" items="${searchbattach }"
 						varStatus="Status">
 						<div class="card">
-							<div class="card-body" onclick="goSingleBoard(${junghun.bcode},${status.index });">
+							<div class="card-body"
+								onclick="goSingleBoard(${junghun.bcode},${status.index });">
 								<button type="button" class="btn btn-light float-right">⋯</button>
 								<img src="<%=context %>/profile_image/${junghun.uimage }"
 									alt="no_image" class="rounded-circle" width="50" width="50">
@@ -871,7 +883,8 @@ function viewBoardOptions(bbcode,bindex){
 					</c:if>
 					<c:forEach var="junghun" items="${searchbattachvideo }">
 						<div class="card">
-							<div class="card-body" onclick="goSingleBoard(${junghun.bcode},${status.index });">
+							<div class="card-body"
+								onclick="goSingleBoard(${junghun.bcode},${status.index });">
 								<button type="button" class="btn btn-light float-right">⋯</button>
 								<img src="<%=context %>/profile_image/${junghun.uimage }"
 									alt="no_image" class="rounded-circle" width="50" width="50">
@@ -1103,6 +1116,7 @@ function viewBoardOptions(bbcode,bindex){
 			</div>
 		</div>
 	</div>
+
 	<!-- 오른쪽 사이드바 끝 -->
 	<!--GOD 글쓰기 팝업 시작-->
 	<form action="../god/write" method="post" enctype="Multipart/form-data"
@@ -2244,7 +2258,6 @@ function viewBoardOptions(bbcode,bindex){
 		});
 		</script>
 	<!--GOD 글쓰기 기능 끝-->
-
 
 	<!-- /#wrapper -->
 </body>

@@ -1,5 +1,6 @@
 package com.spring.bom.controller;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -106,6 +107,12 @@ public class JungChurlController {
 		System.out.println("[JungChurlController] Do -> fs.getSuggestFollowList()");
 		List<Follow> suggestFlist2 = fs.getSuggestFollowList2(user.getUcode());
 		System.out.println("[JungChurlController] Result : listSize is " + suggestFlist2.size());
+		model.addAttribute("suggestFlist2_size", suggestFlist2.size());
+		model.addAttribute("suggestFlist2", suggestFlist2);
+
+		// 리스트 suggestFlist2 에 있는 값들을 랜덤으로 돌림
+		Collections.shuffle(suggestFlist2); // 팔로우 추천 랜덤
+
 		model.addAttribute("suggestFlist2_size", suggestFlist2.size());
 		model.addAttribute("suggestFlist2", suggestFlist2);
 
@@ -234,6 +241,12 @@ public class JungChurlController {
 		model.addAttribute("suggestFlist2_size", suggestFlist2.size());
 		model.addAttribute("suggestFlist2", suggestFlist2);
 
+		// 리스트 suggestFlist2 에 있는 값들을 랜덤으로 돌림
+		Collections.shuffle(suggestFlist2); // 팔로우 추천 랜덤
+
+		model.addAttribute("suggestFlist2_size", suggestFlist2.size());
+		model.addAttribute("suggestFlist2", suggestFlist2);
+
 		// 실시간 해시태그 순위
 		System.out.println("[JungChurlController] Do -> hts.getHashTagRanking()");
 		List<HashTag> hashtagList = hs.getHashTagRanking();
@@ -350,6 +363,28 @@ public class JungChurlController {
 		}
 		System.out.println("[JungChurlController] L Setting Battach Type and Src -> done!!!");
 		System.out.println("MyBoardList size -> " + myLikeBoardList.size());
+
+		// 팔로우 추천2 나를 팔로우하는 유저 추천
+		System.out.println("[JungChurlController] Do -> fs.getSuggestFollowList()");
+		List<Follow> suggestFlist2 = fs.getSuggestFollowList2(loginUser.getUcode());
+		System.out.println("[JungChurlController] Result : listSize is " + suggestFlist2.size());
+		model.addAttribute("suggestFlist2_size", suggestFlist2.size());
+		model.addAttribute("suggestFlist2", suggestFlist2);
+
+		// 리스트 suggestFlist2 에 있는 값들을 랜덤으로 돌림
+		Collections.shuffle(suggestFlist2); // 팔로우 추천 랜덤
+
+		model.addAttribute("suggestFlist2_size", suggestFlist2.size());
+		model.addAttribute("suggestFlist2", suggestFlist2);
+
+		// 실시간 해시태그 순위
+		System.out.println("[JungChurlController] Do -> hts.getHashTagRanking()");
+		List<HashTag> hashtagList = hs.getHashTagRanking();
+
+		for (int i = 0; i < hashtagList.size(); i++)
+			hashtagList.get(i).setHrank(i + 1);
+
+		model.addAttribute("tag_list", hashtagList);
 
 		model.addAttribute("someone", someone);
 		model.addAttribute("myBoardList", myBoardList);

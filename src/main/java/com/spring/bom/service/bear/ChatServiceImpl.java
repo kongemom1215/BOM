@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.spring.bom.dao.bear.ChatDao;
 import com.spring.bom.model.bear.Chat;
 import com.spring.bom.model.bear.User;
+import com.spring.bom.model.iron.Follow;
 
 @Service
 public class ChatServiceImpl implements ChatService {
@@ -64,4 +65,5 @@ public class ChatServiceImpl implements ChatService {
 		System.out.println("chatserviceimpl userinfo 진행  -> ucode " + kiwoong);
 		return cd.userinfo(kiwoong);
 	}
+
 }

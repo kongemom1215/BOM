@@ -42,6 +42,14 @@
 <script src="/js/bootstrap.bundle.min.js"></script>
 <script src="/js/bootstrap.bundle.js"></script>
 <style>
+#bearsize {
+	width: 550px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	text-align: left;
+}
+
 .dropdown-toggle.caret-off::after {
 	display: none;
 }
@@ -172,6 +180,39 @@ label {
 				alert(".ajax viewBoardOptions str->"+str);
 			}
 		});
+	}
+	
+	//팔로우 하는 로직
+	function followchk(number){
+		
+		//name 에 k + number 쓰는 태그를찾아서 text변경
+		var textareaVal = $("button[name=k"+number+"]").text();
+		console.log("textareaVal + textareaVal" + textareaVal)
+		
+		var msg = { uopcode :number};
+		$.ajax({
+			url: '<%=context%>/bear/followchk',
+			data: msg,
+			type: "post",
+
+			success: function (res) {
+				console.log("저장성공 - > " +res)
+				
+				if(res == "1"){
+					console.log("저장성공")
+					  $("button[name=k"+number+"]").text("팔로잉");
+					  $("button[name=k"+number+"]").attr("class","btn btn-success btn-sm float-right");
+			
+				}else 
+					{console.log("저장실패")}
+					
+				 
+			}
+	});	 
+	}
+	
+	function closemodal(){
+		location.reload();
 	}
 </script>
 </head>
@@ -433,7 +474,8 @@ label {
 						<div class="card-header">팔로우 추천</div>
 						<div class="card-body" style="padding: 5px;">
 							<c:if test="${suggestFlist2_size>0 }">
-								<c:forEach var="justFollowMe" items="${suggestFlist2 }">
+								<c:forEach var="justFollowMe" items="${suggestFlist2 }"
+									begin="0" end="2">
 									<div class="card">
 										<div class="card-body"
 											style="font-size: 0.8rem; padding: 10px;">
@@ -443,7 +485,9 @@ label {
 												class="card-subtitle mb-2 text-muted">@${justFollowMe.uatid}</a>
 											<button type="button"
 												class="btn btn-outline-success btn-sm float-right"
-												style="font-size: 0.8rem;">팔로우</button>
+												style="font-size: 0.8rem;"
+												onclick="followchk(${justFollowMe.uucode})"
+												name=k${justFollowMe.uucode}>팔로우</button>
 										</div>
 									</div>
 								</c:forEach>
@@ -467,8 +511,15 @@ label {
 								</c:forEach>
 							</c:if>
 						</div>
+						<c:if test="${suggestFlist2_size>0 }">
+							<button type="button" class="btn btn-outline-success"
+								id="writeBtn" data-toggle="modal" data-target="#morebtn">더보기
+							</button>
+						</c:if>
+
 					</div>
 				</div>
+
 				<div class="list-group-item list-group-item-action bg-light"
 					style="padding: 5px;">
 					<div class="card bg-light mb-3">
@@ -1646,6 +1697,58 @@ label {
 		</script>
 	<!--GOD 글쓰기 기능 끝-->
 
+	<!--BEAR 더보기 창  -->
+	<div class="modal fade" id="morebtn" data-backdrop="static"
+		data-keyboard="false" tabindex="-1"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<div class="modal-body col-12">
+						<div class="card-header">
+							<h4 style="text-align: center;">
+								팔로우 추천
+								<button style="float: right;" onclick="closemodal()">x</button>
+							</h4>
+							<div class="card-body" style="padding: 5px;">
+								<div class="card">
+									<div class="card-body"
+										style="font-size: 0.8rem; padding: 10px;">
+										<c:forEach var="justFollowMe1" items="${suggestFlist2 }" begin="0" end="2">
+											<div class="card">
+												<div class="card-body"
+													style="font-size: 0.8rem; padding: 10px;">
+													<img
+														src="<%=context %>/profile_image/${justFollowMe1.uimage}"
+														class="rounded-circle" width="40" height="40"> <a
+														class="card-title text-dark">${justFollowMe1.unickName}</a>
+													<a class="card-subtitle mb-2 text-muted">@${justFollowMe1.uatid}</a>
+													<c:if test="${justFollowMe1.uonline eq 1 }">
+														<img src="<%=context%>/image/online.png" width="20"
+															height="20">
+													</c:if>
+													<div>
+														<button type="button"
+															class="btn btn-outline-success btn-sm float-right"
+															style="font-size: 1.2rem;"
+															onclick="followchk(${justFollowMe1.uucode})"
+															name="k${justFollowMe1.uucode}">팔로우</button>
+
+													</div>
+													<h3 id="bearsize" style="padding-left: 40px">&nbsp&nbsp${justFollowMe1.uintro}</h3>
+
+												</div>
+											</div>
+										</c:forEach>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 
 	<!-- /#wrapper -->
 </body>

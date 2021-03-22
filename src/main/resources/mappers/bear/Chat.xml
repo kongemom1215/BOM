@@ -49,7 +49,7 @@
 				into chat  VALUES(ccode_seq.nextval ,#{ucode} ,#{uopcode} , null , null)
 				into chat  VALUES(ccode_seq.currval ,  #{uopcode}, #{ucode}, null , null )
 				into chat_detail values(ccode_seq.currval, #{ucode}, '채팅방생성되었습니다.',TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS'))
-  				into chat_detail values(ccode_seq.currval, #{uopcode} , '채팅방생성되었습니다.',TO_CHAR(SYSDATE-1/24/60/60, 'YYYY-MM-DD HH24:MI:SS'))
+  				into chat_detail values(ccode_seq.currval, #{uopcode} , '',TO_CHAR(SYSDATE-1/24/60/60, 'YYYY-MM-DD HH24:MI:SS'))
   		select *
   		from dual
 	
@@ -63,8 +63,6 @@ from chat
 where ucode = #{ucode} and uopcode = #{uopcode}
 
 </select>
-
-
 
 
 

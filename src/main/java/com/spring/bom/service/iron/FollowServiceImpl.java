@@ -28,5 +28,11 @@ public class FollowServiceImpl implements FollowService {
 		System.out.println("[iron] suggestFlist.size() -> "+suggestFlist.size());
 		return suggestFlist;
 	}
-
+	
+	@Override
+	public int fwInsert(Follow follow) {
+		System.out.println("[kiwoong] FollowServiceImpl FwInsert");
+		
+		return fd.fwInsert(follow);
+	}
 }

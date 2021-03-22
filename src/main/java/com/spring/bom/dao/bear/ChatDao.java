@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.spring.bom.model.bear.Chat;
 import com.spring.bom.model.bear.User;
+import com.spring.bom.model.iron.Follow;
 
 public interface ChatDao {
 	
@@ -30,6 +31,7 @@ public interface ChatDao {
 	//세션아이디로 회원정보 가져오기
 	
 	List<User> userinfo(int kiwoong);
+
 
 	
 

@@ -65,7 +65,7 @@
 				<!-- bear1 -->
 				<a href="/bear/chat" class="list-group-item list-group-item-action">
 					<img src="/img/send.svg" width="15" height="15"> 쪽지
-				</a> <a href="bookmark" class="list-group-item list-group-item-action">
+				</a> <a href="/yeah/bookmark" class="list-group-item list-group-item-action">
 					<img src="/img/bookmark.svg" width="15" height="15"> 북마크
 				</a> <a href="/iron/profile/uatid=${user.uatid }"
 					class="list-group-item list-group-item-action"> <img

@@ -1,5 +1,6 @@
 package com.spring.bom.controller;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,11 +22,6 @@ import com.spring.bom.service.hoon.JunghunService;
 public class JunghunController {
 	@Autowired
 	private JunghunService js;
-
-	@RequestMapping(value = "hoon/main")
-	public String main() {
-		return "hoon/main";
-	}
 
 	@RequestMapping(value = "hoon/explore")
 	public String explore(Model model, Junghun junghun, HttpSession session) throws Exception {
@@ -58,6 +54,12 @@ public class JunghunController {
 		System.out.println("[junghun] Do -> fs.getSuggestFollowList()");
 		List<Follow> suggestFlist2 = js.getSuggestFollowList2(loginUser.getUcode());
 		System.out.println("[junghun] Result : listSize is " + suggestFlist2.size());
+		model.addAttribute("suggestFlist2_size", suggestFlist2.size());
+		model.addAttribute("suggestFlist2", suggestFlist2);
+
+		// 리스트 suggestFlist2 에 있는 값들을 랜덤으로 돌림
+		Collections.shuffle(suggestFlist2); // 팔로우 추천 랜덤
+
 		model.addAttribute("suggestFlist2_size", suggestFlist2.size());
 		model.addAttribute("suggestFlist2", suggestFlist2);
 

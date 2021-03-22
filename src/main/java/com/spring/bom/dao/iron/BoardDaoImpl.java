@@ -109,40 +109,191 @@ public class BoardDaoImpl implements BoardDao {
 	@Override
 	public List<Board> getReplyList(int bcode) {
 		System.out.println("[iron] BoardDaoImpl getReplyList start...");
-		List<Board> list = session.selectList("ReplyList", bcode);
-		System.out.println("[iron] replylist.size() -> " + list.size());
+		List<Board> list = null;
+		try {
+			list = session.selectList("ReplyList", bcode);
+			System.out.println("[iron] replylist.size() -> " + list.size());
+
+			// 인용데이터 처리
+			for (int i = 0; i < list.size(); i++) {
+				if (list.get(i).getBtype().equals("quote")) {
+					Board quoteboard = session.selectOne("QuoteBoard", list.get(i).getBbcode());
+					System.out.println("QuoteBoard--bdlist.get(i).getBbcode() --> " + list.get(i).getBbcode());
+					System.out.println("쿼트문 실행");
+					list.get(i).setQ_uimage(quoteboard.getUimage());
+					System.out.println("quoteboard.getUimage() -> " + quoteboard.getUimage());
+					list.get(i).setQ_nickname(quoteboard.getUnickName());
+					list.get(i).setQ_atid(quoteboard.getUatid());
+					list.get(i).setQ_content(quoteboard.getBcontent());
+					list.get(i).setQ_regdate(quoteboard.getBregDate());
+
+					if (quoteboard.getBattach() != null) {
+						System.out.println("quoteboard.getBattach() -> " + quoteboard.getBattach());
+						list.get(i).setQ_attachsrc(quoteboard.getBattach().substring(6));
+						list.get(i).setQ_attachtype(quoteboard.getBattach().substring(0, 5));
+						System.out.println(
+								"quoteboard.getBattach().substring(6) -> " + quoteboard.getBattach().substring(6));
+						System.out.println("quoteboard.getBattach().substring(0, 5) -> "
+								+ quoteboard.getBattach().substring(0, 5));
+					}
+				}
+			}
+		} catch (Exception e) {
+			System.out.println("getReplyList e.getMessage -> " + e.getMessage());
+		}
 		return list;
 	}
 
 	@Override
 	public List<Board> getMyBoardList(Board myboard) {
 		System.out.println("[iron] BoardDaoImpl getMyBoardList start...");
-		List<Board> list = session.selectList("MyBoardList", myboard);
-		System.out.println("[iron] BoardDaoImpl list.size() -> " + list.size());
+		List<Board> list = null;
+		try {
+
+			list = session.selectList("MyBoardList", myboard);
+			System.out.println("[iron] BoardDaoImpl list.size() -> " + list.size());
+
+			// 인용데이터 처리
+			for (int i = 0; i < list.size(); i++) {
+				if (list.get(i).getBtype().equals("quote")) {
+					Board quoteboard = session.selectOne("QuoteBoard", list.get(i).getBbcode());
+					System.out.println("QuoteBoard--bdlist.get(i).getBbcode() --> " + list.get(i).getBbcode());
+					System.out.println("쿼트문 실행");
+					list.get(i).setQ_uimage(quoteboard.getUimage());
+					System.out.println("quoteboard.getUimage() -> " + quoteboard.getUimage());
+					list.get(i).setQ_nickname(quoteboard.getUnickName());
+					list.get(i).setQ_atid(quoteboard.getUatid());
+					list.get(i).setQ_content(quoteboard.getBcontent());
+					list.get(i).setQ_regdate(quoteboard.getBregDate());
+
+					if (quoteboard.getBattach() != null) {
+						System.out.println("quoteboard.getBattach() -> " + quoteboard.getBattach());
+						list.get(i).setQ_attachsrc(quoteboard.getBattach().substring(6));
+						list.get(i).setQ_attachtype(quoteboard.getBattach().substring(0, 5));
+						System.out.println(
+								"quoteboard.getBattach().substring(6) -> " + quoteboard.getBattach().substring(6));
+						System.out.println("quoteboard.getBattach().substring(0, 5) -> "
+								+ quoteboard.getBattach().substring(0, 5));
+					}
+				}
+			}
+		} catch (Exception e) {
+			System.out.println("getMyBoardList e.getMessage() -> " + e.getMessage());
+		}
 		return list;
 	}
 
 	@Override
 	public List<Board> getMyReplyBoardList(Board myReplyBoard) {
 		System.out.println("[iron] BoardDaoImpl getMyReplyBoardList start...");
-		List<Board> list = session.selectList("MyReplyBoardList", myReplyBoard);
-		System.out.println("[iron] BoardDaoImpl list.size() -> " + list.size());
+		List<Board> list = null;
+		try {
+			list = session.selectList("MyReplyBoardList", myReplyBoard);
+			System.out.println("[iron] BoardDaoImpl list.size() -> " + list.size());
+
+			// 인용데이터 처리
+			for (int i = 0; i < list.size(); i++) {
+				if (list.get(i).getBtype().equals("quote")) {
+					Board quoteboard = session.selectOne("QuoteBoard", list.get(i).getBbcode());
+					System.out.println("QuoteBoard--bdlist.get(i).getBbcode() --> " + list.get(i).getBbcode());
+					System.out.println("쿼트문 실행");
+					list.get(i).setQ_uimage(quoteboard.getUimage());
+					System.out.println("quoteboard.getUimage() -> " + quoteboard.getUimage());
+					list.get(i).setQ_nickname(quoteboard.getUnickName());
+					list.get(i).setQ_atid(quoteboard.getUatid());
+					list.get(i).setQ_content(quoteboard.getBcontent());
+					list.get(i).setQ_regdate(quoteboard.getBregDate());
+
+					if (quoteboard.getBattach() != null) {
+						System.out.println("quoteboard.getBattach() -> " + quoteboard.getBattach());
+						list.get(i).setQ_attachsrc(quoteboard.getBattach().substring(6));
+						list.get(i).setQ_attachtype(quoteboard.getBattach().substring(0, 5));
+						System.out.println(
+								"quoteboard.getBattach().substring(6) -> " + quoteboard.getBattach().substring(6));
+						System.out.println("quoteboard.getBattach().substring(0, 5) -> "
+								+ quoteboard.getBattach().substring(0, 5));
+					}
+				}
+			}
+		} catch (Exception e) {
+			System.out.println("getMyReplyBoardList e.getMessage() -> " + e.getMessage());
+		}
 		return list;
 	}
 
 	@Override
 	public List<Board> getMyMediaBoardList(Board myMediaBoard) {
 		System.out.println("[iron] BoardDaoImpl getMyMediaBoardList start...");
-		List<Board> list = session.selectList("MyMediaBoardList", myMediaBoard);
-		System.out.println("[iron] BoardDaoImpl list.size() -> " + list.size());
+		List<Board> list = null;
+		try {
+			list = session.selectList("MyMediaBoardList", myMediaBoard);
+			System.out.println("[iron] BoardDaoImpl list.size() -> " + list.size());
+
+			// 인용데이터 처리
+			for (int i = 0; i < list.size(); i++) {
+				if (list.get(i).getBtype().equals("quote")) {
+					Board quoteboard = session.selectOne("QuoteBoard", list.get(i).getBbcode());
+					System.out.println("QuoteBoard--bdlist.get(i).getBbcode() --> " + list.get(i).getBbcode());
+					System.out.println("쿼트문 실행");
+					list.get(i).setQ_uimage(quoteboard.getUimage());
+					System.out.println("quoteboard.getUimage() -> " + quoteboard.getUimage());
+					list.get(i).setQ_nickname(quoteboard.getUnickName());
+					list.get(i).setQ_atid(quoteboard.getUatid());
+					list.get(i).setQ_content(quoteboard.getBcontent());
+					list.get(i).setQ_regdate(quoteboard.getBregDate());
+
+					if (quoteboard.getBattach() != null) {
+						System.out.println("quoteboard.getBattach() -> " + quoteboard.getBattach());
+						list.get(i).setQ_attachsrc(quoteboard.getBattach().substring(6));
+						list.get(i).setQ_attachtype(quoteboard.getBattach().substring(0, 5));
+						System.out.println(
+								"quoteboard.getBattach().substring(6) -> " + quoteboard.getBattach().substring(6));
+						System.out.println("quoteboard.getBattach().substring(0, 5) -> "
+								+ quoteboard.getBattach().substring(0, 5));
+					}
+				}
+			}
+		} catch (Exception e) {
+			System.out.println("getMyMediaBoardList e.getMessage() -> " + e.getMessage());
+		}
 		return list;
 	}
 
 	@Override
 	public List<Board> getMyLikeBoardList(Board myLikeBoard) {
 		System.out.println("[iron] BoardDaoImpl getMyLikeBoardList start...");
-		List<Board> list = session.selectList("MyLikeBoardList", myLikeBoard);
-		System.out.println("[iron] BoardDaoImpl list.size() -> " + list.size());
+		List<Board> list = null;
+		try {
+			list = session.selectList("MyLikeBoardList", myLikeBoard);
+			System.out.println("[iron] BoardDaoImpl list.size() -> " + list.size());
+
+			// 인용데이터 처리
+			for (int i = 0; i < list.size(); i++) {
+				if (list.get(i).getBtype().equals("quote")) {
+					Board quoteboard = session.selectOne("QuoteBoard", list.get(i).getBbcode());
+					System.out.println("QuoteBoard--bdlist.get(i).getBbcode() --> " + list.get(i).getBbcode());
+					System.out.println("쿼트문 실행");
+					list.get(i).setQ_uimage(quoteboard.getUimage());
+					System.out.println("quoteboard.getUimage() -> " + quoteboard.getUimage());
+					list.get(i).setQ_nickname(quoteboard.getUnickName());
+					list.get(i).setQ_atid(quoteboard.getUatid());
+					list.get(i).setQ_content(quoteboard.getBcontent());
+					list.get(i).setQ_regdate(quoteboard.getBregDate());
+
+					if (quoteboard.getBattach() != null) {
+						System.out.println("quoteboard.getBattach() -> " + quoteboard.getBattach());
+						list.get(i).setQ_attachsrc(quoteboard.getBattach().substring(6));
+						list.get(i).setQ_attachtype(quoteboard.getBattach().substring(0, 5));
+						System.out.println(
+								"quoteboard.getBattach().substring(6) -> " + quoteboard.getBattach().substring(6));
+						System.out.println("quoteboard.getBattach().substring(0, 5) -> "
+								+ quoteboard.getBattach().substring(0, 5));
+					}
+				}
+			}
+		} catch (Exception e) {
+			System.out.println("getMyLikeBoardList e.getMessage() -> " + e.getMessage());
+		}
 		return list;
 	}
 }
