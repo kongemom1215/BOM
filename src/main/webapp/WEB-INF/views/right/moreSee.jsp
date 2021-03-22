@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%
+	String context = request.getContextPath();
+%>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -46,7 +49,7 @@
 
 	<div class="d-flex" id="wrapper">
 
-		<!-- Sidebar -->
+				<!-- Sidebar -->
 		<div class="border-right sidebar-fixed-top" id="sidebar-wrapper">
 			<div class="sidebar-heading" align="center">
 				<img src="/img/logo2.jpg" width="150" height="150">
@@ -65,8 +68,9 @@
 				<!-- bear1 -->
 				<a href="/bear/chat" class="list-group-item list-group-item-action">
 					<img src="/img/send.svg" width="15" height="15"> 쪽지
-				</a> <a href="/yeah/bookmark" class="list-group-item list-group-item-action">
-					<img src="/img/bookmark.svg" width="15" height="15"> 북마크
+				</a> <a href="/yeah/bookmark"
+					class="list-group-item list-group-item-action"> <img
+					src="/img/bookmark.svg" width="15" height="15"> 북마크
 				</a> <a href="/iron/profile/uatid=${user.uatid }"
 					class="list-group-item list-group-item-action"> <img
 					src="/img/user.svg" width="15" height="15"> 프로필
@@ -79,19 +83,16 @@
 					</button>
 				</a>
 				<div class="card">
-               <div class="card-body">
-                  <div class="form-row">
-                     <img src="${ui.uimage }" class="rounded-circle" width="50" width="50"> 
-                     <div class="form-col ml-2">
-                     <a class="card-title text-dark" style="font-size:0.8em">${ui.unickname }</a><br> 
-                     <a class="card-subtitle mb-2 text-muted" style="font-size:0.8em">@${ui.uatid }</a>
-                     </div>
-                     </div>
-                  </div>
-               <button type="button" class="btn btn-success">로그아웃</button>
+					<div class="card-body">
+						<img src="<%=context %>/profile_image/${user.uimage }"
+							class="rounded-circle" width="50" width="50"> <a
+							class="card-title text-dark" style="font-size: 0.8em">${user.unickName }</a><br>
+						<a class="card-subtitle mb-2 text-muted" style="font-size: 0.8em">@${user.uatid }</a>
+					</div>
+					<button type="button" class="btn btn-success">로그아웃</button>
 				</div>
-			</div>
 		</div>
+	</div>
 
 		<!-- /#sidebar-wrapper -->
 

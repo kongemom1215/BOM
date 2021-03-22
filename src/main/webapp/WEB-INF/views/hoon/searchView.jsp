@@ -813,53 +813,11 @@ function closemodal(){
 									class="card-subtitle mb-2 text-muted" style="font-size: 12px">${junghun.bregdate }</a>
 								<p class="card-text" style="margin-top: 10px;">
 									${junghun.bcontent }
-
-
-									<!-- 우선 인용문이 있을 때-->
-									<c:if test="${junghun.btype=='quote' }">
-										<div class="col-12 float-left" id="QuoteArea"
-											style="font-size: 0.8em;">
-											<div class='card'>
-												<div class='card-body'>
-													<img id="quote_profile"
-														src="<%=context %>/profile_image/${junghun.q_uimage}"
-														alt='no_image' class='rounded-circle' width='30'> <a
-														class='card-title text-dark' id="quote_nickname">${junghun.q_nickname}</a>
-													<a class='card-subtitle mb-2 text-muted' id="quote_atid">${junghun.q_atid}</a>
-													<a class='card-subtitle mb-2 text-muted' id="quote_regdate">${junghun.q_regdate}</a>
-													<p class='card-text mt-2 mb-0' style="height: 100%;"
-														id="quote_content">${junghun.q_content}</p>
-													<c:if test="${junghun.q_attach != ''}">
-														<div class="quote_file mt-2">
-															<c:if test="${junghun.q_attachtype eq 'image'}">
-																<img id="quote_img"
-																	src="<%=context %>/image/${junghun.q_attachsrc }"
-																	class="img-fluid" />
-															</c:if>
-															<c:if test="${junghun.q_attachtype eq 'video'}">
-																<div id="show_quote_video"
-																	class="embed-responsive embed-responsive-16by9">
-																	<video controls id="quote_video"
-																		src="<%=context %>/video/${junghun.q_attachsrc }">
-																	</video>
-																</div>
-															</c:if>
-														</div>
-													</c:if>
-
-												</div>
-											</div>
-										</div>
-									</c:if>
-
-
+								<p>
 									<c:if test="${junghun.battachType=='image'}">
 										<img class="img-thumnail" width="300"
 											src="<%=context %>/image/${junghun.battachSrc}" />
 									</c:if>
-								</p>
-
-
 								<div align="center">
 									<div class="btn-group col-md-12" role="group"
 										aria-label="Button group with nested dropdown">

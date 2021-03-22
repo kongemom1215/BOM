@@ -1,10 +1,21 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%
+	String context = request.getContextPath();
+%>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
+<link
+	href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+	rel="stylesheet" id="bootstrap-css">
+<script
+	src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script
+	src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<link href="../css/login.css" rel="stylesheet" type="text/css">
 
 <meta charset="utf-8">
 <meta name="viewport"
@@ -43,36 +54,26 @@
 </head>
 
 <body>
-<div class="d-flex" id="wrapper">
-	<div class="container-fluid">
-		<div class="card">
-			<div align="center">
-				<div class="card align-middle" style="width:20rem; border-radius:20px;">
-					<div class="card-title" style="margin-top:30px;">
-						<h2 class="card-title text-center" style="color:green;">Welcome Back!</h2>
-					</div>
-					<div class="card-body">
+<div class="wrapper fadeInDown">
+		<div id="formContent">
+			<!-- Tabs Titles -->
+			<p>
+				<h2 class="card-title text-center" style="color:green; font-weight:bold;">Welcome Back!</h2>
 			      <form class="form-signin" method="POST" onSubmit="logincall();return false">
 			        <h5 class="form-signin-heading">탈퇴한 회원입니다. 계정을 복구하시겠습니까?</h5>
-				        <p>
-						<p>
-			        <div class="checkbox">
-			        </div>
+			        <p>
+				  </form>
+				  <div id="formFooter">
 			        <input type="hidden" value="${ui.uCode }">
-			        <button type="button" class="btn btn-outline-success" onclick="location.href='/right/userAble?ucode=${ui.uCode }'" style="margin-right:0.5%">복구</button> 
-			        <button type="button" class="btn btn-outline-secondary" onclick="location.href='bro/login'">취소</button>
-			      </form>
+			        <button type="button" class="btn btn-outline-success" onclick="location.href='/right/userAble?ucode=${ui.uCode }'" id="ok" style="margin-right:0.5%">복구</button> 
+			        <button type="button" class="btn btn-outline-secondary" onclick="location.href='../bro/index'">취소</button>
 			   </div>
 			</div>
 		</div>
-	</div>
-</div>
-
 	<div class="modal">
 	</div>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    </div>
   </body>
 
 </html>

@@ -402,7 +402,7 @@ label {
 
 										<!-- 인용 -->
 										<button type="button"
-											onclick="scrap_click('${tl_element.bcode}',${status.index },'${tl_element.unickName }','${tl_element.uatid }','<%=context %>/profile_image/${tl_element.uimage }','${tl_element.battachType}','${tl_element.battachSrc}','<%=context %>');"
+											onclick="scrap_click('${tl_element.bcode}','${status.index }','${tl_element.unickName }','${tl_element.uatid }','<%=context %>/profile_image/${tl_element.uimage }','${tl_element.battachType}','${tl_element.battachSrc}','<%=context %>');"
 											class="scrapSetting btn btn-secondary mr-3 btn-light"
 											data-toggle="modal" data-target="#writeForm">
 											<input type="hidden" value="${tl_element.bcontent}"

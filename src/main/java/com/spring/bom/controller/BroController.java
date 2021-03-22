@@ -51,25 +51,13 @@ public class BroController {
 		
 		System.out.println("login data check -- login.ucode -> "+login.getuCode());
 		System.out.println("login data check -- login.ustate -> "+login.getuState());
-		
 		if(login == null) {
-			session.setAttribute("login", null);
+			session.setAttribute("login", login);
 			System.out.println("login off");
 			System.out.println("controller uEamil-->"+uEmail);
-			bs.logout(uEmail);	//5번 실패 미구현
+			bs.logout(uEmail);
+			model.addAttribute("uState", 1);
 			return "bro/loginFail";
-		}
-		
-		else if(login.getuState() == 0){
-			//탈퇴 회원 로그인시 계정 복구page
-			String uemail = req.getParameter("uemail");
-			model.addAttribute("uemail",uemail);
-			model.addAttribute("user",login);
-			System.out.println("uemail : "+ login.getuEmail());
-			session.setAttribute("ui",login);
-			session.setAttribute("ucode", login.getuCode());
-			System.out.println("탈퇴회원 login");
-			return "/right/UserdisabledPage";
 		}
 		else if(login.getuCode()==0){
 			session.setAttribute("login", login);
@@ -77,9 +65,25 @@ public class BroController {
 			return "redirect:/coffee/interceptor/censorBomManagerPage";
 		}
 		else {
-			System.out.println(login.getuCode());
-			session.setAttribute("ucode",login.getuCode());
+			session.setAttribute("ucode", login.getuCode());
 			System.out.println("login on");
+			int a = bs.state(uEmail);
+			int b = bs.loginCount(uEmail);
+			System.out.println("controller ustate number-->"+ a);
+			System.out.println("controller uLoginCount number-->"+ b);
+			if(a == 0) {
+				model.addAttribute("uState", 0);
+				return "/right/UserdisabledPage";
+			}else if(a == 2) {
+				model.addAttribute("uState", 2);
+				return "bro/loginFail";
+			}
+			System.out.println("callback");
+			if(b >= 5) {
+				model.addAttribute("uLoginCount", b);
+				return "bro/loginFail";
+			}
+			bs.online(uEmail);
 			bs.loginClear(uEmail);
 			return "redirect:../iron/timeline";
 		}

@@ -2,79 +2,77 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="User_info">
-	<select id="login" resultType="user_info"
-		parameterType="user_info">
+<select id="login" resultType="user_info" parameterType="user_info">
 		SELECT *
-		FROM user_info
-		WHERE uEmail = #{uEmail}
-		AND uPassword = #{uPassword }
-
+		  FROM user_info
+		 WHERE uEmail = #{uEmail}
+		 AND uPassword = #{uPassword }  
+		 
 	</select>
-
+	
 	<insert id="join" parameterType="User_info">
-		INSERT INTO user_info( uCode, uEmail, uPassword, uNickname,uAtid, uBirth,
-		uGender, uNation, uRegDate )
-		values (uCode_SEQ.NEXTVAL, #{uEmail}, #{uPassword}, #{uNickname},#{uAtid} ,
-		TO_CHAR(#{uBirth},'yyyymmdd'), #{uGender}, #{uNation},
-		TO_CHAR(sysdate,'yyyy-mm-dd') )
+	    INSERT INTO user_info(   uCode, uEmail, uPassword, uNickname,uAtid, uBirth, uGender, uNation, uRegDate )
+	                 values (uCode_SEQ.NEXTVAL, #{uEmail}, #{uPassword}, #{uNickname},#{uAtid} , TO_CHAR(#{uBirth},'yyyymmdd'), #{uGender}, #{uNation}, TO_CHAR(sysdate,'yyyy-mm-dd') )
+   
+    </insert>
+    
+    <select id="checkEmail" parameterType="String" resultType="int">
+         SELECT count(*)
+         FROM USER_INFO
+         WHERE UEMAIL=#{UEMAIL}
+</select>
+  <select id="checkAtid" parameterType="String" resultType="int">
+         SELECT count(*)
+         FROM USER_INFO
+         WHERE UAtid=#{UAtid}
+</select>
+<select id="uCode1" parameterType="User_info" resultType="int">
+select uCode
+ from ( select uCode from user_info order by rownum desc)
+ where ROWNUM=1
 
-	</insert>
+</select>
 
-	<select id="checkEmail" parameterType="String" resultType="int">
-		SELECT count(*)
-		FROM USER_INFO
-		WHERE UEMAIL=#{UEMAIL}
-	</select>
-	<select id="checkAtid" parameterType="String" resultType="int">
-		SELECT count(*)
-		FROM USER_INFO
-		WHERE UAtid=#{UAtid}
-	</select>
-	<select id="uCode1" parameterType="User_info" resultType="int">
-		select uCode
-		from ( select uCode from user_info order by rownum desc)
-		where ROWNUM=1
+<update id="fileName" parameterType="User_info">
+update user_info set uImage = #{uImage}
+where uCode = #{uCode}
 
-	</select>
+</update>
+<update id="uLoginCount" parameterType="User_info" >
+update user_info set uLoginCount = uLoginCount+1
+where uEmail = #{uEmail}
 
-	<update id="fileName" parameterType="User_info">
-		update user_info set uImage = #{uImage}
-		where uCode = #{uCode}
+</update>
+<update id="uLoginClear" parameterType="User_info" >
+update user_info set uLoginCount = 0
+where uEmail = #{uEmail}
 
-	</update>
-	<update id="uLoginCount" parameterType="User_info">
-		update user_info set uLoginCount = uLoginCount+1
-		where uEmail = #{uEmail}
+</update>
+<update id="findPw" parameterType="User_info" >
+update user_info set uPassword = #{uPassword}
+where uEmail = #{uEmail}
 
-	</update>
-	<update id="uLoginClear" parameterType="User_info">
-		update user_info set uLoginCount = 0
-		where uEmail = #{uEmail}
+</update>
 
-	</update>
-	<update id="findPw" parameterType="User_info">
-		update user_info set uPassword = #{uPassword}
-		where uEmail = #{uEmail}
+<update id="online" parameterType="User_info" >
+update user_info set uonline = 1
+where uEmail = #{uEmail}
 
-	</update>
-
-	<update id="online" parameterType="User_info">
-		update user_info set uonline = 1
-		where uEmail = #{uEmail}
-
-	</update>
-	<select id="state" parameterType="User_info" resultType="int">
-		select uState from user_info
-		where uEmail = #{uEmail}
+</update>
+<select id="state" parameterType="User_info" resultType="int">
+select uState from user_info
+where uEmail = #{uEmail}
 
 
-	</select>
-	<select id="loginCount" parameterType="User_info"
-		resultType="int">
-		select uLoginCount from user_info
-		where uEmail = #{uEmail}
-	</select>
-</mapper>
+</select>
+<select id="loginCount" parameterType="User_info" resultType="int">
+select uLoginCount from user_info
+where uEmail =  #{uEmail}
+
+
+
+</select>
+	</mapper>
 
 
 	

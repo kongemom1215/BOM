@@ -388,7 +388,7 @@
 							$("#reg_submit").attr("disabled", true);
 						}
 						if (data == 0) {
-							$("#Email_check").text("사용가능한 이메일입니다 :p");
+							$("#Email_check").text("사용가능한 이메일`입니다 :p");
 							$("#Email_check").css("color", "red");
 							$("#reg_submit").attr("disabled", true);
 

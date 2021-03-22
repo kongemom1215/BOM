@@ -11,7 +11,7 @@
 <c:if test="${result2 > 0 }">
 	<script type="text/javascript">
 		alert("복구 되었습니다! 다시 봄에 오신걸 환영합니다 :)");
-		location.href = "/right/main";
+		location.href = "/iron/timeline";
 	</script>
 </c:if>
 <c:if test="${result2 ==0 }">

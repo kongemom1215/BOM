@@ -1,6 +1,9 @@
 
 body {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'GmarketSansLight', sans-serif;
+    src:
+		url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansLight.woff')
+		format('woff');
     font-size: 16px;
     font-weight: 300;
     color: #888;
@@ -177,9 +180,7 @@ img { max-width: 100%; }
 
 }
 
-@media (max-width: 415px) {
-	
+@media (max-width: 415px) {	
 	h1, h2 { font-size: 32px; }
-
 }
 
