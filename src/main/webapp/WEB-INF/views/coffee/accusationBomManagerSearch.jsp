@@ -135,25 +135,31 @@
 				</a> <a href="#" class="list-group-item list-group-item-action"> <img
 					src="/img/user.svg" width="15" height="15"> 프로필
 				</a> <a href="#" class="list-group-item list-group-item-action"> <img
-					src="/img/more.svg" width="15" height="15"> 더보기 -->
-				</a> <a href="/coffee/interceptor/censorBomManagerPage" class="list-group-item list-group-item-action"> <img
+					src="/img/more.svg" width="15" height="15"> 더보기 </a>-->
+				<a href="/coffee/interceptor/censorBomManagerPage" class="list-group-item list-group-item-action"> <img
 					src="/img/coffee/censorBom.svg" width="15" height="15"> 봄 검열
 				</a> <a href="/coffee/interceptor/censorMemberManagerPage" class="list-group-item list-group-item-action"> <img
 					src="/img/coffee/censorMember.svg" width="15" height="15"> 회원 검열
-				</a> <a href="/coffee/interceptor/censorAccusationManagerPage" class="list-group-item list-group-item-action"> <img
+				</a><!--  <a href="/coffee/interceptor/censorAccusationManagerPage" class="list-group-item list-group-item-action"> <img
 					src="/img/coffee/accusation.svg" width="15" height="15"> 신고 게시판
-				</a> <!-- <a href="#" class="list-group-item list-group-item-action">
+				</a>  --><!-- <a href="#" class="list-group-item list-group-item-action">
 					<button type="button" class="btn btn-outline-success">
 						<img src="/img/write.svg" width="15" height="15"> 글 쓰기
 					</button>
 				</a> -->
 				<div class="card">
 					<div class="card-body">
-						<img src="/img/teemo.jpg" class="rounded-circle" width="50"
-							width="50"> <a class="card-title text-dark">닉네임</a> <a
-							class="card-subtitle mb-2 text-muted">@atid</a>
+						<c:choose>
+							<c:when test="${not empty user.uimage }">
+								<img alt="회원 이미지" src="<%=context %>/profile_image/${user.uimage }" class="rounded-circle" width="50"
+								height="50"></c:when>
+							<c:otherwise>
+								<img src="/img/coffee/user_basic.svg" class="rounded-circle" width="50" height="50">
+							</c:otherwise>
+						</c:choose> <a class="card-title text-dark">${user.unickName }</a> <a
+						class="card-subtitle mb-2 text-muted">@${user.uatid }</a>
 					</div>
-					<button type="button" class="btn btn-success">로그아웃</button>
+					<button type="button" class="btn btn-success" onclick = "alert('로그아웃 되었습니다'); location.href = '/coffee/logout'; ">로그아웃</button>
 				</div>
 			</div>
 		</div>
@@ -164,7 +170,7 @@
 		<div id="page-content-wrapper">
 			<nav
 				class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
-				<button class="btn btn-success" id="menu-toggle">←</button>
+				<button class="btn btn-success" id="menu-toggle" onclick="history.back(); return false;">←</button>
 			</nav>
 			<h2>봄 검열 페이지</h2>
 			<div class="alert alert-success" role="alert">
@@ -214,31 +220,43 @@
 								class="card-subtitle mb-2 text-muted">${list.bregdate }</a> <a href="#"
 								class="card-text" style="margin-top: 10px;">${list.bcontent }</a>
 								<c:if test="${list.battach!=null }">
-								 	<c:if test="${list.battachType=='image'}">
-								 		<img class="img-thumnail" width="300" src="<%=context %>/image/${list.battachSrc}"/>
-								 	</c:if>
-								 	<c:if test="${list.battachType=='video'}">
-								 		<video controls width="300">
-								 			<source  src="<%=context %>/video/${list.battachSrc}" type="video/mp4">
-								 			<source  src="<%=context %>/video/${list.battachSrc}" type="video/webm">
-								 			해당 브라우저에는 지원하지 않는 비디오입니다.
-								 		</video>
-								 	</c:if>
-								 </c:if>
+			                        <c:if test="${list.battachType=='image'}">
+			                           <img class="img-fluid" 
+			                              src="<%=context %>/image/${list.battachSrc}" />
+			                        </c:if>
+			                        <c:if test="${list.battachType=='video'}">
+			                           <div class="embed-responsive embed-responsive-16by9">
+			                           <video controls>
+			                              <source src="<%=context %>/video/${list.battachSrc}"
+			                                 type="video/mp4">
+			                              <source src="<%=context %>/video/${list.battachSrc}"
+			                                 type="video/webm">
+			                              	해당 브라우저에는 지원하지 않는 비디오입니다.
+			                           </video>
+			                           </div>
+			                        </c:if>
+			          			</c:if>
 							<div align="center">
 								<div class="btn-group col-md-12" role="group"
 									aria-label="Button group with nested dropdown">
 									<button type="button" class="btn btn-secondary btn-light mr-3"
 										data-toggle="tooltip" data-placement="top" title="답글">
-										<img src="/img/speech-bubble.svg" width="20" height="20">${list.breplycount }
+										<img src="/img/speech-bubble.svg" width="20" height="20"><c:if test="${list.breplycount ne 0}">
+                                   			${list.breplycount }
+                                 		</c:if>
+										
 									</button>
 									<button type="button" class="btn btn-secondary btn-light mr-3"
 										data-toggle="tooltip" data-placement="top" title="스크랩 or 인용">
-										<img src="/img/bring.svg" width="20" height="20">${list.bquotecount }
+										<img src="/img/bring.svg" width="20" height="20"><c:if test="${list.bquotecount ne 0}">
+                                  			${list.bquotecount }
+                                 		</c:if>
 									</button>
 									<button type="button" class="btn btn-secondary btn-light mr-3"
 										data-toggle="tooltip" data-placement="top" title="좋아요">
-										<img src="/img/heart.svg" width="20" height="20">${list.blikecount }
+										<img src="/img/heart.svg" width="20" height="20"><c:if test="${list.blikecount ne 0}">
+                                 			${list.blikecount }
+                                 		</c:if>
 									</button>
 									
 								</div>
@@ -257,81 +275,69 @@
 		<div class="bg-light border-left" id="sidebar-wrapper2">
 			<div class="list-group list-group-flush">
 				<div class="list-group-item list-group-item-action bg-light">
-					<div id="drop_the_text">
-						<!-- 엔터치면 searchData() 실행 -->
-						<input class="form-control" id="search" placeholder="봄 검색"
+					<!-- <div id="drop_the_text">
+						엔터치면 searchData() 실행
+						<input  class="form-control" id="search" placeholder="봄 검색"
 							onkeypress="if( event.keyCode == 13 ){searchData();}">
-					</div>
+					</div> -->
 				</div>
-				<div class="list-group-item list-group-item-action bg-light"
+				<%-- <div class="list-group-item list-group-item-action bg-light"
 					style="padding: 5px;">
 					<div class="card bg-light mb-3">
 						<div class="card-header">팔로우 추천</div>
 						<div class="card-body" style="padding: 5px;">
-							<div class="card">
-								<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
-									<img src="/img/teemo.jpg" class="rounded-circle" width="20"
-										height="20"> <a class="card-title text-dark">닉네임</a> <a
-										class="card-subtitle mb-2 text-muted">@atid</a>
-									<button type="button"
-										class="btn btn-outline-success btn-sm float-right"
-										style="font-size: 0.8rem;">팔로우</button>
-								</div>
-							</div>
-							<div class="card">
-								<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
-									<img src="/img/teemo.jpg" class="rounded-circle" width="20"
-										height="20"> <a class="card-title text-dark">닉네임</a> <a
-										class="card-subtitle mb-2 text-muted">@atid</a>
-									<button type="button"
-										class="btn btn-outline-success btn-sm float-right"
-										style="font-size: 0.8rem;">팔로우</button>
-								</div>
-							</div>
-							<div class="card">
-								<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
-									<img src="/img/teemo.jpg" class="rounded-circle" width="20"
-										height="20"> <a class="card-title text-dark">닉네임</a> <a
-										class="card-subtitle mb-2 text-muted">@atid</a>
-									<button type="button"
-										class="btn btn-outline-success btn-sm float-right"
-										style="font-size: 0.8rem;">팔로우</button>
-								</div>
-							</div>
+							<c:if test="${suggestFlist2_size>0 }">
+								<c:forEach var="justFollowMe" items="${suggestFlist2 }">
+									<div class="card">
+										<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
+											<img src="<%=context %>/profile_image/${justFollowMe.uimage}" class="rounded-circle" width="20"
+												height="20">
+												<a class="card-title text-dark">${justFollowMe.unickName}</a>
+												<a class="card-subtitle mb-2 text-muted">@${justFollowMe.uatid}</a>
+											<button type="button"
+												class="btn btn-outline-success btn-sm float-right"
+												style="font-size: 0.8rem;">팔로우</button>
+										</div>
+									</div>
+								</c:forEach>
+							</c:if>
+							<!-- 팔로우하는 유저가 없을 경우 관심항목이 비슷한 사람을 추천 -->
+							<c:if test="${suggestFlist2_size<1 }">
+								<c:forEach var="justFollowMe" items="${suggestFlist2 }">
+									<div class="card">
+										<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
+											<img src="${resourcePath }/profile_image/${justFollowMe.uimage}" class="rounded-circle" width="20"
+												height="20">
+												<a class="card-title text-dark">${justFollowMe.unickName}</a>
+												<a class="card-subtitle mb-2 text-muted">@${justFollowMe.uatid}</a>
+											<button type="button"
+												class="btn btn-outline-success btn-sm float-right"
+												style="font-size: 0.8rem;">팔로우</button>
+										</div>
+									</div>
+								</c:forEach>
+							</c:if>
 						</div>
 					</div>
-				</div>
+				</div> --%>
 				<div class="list-group-item list-group-item-action bg-light"
 					style="padding: 5px;">
 					<div class="card bg-light mb-3">
-						<div class="card-header">실시간 트랜드</div>
+						<div class="card-header">실시간 해시태그</div>
 						<div class="card-body" style="padding: 5px;">
-							<div class="card">
-								<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
-									1위
-									<div>
-										<a href="#">#사랑해티모</a> <span class="float-right">11,333
-											봄</span>
+							<c:forEach var="tag" items="${tag_list}" varStatus="status">
+								<c:if test="${status.count <=3 }">
+									<div class="card">
+										<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
+											${tag.hrank}위
+											<div>
+												<a href="#">#${tag.hname}</a> <span class="float-right">${tag.hcount }
+													봄</span>
+											</div>
+										</div>
 									</div>
-								</div>
-							</div>
-							<div class="card">
-								<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
-									2위
-									<div>
-										<a href="#">#티세구</a> <span class="float-right">2,301 봄</span>
-									</div>
-								</div>
-							</div>
-							<div class="card">
-								<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
-									3위
-									<div>
-										<a href="#">#롤하고싶다</a> <span class="float-right">1,300
-											봄</span>
-									</div>
-								</div>
-							</div>
+								</c:if>
+							</c:forEach>
 						</div>
 					</div>
 				</div>

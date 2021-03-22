@@ -244,7 +244,7 @@ function viewBoardOptions(bbcode,bindex){
 							</div>
 						</div>
 					</div>
-					<button type="button" class="btn btn-success">로그아웃</button>
+					<button type="button" class="btn btn-success" onclick="location.href='../coffee/logout'">로그아웃</button>
 				</div>
 			</div>
 		</div>

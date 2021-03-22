@@ -314,8 +314,8 @@
 				</a> <a href="#" class="list-group-item list-group-item-action"> <img
 					src="/img/user.svg" width="15" height="15"> 프로필
 				</a> <a href="#" class="list-group-item list-group-item-action"> <img
-					src="/img/more.svg" width="15" height="15"> 더보기 -->
-				</a> <a href="/coffee/interceptor/censorBomManagerPage" class="list-group-item list-group-item-action"> <img
+					src="/img/more.svg" width="15" height="15"> 더보기 </a>-->
+				<a href="/coffee/interceptor/censorBomManagerPage" class="list-group-item list-group-item-action"> <img
 					src="/img/coffee/censorBom.svg" width="15" height="15"> 봄 검열
 				</a> <a href="/coffee/interceptor/censorMemberManagerPage" class="list-group-item list-group-item-action"> <img
 					src="/img/coffee/censorMember.svg" width="15" height="15"> 회원 검열
@@ -450,8 +450,8 @@
 				    							</c:otherwise>
 				    							</c:choose>
 											</div>
-											<span><button type="button" class="btn btn-danger float-right ${status.index }">탈퇴</button></span>
-											<span><button type="button" class="btn btn-primary float-right ${status.index }">복원</button></span>
+											<span><button type="button" class="btn btn-danger float-right u${status.index }">탈퇴</button></span>
+											<span><button type="button" class="btn btn-primary float-right u${status.index }">복원</button></span>
 											
 											<c:choose>
 												<c:when test="${not empty list.uimage }">
@@ -492,79 +492,67 @@
 				<div class="list-group-item list-group-item-action bg-light">
 					<div id="drop_the_text">
 						<!-- 엔터치면 searchData() 실행 -->
-						<input class="form-control" id="search" placeholder="봄 검색"
+						<input  class="form-control" id="search" placeholder="봄 검색"
 							onkeypress="if( event.keyCode == 13 ){searchData();}">
 					</div>
 				</div>
-				<div class="list-group-item list-group-item-action bg-light"
+				<%-- <div class="list-group-item list-group-item-action bg-light"
 					style="padding: 5px;">
 					<div class="card bg-light mb-3">
 						<div class="card-header">팔로우 추천</div>
 						<div class="card-body" style="padding: 5px;">
-							<div class="card">
-								<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
-									<img src="/img/teemo.jpg" class="rounded-circle" width="20"
-										height="20"> <a class="card-title text-dark">닉네임</a> <a
-										class="card-subtitle mb-2 text-muted">@atid</a>
-									<button type="button"
-										class="btn btn-outline-success btn-sm float-right"
-										style="font-size: 0.8rem;">팔로우</button>
-								</div>
-							</div>
-							<div class="card">
-								<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
-									<img src="/img/teemo.jpg" class="rounded-circle" width="20"
-										height="20"> <a class="card-title text-dark">닉네임</a> <a
-										class="card-subtitle mb-2 text-muted">@atid</a>
-									<button type="button"
-										class="btn btn-outline-success btn-sm float-right"
-										style="font-size: 0.8rem;">팔로우</button>
-								</div>
-							</div>
-							<div class="card">
-								<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
-									<img src="/img/teemo.jpg" class="rounded-circle" width="20"
-										height="20"> <a class="card-title text-dark">닉네임</a> <a
-										class="card-subtitle mb-2 text-muted">@atid</a>
-									<button type="button"
-										class="btn btn-outline-success btn-sm float-right"
-										style="font-size: 0.8rem;">팔로우</button>
-								</div>
-							</div>
+							<c:if test="${suggestFlist2_size>0 }">
+								<c:forEach var="justFollowMe" items="${suggestFlist2 }">
+									<div class="card">
+										<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
+											<img src="<%=context %>/profile_image/${justFollowMe.uimage}" class="rounded-circle" width="20"
+												height="20">
+												<a class="card-title text-dark">${justFollowMe.unickName}</a>
+												<a class="card-subtitle mb-2 text-muted">@${justFollowMe.uatid}</a>
+											<button type="button"
+												class="btn btn-outline-success btn-sm float-right"
+												style="font-size: 0.8rem;">팔로우</button>
+										</div>
+									</div>
+								</c:forEach>
+							</c:if>
+							<!-- 팔로우하는 유저가 없을 경우 관심항목이 비슷한 사람을 추천 -->
+							<c:if test="${suggestFlist2_size<1 }">
+								<c:forEach var="justFollowMe" items="${suggestFlist2 }">
+									<div class="card">
+										<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
+											<img src="${resourcePath }/profile_image/${justFollowMe.uimage}" class="rounded-circle" width="20"
+												height="20">
+												<a class="card-title text-dark">${justFollowMe.unickName}</a>
+												<a class="card-subtitle mb-2 text-muted">@${justFollowMe.uatid}</a>
+											<button type="button"
+												class="btn btn-outline-success btn-sm float-right"
+												style="font-size: 0.8rem;">팔로우</button>
+										</div>
+									</div>
+								</c:forEach>
+							</c:if>
 						</div>
 					</div>
-				</div>
+				</div> --%>
 				<div class="list-group-item list-group-item-action bg-light"
 					style="padding: 5px;">
 					<div class="card bg-light mb-3">
-						<div class="card-header">실시간 트랜드</div>
+						<div class="card-header">실시간 해시태그</div>
 						<div class="card-body" style="padding: 5px;">
-							<div class="card">
-								<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
-									1위
-									<div>
-										<a href="#">#사랑해티모</a> <span class="float-right">11,333
-											봄</span>
+							<c:forEach var="tag" items="${tag_list}" varStatus="status">
+								<c:if test="${status.count <=3 }">
+									<div class="card">
+										<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
+											${tag.hrank}위
+											<div>
+												<a href="#">#${tag.hname}</a> <span class="float-right">${tag.hcount }
+													봄</span>
+											</div>
+										</div>
 									</div>
-								</div>
-							</div>
-							<div class="card">
-								<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
-									2위
-									<div>
-										<a href="#">#티세구</a> <span class="float-right">2,301 봄</span>
-									</div>
-								</div>
-							</div>
-							<div class="card">
-								<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
-									3위
-									<div>
-										<a href="#">#롤하고싶다</a> <span class="float-right">1,300
-											봄</span>
-									</div>
-								</div>
-							</div>
+								</c:if>
+							</c:forEach>
 						</div>
 					</div>
 				</div>

@@ -6,6 +6,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.spring.bom.model.bro.User_info;
 import com.spring.bom.model.coffee.CoffeeUser_info;
 
 @Repository
@@ -132,5 +133,14 @@ public class User_infoDaoImpl implements User_infoDao {
 		}
 		return list;
 	}
+	@Override
+	public void logout(User_info ui) {
+		try {
+			session.update("coffeeLogout", ui);
+		}catch (Exception e) {
+			System.out.println("User_infoDaoImpl logout Error ->"+e.getMessage());
+		}
+	}
+	
 
 }

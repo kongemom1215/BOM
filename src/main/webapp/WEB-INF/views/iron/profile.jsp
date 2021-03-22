@@ -267,7 +267,7 @@ label {
 							class="card-title text-dark">${loginUser.unickName }</a> <a
 							class="card-subtitle mb-2 text-muted">@${loginUser.uatid}</a>
 					</div>
-					<button type="button" class="btn btn-success">로그아웃</button>
+					<button type="button" class="btn btn-success" onclick="location.href='../coffee/logout'">로그아웃</button>
 				</div>
 			</div>
 		</div>

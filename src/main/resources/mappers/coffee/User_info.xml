@@ -35,7 +35,9 @@
    	<select id="coffeeSelectManager" parameterType="int" resultType="int">
    		SELECT COUNT(*) FROM user_info WHERE ucode = 0 AND ucode = #{ucode}
    	</select>
-   
+   	<update id="coffeeLogout" parameterType="User_info">
+ 		UPDATE user_info set uonline = 0 WHERE ucode = #{uCode}  	
+   	</update>
    
    
 </mapper>

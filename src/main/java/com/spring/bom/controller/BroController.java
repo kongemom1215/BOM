@@ -74,7 +74,7 @@ public class BroController {
 		else if(login.getuCode()==0){
 			session.setAttribute("login", login);
 			System.out.println("관리자계정 로그인!!");
-			return "/coffee/censorMemberManagerPage";
+			return "redirect:/coffee/interceptor/censorBomManagerPage";
 		}
 		else {
 			System.out.println(login.getuCode());

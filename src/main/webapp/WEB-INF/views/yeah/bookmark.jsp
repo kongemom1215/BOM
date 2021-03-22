@@ -266,7 +266,7 @@ label {
 							width="50"> <a class="card-title text-dark">${user.unickName }</a> <a
 							class="card-subtitle mb-2 text-muted">@${user.uatid }</a>
 					</div>
-					<button type="button" class="btn btn-success">로그아웃</button>
+					<button type="button" class="btn btn-success" onclick="location.href='../coffee/logout'">로그아웃</button>
 				</div>
 			</div>
 		</div>

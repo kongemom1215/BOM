@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.spring.bom.dao.coffee.User_infoDao;
+import com.spring.bom.model.bro.User_info;
 import com.spring.bom.model.coffee.CoffeeUser_info;
 
 @Service
@@ -57,6 +58,10 @@ public class User_infoServiceImpl implements User_infoService {
 		List<CoffeeUser_info> user_infoList = null;
 		user_infoList = uid.user_infoRestoreList(search);
 		return user_infoList;
+	}
+	@Override
+	public void logout(User_info ui) {
+		uid.logout(ui);
 	}
 
 }
