@@ -110,17 +110,14 @@
 								$("input[type='checkbox']").on("click", function(){
 									let count = $("input:checked[type='checkbox']").length;
 									if(count>3){
-										$(this).prop("checked",false);
 										$('#countfrm').text('3개까지만 선택하실수 있습니다!');
 										$('#countfrm').css('color', 'red');
 										$('#reg_submit').attr('disabled', true);
 									}else if(count<3){
-										$(this).prop("checked",false);
 										$('#countfrm').text('3개까지 선택하셔야 합니다!');
 										$('#countfrm').css('color', 'red');
 										$('#reg_submit').attr('disabled', true);
 									}else{
-										$(this).prop("checked",true);
 										$('#countfrm').text('');
 										$('#countfrm').css('color', 'green');
 										$("#reg_submit").attr("disabled", false);
