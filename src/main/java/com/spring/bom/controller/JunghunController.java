@@ -168,6 +168,9 @@ public class JunghunController {
 		System.out.println("[j] Do -> fs.getSuggestFollowList()");
 		List<Follow> suggestFlist2 = js.getSuggestFollowList2(loginUser.getUcode());
 		System.out.println("[j] Result : listSize is " + suggestFlist2.size());
+		// 리스트 suggestFlist2 에 있는 값들을 랜덤으로 돌림
+		Collections.shuffle(suggestFlist2); // 팔로우 추천 랜덤
+
 		model.addAttribute("suggestFlist2_size", suggestFlist2.size());
 		model.addAttribute("suggestFlist2", suggestFlist2);
 

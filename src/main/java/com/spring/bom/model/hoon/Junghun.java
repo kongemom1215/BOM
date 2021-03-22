@@ -19,6 +19,7 @@ public class Junghun {
 	private String bregdate;
 	private int bcode;
 	private int bbcode;
+	private String btype;
 	
 	// hastag
 	private String hname;
@@ -76,6 +77,15 @@ public class Junghun {
 	private String q_attachsrc;
 	private String q_attachtype;
 	private String q_regdate;
+
+	
+	public String getBtype() {
+		return btype;
+	}
+
+	public void setBtype(String btype) {
+		this.btype = btype;
+	}
 
 	public int getHcount() {
 		return hcount;
