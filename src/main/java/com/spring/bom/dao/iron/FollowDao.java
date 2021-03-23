@@ -11,5 +11,7 @@ public interface FollowDao {
 	List<Follow> getSuggestFollowList2(int ucode);	//나를 팔로우하는 유저 추천
 
 	int fwInsert(Follow follow);
+	
+	int unfollow(Follow follow); // 언팔로워하기
 
 }

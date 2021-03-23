@@ -40,6 +40,11 @@ String context = request.getContextPath();
 <script src="/js/bootstrap.bundle.min.js"></script>
 <script src="/js/bootstrap.bundle.js"></script>
 <style>
+#lineclear {
+	border: 0;
+	outline: none;
+}
+
 .dropdown-toggle.caret-off::after {
 	display: none;
 }
@@ -365,19 +370,16 @@ img {
 					}else{
 					
 						$("#messagelist").append("<div class="+"incoming_msg"+">"+
- 								 "<div class="+"received_withd_msg"+">"+
+ 								 "<br><div class="+"received_withd_msg"+">"+
  									"<p>"+d.msg+ "</p>"+
-    								"</div></div>");	
+    								"</div></div><br>");	
 					}
 						
 				}else{
 					console.warn("unknown type!");
 				}
 			}
-		}
-
-		
-	
+		}	
 	}	
 	function send(number) {
 		var kk='${ucode}';
@@ -391,14 +393,7 @@ img {
 		console.log(option);
 		ws.send(JSON.stringify(option))
 		$('#chatting').val("");
-	}
-		
-		
-		
-		
-	
-	
-	
+	}	
 	function getRoom(){
 		//$("#sessionId").val()
 		//var timerID;
@@ -413,10 +408,6 @@ img {
 				
 				createChatingRoom(res);
 			}
-		
-		
-	
-
 	});
 	}
 	
@@ -427,16 +418,14 @@ img {
 			var stt = str.substring(1);
 			console.log("@ 자른 상대방 id2 - > " + stt)
 			
-			$.ajax({
-				   
+			$.ajax({				   
 				url: "<%=context%>/bear/selectcode",
 				data: {uatid : stt},
 				dataType: 'text',
 				success: function (data){
 					console.log('@아이디로 회원 코드값은 : '+ data)
 					var msg = {uopcode :  data};
-					console.log('@아이디로 회원 msg : '+ msg)
-					
+					console.log('@아이디로 회원 msg : '+ msg)					
 					$.ajax({
 						url : '<%=context%>/bear/createRoom',
 						data : msg,
@@ -450,20 +439,9 @@ img {
 								else{
 									alert($('#roomName').val() + "님 과 채팅방이생성되었습니다." )
 									 location.reload();
-								}
-								
-								
-							}
-						
-						
+								}																
+							}						
 					});$("#roomName").empty();
-					
-					
-					
-					
-						
-					
-		
 				}});
 		}
 			
@@ -588,7 +566,7 @@ img {
 		         		 "<div class=chat_people>" +
 		         		"<div class="+"chat_img"+"><img src="+context+"/profile_image/"+uimage+" class="+"rounded-circle"+" width="+"100"+" height="+"50"+"></div>"+
 		          			 	 "<div class=chat_ib>"+
-		            			  "<h5><b>" +uatid+ "</b><span class=chat_date><b>" +cdtime+ "</b></span></h5>"+
+		            			  "<h5><b>@ "+uatid+ "</b><span class=chat_date><b>" +cdtime+ "</b></span></h5>"+
 		             				 "<h5"+" id='msgsize'>"+ msg+"<span id = 'k123'>"+"</span></h5><div class="+"'boxsize'"+"  align="+"'right'"+"><button type='button' class="+"'btn btn-success'"+" onclick='goRoom(\""+roomNumber+"\")'>참여</button>"+"</div> "+
 		           				 "</div>"+
 		        		      "</div>"+
@@ -622,9 +600,10 @@ img {
 		});
 	}
 	
+	//팔로우 추천 가져가야할 
 	//팔로우 추천 더보기 닫기 기능
 	function closemodal(){
-		location.href="../bear/chat";
+		location.reload();
 	}
 	
 	//팔로우 하는 로직
@@ -647,6 +626,7 @@ img {
 					console.log("저장성공")
 					  $("button[name=k"+number+"]").text("팔로잉");
 					  $("button[name=k"+number+"]").attr("class","btn btn-success btn-sm float-right");
+					  $("button[name=k"+number+"]").attr("onclick","unfollow("+number+")");
 					  
 				
 			
@@ -657,6 +637,31 @@ img {
 			}
 	});	 
 	}
+	//언팔로우 
+	function unfollow(number){
+		console.log("언팔로우 시작  number -> " + number);
+		
+		var msg = {fopcode  : number};
+		
+		$.ajax({
+			url: '<%=context%>/bear/unfollow',
+			data: msg,
+			type: "post",
+			success: function (res){
+				
+				if(res == 1 ){
+					console.log("저장성공 - > " +res)
+					 $("button[name=k"+number+"]").text("언팔함");
+					  $("button[name=k"+number+"]").attr("class","btn btn-danger btn-sm float-right");
+					  $("button[name=k"+number+"]").attr("onclick","followchk("+number+")");					
+				}else{					
+					alert("삭제하지못했습니다.")
+				}				
+			}			
+		});
+}
+	 //팔로우 추천 가져가야할 곳 끝
+	
 </script>
 
 
@@ -677,10 +682,13 @@ img {
 				</a> <a href="/hoon/explore"
 					class="list-group-item list-group-item-action"> <img
 					src="/img/search.svg" width="15" height="15"> 검색하기
-				</a> <a href="alarm" class="list-group-item list-group-item-action">
+				</a>
+				<!-- 
+				<a href="alarm" class="list-group-item list-group-item-action">
 					<img src="/img/bell.svg" width="15" height="15"> 알림 <span
 					class="badge badge-success">1</span>
 				</a>
+				 -->
 				<!-- bear1 -->
 				<a href="/bear/chat" class="list-group-item list-group-item-action">
 					<img src="/img/send.svg" width="15" height="15"> 쪽지
@@ -701,7 +709,7 @@ img {
 							class="card-title text-dark">${user.unickName }</a> <a
 							class="card-subtitle mb-2 text-muted"> @${user.uatid } </a>
 					</div>
-					<button type="button" class="btn btn-success" onclick="location.href='../coffee/logout'">로그아웃</button>
+					<button type="button" class="btn btn-success">로그아웃</button>
 					<input type="hidden" id="sessionId" value="${ucode }">
 				</div>
 			</div>
@@ -718,7 +726,9 @@ img {
 		<div id="page-content-wrapper" style="padding: 10px">
 
 			<br>
+			<br>
 			<h3 class=" text-center">쪽지방</h3>
+			<br />
 			<div class="messaging">
 				<div class="inbox_msg">
 					<div class="inbox_people">
@@ -756,8 +766,7 @@ img {
 						</div>
 						<div class="type_msg">
 							<div class="input_msg_write" id="messagetest">
-								<input type="text" class="write_msg"
-									placeholder="Type a message" />
+								<input type="text" class="write_msg" placeholder="채팅방을 선택해주세요." />
 								<button class="msg_send_btn" type="button">
 									<i class="fa fa-paper-plane-o" aria-hidden="true"></i>
 								</button>
@@ -771,6 +780,7 @@ img {
 		<!-- /#page-content-wrapper -->
 
 		<!-- 오른쪽 사이드바 -->
+		<!-- 사이드바 팔로우 가져가야할 구간 시작 -->
 		<div class="bg-light border-left" id="sidebar-wrapper2">
 			<div class="list-group list-group-flush">
 				<div class="list-group-item list-group-item-action bg-light">
@@ -794,7 +804,8 @@ img {
 											<img src="<%=context %>/profile_image/${justFollowMe.uimage}"
 												class="rounded-circle" width="20" height="20"> <a
 												class="card-title text-dark">${justFollowMe.unickName}</a> <a
-												class="card-subtitle mb-2 text-muted">@${justFollowMe.uatid}</a>
+												class="card-subtitle mb-2 text-muted"
+												href="/iron/profile?uatid=${justFollowMe.uatid}">@${justFollowMe.uatid}</a>
 											<button type="button"
 												class="btn btn-outline-success btn-sm float-right"
 												style="font-size: 0.8rem;"
@@ -806,24 +817,23 @@ img {
 									</div>
 								</c:forEach>
 							</c:if>
+							<%--
 							<!-- 팔로우하는 유저가 없을 경우 관심항목이 비슷한 사람을 추천 -->
 							<c:if test="${suggestFlist2_size<1 }">
 								<c:forEach var="justFollowMe" items="${suggestFlist2 }">
 									<div class="card">
-										<div class="card-body"
-											style="font-size: 0.8rem; padding: 10px;">
-											<img
-												src="${resourcePath }/profile_image/${justFollowMe.uimage}"
-												class="rounded-circle" width="20" height="20"> <a
-												class="card-title text-dark">${justFollowMe.unickName}</a> <a
-												class="card-subtitle mb-2 text-muted">@${justFollowMe.uatid}</a>
+										<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
+											<img src="${resourcePath }/profile_image/${justFollowMe.uimage}" class="rounded-circle" width="20"
+												height="20">
+												<a class="card-title text-dark">${justFollowMe.unickName}</a>
+												<a class="card-subtitle mb-2 text-muted">@${justFollowMe.uatid}</a>
 											<button type="button"
 												class="btn btn-outline-success btn-sm float-right"
 												style="font-size: 0.8rem;">팔로우</button>
 										</div>
 									</div>
 								</c:forEach>
-							</c:if>
+							</c:if> --%>
 						</div>
 						<c:if test="${suggestFlist2_size>0 }">
 							<button type="button" class="btn btn-outline-success"
@@ -832,6 +842,7 @@ img {
 						</c:if>
 					</div>
 				</div>
+				<!-- 사이드바 팔로우 가져가야할 구간 끝 -->
 
 				<div class="list-group-item list-group-item-action bg-light"
 					style="padding: 5px;">
@@ -859,37 +870,26 @@ img {
 				<div class="list-group-item list-group-item-action bg-light"
 					style="padding: 5px;">
 					<div class="card bg-light mb-3">
-						<div class="card-header">실시간 트랜드</div>
+						<div class="card-header">해시태그</div>
 						<div class="card-body" style="padding: 5px;">
-							<div class="card">
-								<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
-									1위
-									<div>
-										<a href="#">#사랑해티모</a> <span class="float-right">11,333
-											봄</span>
+							<c:forEach var="tag" items="${tag_list}" varStatus="status">
+								<c:if test="${status.count <=3 }">
+									<div class="card">
+										<div class="card-body"
+											style="font-size: 0.8rem; padding: 10px;">
+											${tag.hrank}위
+											<div>
+												<a href="#">#${tag.hname}</a> <span class="float-right">${tag.hcount }
+													봄</span>
+											</div>
+										</div>
 									</div>
-								</div>
-							</div>
-							<div class="card">
-								<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
-									2위
-									<div>
-										<a href="#">#티세구</a> <span class="float-right">2,301 봄</span>
-									</div>
-								</div>
-							</div>
-							<div class="card">
-								<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
-									3위
-									<div>
-										<a href="#">#롤하고싶다</a> <span class="float-right">1,300
-											봄</span>
-									</div>
-								</div>
-							</div>
+								</c:if>
+							</c:forEach>
 						</div>
 					</div>
 				</div>
+				
 				<div class="list-group-item list-group-item-action bg-light"
 					style="padding: 5px; font-size: 0.8rem;">
 					<div class="card">
@@ -906,6 +906,7 @@ img {
 	<!-- /#wrapper -->
 
 	<!--BEAR 더보기 창  -->
+	<!-- 모달 가져가서 붙여야함 -->
 	<div class="modal fade" id="morebtn" data-backdrop="static"
 		data-keyboard="false" tabindex="-1"
 		aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -916,7 +917,10 @@ img {
 						<div class="card-header">
 							<h4 style="text-align: center;">
 								팔로우 추천
-								<button style="float: right;" onclick="closemodal()">x</button>
+								<button id="lineclear" style="float: right;"
+									onclick="closemodal()">
+									<img src="<%=context%>/image/x.png" width="30" height="30">
+								</button>
 							</h4>
 							<div class="card-body" style="padding: 5px;">
 								<div class="card">
@@ -957,7 +961,7 @@ img {
 			</div>
 		</div>
 	</div>
-
+	<!-- 모달 가져가서 붙여야함 -->
 
 
 </body>

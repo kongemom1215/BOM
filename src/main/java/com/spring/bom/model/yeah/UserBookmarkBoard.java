@@ -24,7 +24,7 @@ public class UserBookmarkBoard {
 	private int bbcode; // 스크랩 / 인용시 부여
 	private String btype;
 
-	// 조회용
+	// 인용 조회용
 	private String q_uimage;
 	private String q_nickname;
 	private String q_atid;
@@ -129,6 +129,7 @@ public class UserBookmarkBoard {
 	String uimage3;
 	String unickname3;
 	String uatid3;
+	
 
 	public String getUimage3() {
 		return uimage3;

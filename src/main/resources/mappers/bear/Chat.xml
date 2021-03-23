@@ -59,7 +59,7 @@
 <select id="selectck" resultType="Chat" parameterType="Chat">
 
 select ccode
-from chat
+from chat 
 where ucode = #{ucode} and uopcode = #{uopcode}
 
 </select>

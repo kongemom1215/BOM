@@ -7,7 +7,7 @@
 <%
 	String context = request.getContextPath();
 %>
-<html lang="ko">
+<html lang="en">
 
 <head>
 
@@ -41,6 +41,7 @@
 <script src="/js/jquery.js"></script>
 <script src="/js/bootstrap.bundle.min.js"></script>
 <script src="/js/bootstrap.bundle.js"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <style>
 #bearsize {
 	width: 550px;
@@ -117,107 +118,123 @@ label {
 	color: #28a745;
 }
 </style>
-<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <script type="text/javascript">
-	
-	function goProfile(){
-		location.href = "../iron/profile?uatid="+${user.uatid};
-	}
-	
-	window.onload = function(){	//주혜
-		clickWriteBtn();
-		clickSaveBtn();
-		getFollower('<%=context %>');
-	}
-	
-	function goSingleBoard(bbcode,bindex){
-		alert(bbcode+'로 이동합니다.');
-		location.href = 'singleBoard?bcode='+bbcode;
-	}
-	
-	function clickLikeBtn(bbcode,btnIndex){
-		event.stopPropagation();
-		var index = btnIndex;
-		var bcode = bbcode;
-		var msg = '게시글['+bcode+']에 좋아요를 눌렀습니다!';
-		alert(msg);
-		$.ajax({
-			url : "<%=context%>/iron/AjaxLikeAction",
-			data:{ bcode: bcode }, 
-			dataType:'json',
-			success : function(data){
-				var str='';
-				$('#likeBtn'+index).empty();
-				if(data.ltype==0||data.ltype==null)
-					str += "<img src='/img/heart.svg' width='20' height='20'> " + data.likeCount
-				if(data.ltype==1)
-					str+= "<img src='/img/red_heart.svg' width='20' height='20'> "+ data.likeCount
-				$('#likeBtn'+index).append(str);
-				alert(".ajax clickLikeBtn str->"+str);
-			}
-		});
-	}
-	
-	function viewBoardOptions(bbcode,bindex){
-		event.stopPropagation();
-		var index = bindex;
-		var bcode = bbcode;
-		var msg = '게시글['+bcode+']의 옵션을 눌렀습니다!';
-		alert(msg);
-		$.ajax({
-			url : "<%=context%>/iron/AjaxViewBoardOptions",
-			data:{ bcode: bcode }, 
-			dataType:'json',
-			success : function(data){
-				var str='';
-				$('#boardDropdownOption'+index).empty();
-				if(data.bbtype==0||data.bbtype==null)
-					str += "<a class='dropdown-item' onclick=bookmarkAction();> 북마크추가</a>"
-				if(data.bbtype==1)
-					str += "<a class='dropdown-item' onclick=bookmarkAction();> 북마크 삭제</a>"
-				$('#boardDropdownOption'+index).append(str+"<a class='dropdown-item' href='#'>URL담아가기</a>");
-				alert(".ajax viewBoardOptions str->"+str);
-			}
-		});
-	}
-	
-	//팔로우 하는 로직
-	function followchk(number){
-		
-		//name 에 k + number 쓰는 태그를찾아서 text변경
-		var textareaVal = $("button[name=k"+number+"]").text();
-		console.log("textareaVal + textareaVal" + textareaVal)
-		
-		var msg = { uopcode :number};
-		$.ajax({
-			url: '<%=context%>/bear/followchk',
-			data: msg,
-			type: "post",
+function goProfile(){
+	location.href = "../iron/profile?uatid="+${user.uatid};
+}
 
-			success: function (res) {
-				console.log("저장성공 - > " +res)
-				
-				if(res == "1"){
-					console.log("저장성공")
-					  $("button[name=k"+number+"]").text("팔로잉");
-					  $("button[name=k"+number+"]").attr("class","btn btn-success btn-sm float-right");
-			
-				}else 
-					{console.log("저장실패")}
-					
-				 
-			}
+window.onload = function(){	//주혜
+	clickWriteBtn();
+	clickSaveBtn();
+	getFollower('<%=context%>');
+}
+
+function goSingleBoard(bbcode,bindex){
+	alert(bbcode+'로 이동합니다.');
+	location.href = '../iron/singleBoard?bcode='+bbcode;
+}
+
+function clickLikeBtn(bbcode,btnIndex){
+	event.stopPropagation();
+	var index = btnIndex;
+	var bcode = bbcode;
+	var msg = '게시글['+bcode+']에 좋아요를 눌렀습니다!';
+	alert(msg);
+	$.ajax({
+		url : "<%=context%>/iron/AjaxLikeAction",
+		data:{ bcode: bcode }, 
+		dataType:'json',
+		success : function(data){
+			var str='';
+			$('#likeBtn'+index).empty();
+			if(data.ltype==0||data.ltype==null)
+				str += "<img src='/img/heart.svg' width='20' height='20'> " + data.likeCount
+			if(data.ltype==1)
+				str+= "<img src='/img/red_heart.svg' width='20' height='20'> "+ data.likeCount
+			$('#likeBtn'+index).append(str);
+			alert(".ajax clickLikeBtn str->"+str);
+		}
+	});
+}
+
+function viewBoardOptions(bbcode,bindex){
+	event.stopPropagation();
+	var index = bindex;
+	var bcode = bbcode;
+	var msg = '게시글['+bcode+']의 옵션을 눌렀습니다!';
+	alert(msg);
+	$.ajax({
+		url : "<%=context%>/iron/AjaxViewBoardOptions",
+		data:{ bcode: bcode }, 
+		dataType:'json',
+		success : function(data){
+			var str='';
+			$('#boardDropdownOption'+index).empty();
+			if(data.bbtype==0||data.bbtype==null)
+				str += "<a class='dropdown-item' onclick=bookmarkAction();> 북마크추가</a>"
+			if(data.bbtype==1)
+				str += "<a class='dropdown-item' onclick=bookmarkAction();> 북마크 삭제</a>"
+			$('#boardDropdownOption'+index).append(str+"<a class='dropdown-item' href='#'>URL담아가기</a>");
+			alert(".ajax viewBoardOptions str->"+str);
+		}
+	});
+}
+
+//팔로우 추천 가져가야할 
+//팔로우 추천 더보기 닫기 기능
+function closemodal(){
+	location.reload();
+}
+//팔로우 하는 로직
+function followchk(number){
+	//name 에 k + number 쓰는 태그를찾아서 text변경
+	var textareaVal = $("button[name=k"+number+"]").text();
+	console.log("textareaVal + textareaVal" + textareaVal)
+	var msg = { uopcode :number};
+	$.ajax({
+		url: '<%=context%>/bear/followchk',
+		data: msg,
+		type: "post",
+		success: function (res) {
+			console.log("저장성공 - > " +res)
+			if(res == "1"){
+				console.log("저장성공")
+				  $("button[name=k"+number+"]").text("팔로잉");
+				  $("button[name=k"+number+"]").attr("class","btn btn-success btn-sm float-right");
+				  $("button[name=k"+number+"]").attr("onclick","unfollow("+number+")");
+			}else 
+				{console.log("저장실패")}
+		}
 	});	 
-	}
-	
-	function closemodal(){
-		location.reload();
+}
+//언팔로우 
+function unfollow(number){
+	console.log("언팔로우 시작  number -> " + number);
+	var msg = {fopcode  : number};
+	$.ajax({
+		url: '<%=context%>/bear/unfollow',
+			data : msg,
+			type : "post",
+			success : function(res) {
+				if (res == 1) {
+					console.log("저장성공 - > " + res)
+					$("button[name=k" + number + "]").text("언팔함");
+					$("button[name=k" + number + "]").attr("class",
+							"btn btn-danger btn-sm float-right");
+					$("button[name=k" + number + "]").attr("onclick",
+							"followchk(" + number + ")");
+				} else {
+					alert("삭제하지못했습니다.")
+				}
+			}
+		});
 	}
 </script>
+
 </head>
 
 
-  
+
 <body>
 
 	<div class="d-flex" id="wrapper">
@@ -234,10 +251,13 @@ label {
 				</a> <a href="/hoon/explore"
 					class="list-group-item list-group-item-action"> <img
 					src="/img/search.svg" width="15" height="15"> 검색하기
-				</a> <a href="alarm" class="list-group-item list-group-item-action">
+				</a>
+				<!-- 
+				<a href="alarm" class="list-group-item list-group-item-action">
 					<img src="/img/bell.svg" width="15" height="15"> 알림 <span
 					class="badge badge-success">1</span>
 				</a>
+				 -->
 				<!-- bear1 -->
 				<a href="/bear/chat" class="list-group-item list-group-item-action">
 					<img src="/img/send.svg" width="15" height="15"> 쪽지
@@ -259,40 +279,29 @@ label {
 						<img src="/img/write.svg" width="15" height="15"> 글 쓰기
 					</button>
 				</div>
-				
+
 				<div class="card">
 					<div class="card-body">
-						<img src="<%=context %>/profile_image/${user.uimage}" alt="no_image" class="rounded-circle" width="50"
-							width="50"> <a class="card-title text-dark">${user.unickName }</a> <a
-							class="card-subtitle mb-2 text-muted">@${user.uatid }</a>
+						<div class="form-row">
+							<img src="<%=context %>/profile_image/${user.uimage}"
+								alt="no_image" class="rounded-circle" width="50">
+							<div class="form-col ml-2">
+								<a class="card-title text-dark" style="font-size: 0.8em">${user.unickName }</a><br>
+								<a class="card-subtitle mb-2 text-muted"
+									style="font-size: 0.8em">@${user.uatid }</a>
+							</div>
+						</div>
 					</div>
-					<button type="button" class="btn btn-success" onclick="location.href='../coffee/logout'">로그아웃</button>
+					<button type="button" class="btn btn-success"
+						onclick="location.href='../coffee/logout'">로그아웃</button>
 				</div>
 			</div>
 		</div>
 
-		<!-- Sidbar End -->
+		<!-- /#sidebar-wrapper -->
+
 
 		<div id="page-content-wrapper">
-
-
-			<!-- <div class="card">
-					<div class="card-header">글쓰기</div>
-					<div class="card-body">
-						<div class="form-group">
-							<textarea class="form-control" id="exampleFormControlTextarea1"
-								rows="3"></textarea>
-						</div>
-						<div class="btn-group" role="group" aria-label="Basic example">
-							<button type="button" class="btn btn-outline-secondary">미디어</button>
-							<button type="button" class="btn btn-outline-secondary">GIF</button>
-							<button type="button" class="btn btn-outline-secondary">투표</button>
-							<button type="button" class="btn btn-outline-secondary">예약하기</button>
-						</div>
-						<button type="submit" class="btn btn-success float-right">등록</button>
-					</div>
-				</div> -->
-
 			<!-- 북 마크  -->
 			<div class="container-fluid">
 				<p>
@@ -304,131 +313,140 @@ label {
 							type="button" id="dropdownMenu2" data-toggle="dropdown"
 							aria-haspopup="true" aria-expanded="false">...</button>
 
-
 						<div class="dropdown-menu" aria-labelledby="dropdownMenu2">
-							<form action="deleteAll">
+							<form action="updateAll">
 								<input type="hidden" name="ucode" value="${ucode }">
 								<button type="submit" class="dropdown-item">모든 북마크 지우기</button>
 							</form>
 						</div>
 					</div>
+					<!-- 북마크 리스트 유무확인 -->
 
-					<!-- 북마크 글 정렬  -->
-					<c:forEach var="bookmark" items="${ubmBoardList}">
-						<div class="card">
-							<div class="card-body">
-								<!-- <button type="button" class="btn btn-light float-right">⋯</button> -->
-								<img src="<%=context %>/profile_image/${bookmark.uimage }"
-									class="rounded-circle" width="50"> <a
-									class="card-title text-dark">${bookmark.unickname }</a> <a
-									class="card-subtitle mb-2 text-muted">@${bookmark.uatid }</a> <a
-									class="card-subtitle mb-2 text-muted">${bookmark.bdate }</a>
+					<c:if
+						test="${ubmBoardList.size() == null || ubmBoardList.size() < 1 }">
+						북마크 목록이 없습니다.
+					</c:if>
+
+					<c:if test="${ubmBoardList.size() > 0}">
+
+						<!-- 북마크 글 정렬  -->
+						<c:forEach var="bookmark" items="${ubmBoardList}"
+							varStatus="status">
+							<div class="card">
+								<script type="text/javascript">
+									function goSingleBoard(bbcode,bindex){
+									alert(bbcode+'로 이동합니다.');
+									location.href = '../iron/singleBoard?bcode='+bbcode;
+									}
+								</script>
+								<div class="card-body"
+									onclick="goSingleBoard(${bookmark.bcode},${status.index });">
+									<!-- <button type="button" class="btn btn-light float-right">⋯</button> -->
+									<img src="<%=context %>/profile_image/${bookmark.uimage }"
+										class="rounded-circle" width="50"> <a
+										class="card-title text-dark">${bookmark.unickname }</a> <a
+										class="card-subtitle mb-2 text-muted">@${bookmark.uatid }</a>
+									<a class="card-subtitle mb-2 text-muted">${bookmark.bdate }</a>
 
 
-								<c:if test="${bookmark.btype == 'quote' }">
-									<div class="col-12 float-left" id="QuoteArea"
-										style="font-size: 0.8em;">
-										<div class='card'>
-											<div class='card-body'>
-												<img id="quote_profile"
-													src="<%=context %>/profile_image/${bookmark.q_uimage}"
-													alt='no_image' class='rounded-circle' width='30'> <a
-													class='card-title text-dark' id="quote_nickname">${bookmark.q_nickname}</a>
-												<a class='card-subtitle mb-2 text-muted' id="quote_atid">${bookmark.q_atid}</a>
-												<a class='card-subtitle mb-2 text-muted' id="quote_regdate">${bookmark.q_regdate}</a>
-												<p class='card-text mt-2 mb-0' style="height: 100%;"
-													id="quote_content">${bookmark.q_content}</p>
-												<c:if test="${bookmark.q_attach != ''}">
-													<div class="quote_file mt-2">
-														<c:if test="${bookmark.q_attachtype eq 'image'}">
-															<img id="quote_img"
-																src="<%=context %>/image/${bookmark.q_attachsrc }"
-																class="img-fluid" />
-														</c:if>
-														<c:if test="${bookmark.q_attachtype eq 'video'}">
-															<div id="show_quote_video"
-																class="embed-responsive embed-responsive-16by9">
-																<video controls id="quote_video"
-																	src="<%=context %>/video/${bookmark.q_attachsrc }">
-																</video>
-															</div>
-														</c:if>
-													</div>
-												</c:if>
+									<c:if test="${bookmark.btype == 'quote' }">
+										<div class="col-12 float-left" id="QuoteArea"
+											style="font-size: 0.8em;">
+											<div class='card'>
+												<div class='card-body'>
+													<img id="quote_profile"
+														src="<%=context %>/profile_image/${bookmark.q_uimage}"
+														alt='no_image' class='rounded-circle' width='30'> <a
+														class='card-title text-dark' id="quote_nickname">${bookmark.q_nickname}</a>
+													<a class='card-subtitle mb-2 text-muted' id="quote_atid">${bookmark.q_atid}</a>
+													<a class='card-subtitle mb-2 text-muted' id="quote_regdate">${bookmark.q_regdate}</a>
+													<p class='card-text mt-2 mb-0' style="height: 100%;"
+														id="quote_content">${bookmark.q_content}</p>
+													<c:if test="${bookmark.q_attach != ''}">
+														<div class="quote_file mt-2">
+															<c:if test="${bookmark.q_attachtype eq 'image'}">
+																<img id="quote_img"
+																	src="<%=context %>/image/${bookmark.q_attachsrc }"
+																	class="img-fluid" />
+															</c:if>
+															<c:if test="${bookmark.q_attachtype eq 'video'}">
+																<div id="show_quote_video"
+																	class="embed-responsive embed-responsive-16by9">
+																	<video controls id="quote_video" width="100%"
+																		src="<%=context %>/video/${bookmark.q_attachsrc }">
+																	</video>
+																</div>
+															</c:if>
+														</div>
+													</c:if>
 
+												</div>
 											</div>
 										</div>
-									</div>
-								</c:if>
+									</c:if>
 
-								<p class="card-text" style="margin-top: 10px;">${bookmark.bcontent }</p>
+									<p class="card-text" style="margin-top: 10px;">${bookmark.bcontent }</p>
 
-								<c:if test="${bookmark.battachType == 'image' }">
-									<img src="<%=context %>/image/${bookmark.battachSrc }" width="200">
-								</c:if>
+									<c:if test="${bookmark.battachType == 'image' }">
+										<img src="<%=context %>/image/${bookmark.battachSrc }"
+											width="200">
+									</c:if>
 
-								<c:if test="${bookmark.battachType == 'video' }">
-									<video controls width="300">
-										<source src="<%=context %>/video/${bookmark.battachSrc }"
-											type="video/mp4" />
-										<source src="<%=context %>/video/${bookmark.battachSrc }"
-											type="video/webm">
-									</video>
-								</c:if>
-							</div>
+									<c:if test="${bookmark.battachType == 'video' }">
+										<video controls width="300">
+											<source src="<%=context %>/video/${bookmark.battachSrc }"
+												type="video/mp4" />
+											<source src="<%=context %>/video/${bookmark.battachSrc }"
+												type="video/webm">
+										</video>
+									</c:if>
+								</div>
 
-							<div align="center">
-								<div class="btn-group col-md-12" role="group"
-									aria-label="Button group with nested dropdown">
-									<button type="button" class="btn btn-secondary mr-3 btn-light"
-										data-toggle="tooltip" data-placement="top" title="답글 ">
-										<img src="/img/speech-bubble.svg" width="20" height="20">
-									</button>
-									<button type="button" class="btn btn-secondary btn-light mr-3"
-										data-toggle="tooltip" data-placement="top" title="스크랩 or 인용">
-										<img src="/img/bring.svg" width="20" height="20">
-									</button>
+								<div align="center">
+									<div class="btn-group col-md-12" role="group"
+										aria-label="Button group with nested dropdown">
+										<button type="button" class="btn btn-secondary mr-3 btn-light"
+											data-toggle="tooltip" data-placement="top" title="답글 ">
+											<img src="/img/speech-bubble.svg" width="20" height="20">
+										</button>
+										<button type="button" class="btn btn-secondary btn-light mr-3"
+											data-toggle="tooltip" data-placement="top" title="스크랩 or 인용">
+											<img src="/img/bring.svg" width="20" height="20">
+										</button>
 
-									<button type="button"
-										class="btn btn-secondary btn-light mr-3 dropdown-toggle caret-off"
-										data-toggle="dropdown" aria-haspopup="true"
-										aria-expanded="false">
-										<img src="/img/share.svg" width="20" height="20">
-									</button>
 
-									<!-- 북마크 삭제 -->
-									<div class="dropdown-menu">
-										<form action="delete">
-											<input type="hidden" name="ucode" value="${bookmark.ucode }">
-											<input type="hidden" name="bcode" value="${bookmark.bcode }">
-											<button type="submit" class="dropdown-item">${bookmark.ucode }북마크
-												삭제${bookmark.bcode }</button>
-										</form>
 
-										<form>
-											<button class="dropdown-item">URL담아가기</button>
-										</form>
+										<button type="button"
+											class="btn btn-secondary btn-light mr-3 dropdown-toggle caret-off"
+											data-toggle="dropdown" aria-haspopup="true"
+											aria-expanded="false">
+											<img src="/img/share.svg" width="20" height="20">
+										</button>
+
+										<!-- 북마크 삭제 -->
+										<div class="dropdown-menu">
+											<form action="update">
+												<input type="hidden" name="ucode" value="${bookmark.ucode }">
+												<input type="hidden" name="bcode" value="${bookmark.bcode }">
+												<button type="submit" class="dropdown-item">북마크 지우기</button>
+											</form>
+
+											<form>
+												<button class="dropdown-item">URL담아가기</button>
+											</form>
+										</div>
 									</div>
 								</div>
 							</div>
-						</div>
-					</c:forEach>
+						</c:forEach>
+					</c:if>
 				</div>
 			</div>
 		</div>
-
-
-
 		<!-- /#page-content-wrapper -->
 
-
-
-
-
-
-
-
 		<!-- 오른쪽 사이드바 -->
+		<!-- 사이드바 팔로우 가져가야할 구간 시작 -->
 		<div class="bg-light border-left" id="sidebar-wrapper2">
 			<div class="list-group list-group-flush">
 				<div class="list-group-item list-group-item-action bg-light">
@@ -438,7 +456,7 @@ label {
 							onkeypress="if( event.keyCode == 13 ){searchData();}">
 					</div>
 				</div>
-<div class="list-group-item list-group-item-action bg-light"
+				<div class="list-group-item list-group-item-action bg-light"
 					style="padding: 5px;">
 					<div class="card bg-light mb-3">
 						<div class="card-header">팔로우 추천</div>
@@ -452,7 +470,8 @@ label {
 											<img src="<%=context %>/profile_image/${justFollowMe.uimage}"
 												class="rounded-circle" width="20" height="20"> <a
 												class="card-title text-dark">${justFollowMe.unickName}</a> <a
-												class="card-subtitle mb-2 text-muted">@${justFollowMe.uatid}</a>
+												class="card-subtitle mb-2 text-muted"
+												href="/iron/profile?uatid=${justFollowMe.uatid}">@${justFollowMe.uatid}</a>
 											<button type="button"
 												class="btn btn-outline-success btn-sm float-right"
 												style="font-size: 0.8rem;"
@@ -462,38 +481,37 @@ label {
 									</div>
 								</c:forEach>
 							</c:if>
+							<%--
 							<!-- 팔로우하는 유저가 없을 경우 관심항목이 비슷한 사람을 추천 -->
 							<c:if test="${suggestFlist2_size<1 }">
 								<c:forEach var="justFollowMe" items="${suggestFlist2 }">
 									<div class="card">
-										<div class="card-body"
-											style="font-size: 0.8rem; padding: 10px;">
-											<img
-												src="${resourcePath }/profile_image/${justFollowMe.uimage}"
-												class="rounded-circle" width="20" height="20"> <a
-												class="card-title text-dark">${justFollowMe.unickName}</a> <a
-												class="card-subtitle mb-2 text-muted">@${justFollowMe.uatid}</a>
+										<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
+											<img src="${resourcePath }/profile_image/${justFollowMe.uimage}" class="rounded-circle" width="20"
+												height="20">
+												<a class="card-title text-dark">${justFollowMe.unickName}</a>
+												<a class="card-subtitle mb-2 text-muted">@${justFollowMe.uatid}</a>
 											<button type="button"
 												class="btn btn-outline-success btn-sm float-right"
 												style="font-size: 0.8rem;">팔로우</button>
 										</div>
 									</div>
 								</c:forEach>
-							</c:if>
+							</c:if> --%>
 						</div>
 						<c:if test="${suggestFlist2_size>0 }">
 							<button type="button" class="btn btn-outline-success"
 								id="writeBtn" data-toggle="modal" data-target="#morebtn">더보기
 							</button>
 						</c:if>
-
 					</div>
 				</div>
+				<!-- 사이드바 팔로우 가져가야할 구간 끝 -->
 
 				<div class="list-group-item list-group-item-action bg-light"
 					style="padding: 5px;">
 					<div class="card bg-light mb-3">
-						<div class="card-header">실시간 해시태그</div>
+						<div class="card-header">해시태그</div>
 						<div class="card-body" style="padding: 5px;">
 							<c:forEach var="tag" items="${tag_list}" varStatus="status">
 								<c:if test="${status.count <=3 }">
@@ -512,504 +530,499 @@ label {
 						</div>
 					</div>
 				</div>
-				<div class="list-group-item list-group-item-action bg-light"
-					style="padding: 5px; font-size: 0.8rem;">
-					<div class="card">
-						<div class="card-body">
-							<a href="#">이용약관</a> <a href="#">개인정보처리방침</a> <a href="#">운영정책</a>
-							Copyright © Bom Corp. All rights reserved.
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!-- 오른쪽 사이드바 끝 -->
 
-	<!--GOD 글쓰기 팝업 시작-->
-	<form action="../god/write" method="post" enctype="Multipart/form-data"
-		onsubmit="return checkWrite()">
-		<!--실제 값을 보내는곳 -->
-		<input type="hidden" name="ucode" value="${user.getUcode() }">
-		<input type="hidden" name="savebcode"> <input type="hidden"
-			name="bcontent"> <input type="hidden" name="bregdate">
-		<input type="hidden" name="btype"> <input type="hidden"
-			name="banchor" value="0"> <input type="hidden" name="image">
-		<input type="hidden" name="video"> <input type="hidden"
-			name="vote"> <input type="hidden" name="save"> <input
-			type="hidden" name="bsaveorrsvd"> <input type="hidden"
-			name="bbcode"> <input type="hidden" name="hashtags">
-		<!--실제 값을 보내는곳 끝 -->
-		<div class="modal fade" id="writeForm" data-backdrop="static"
-			data-keyboard="false" tabindex="-1"
-			aria-labelledby="exampleModalLabel" aria-hidden="true">
-			<div class="modal-dialog modal-dialog-scrollable">
-				<div class="modal-content">
-					<div class="modal-header">
-						<fieldset class="w-100">
-							<button type="button" id="selectToAtid" class="btn btn-light"
-								data-toggle="modal" data-target="#towhom">받는 사람</button>
-							<button type="button" id="realCloseWrite" class="close"
-								data-dismiss="modal" style="display: none;"></button>
-							<button type="button" id="closeWrite" class="close"
-								style="float: right;" data-toggle="modal"
-								data-target="#saveModal" aria-label="Close">
-								<span aria-hidden="true">&times;</span>
-							</button>
-							<a style="float: right; color: black; text-decoration: none;"
-								data-toggle="modal" data-target="#tempForm">임시 저장한 봄 <span
-								class="badge badge-success" id="sumNum"></span>
-							</a>
-						</fieldset>
-					</div>
-					<div class="modal-body col-12">
-						<!-- 인용부분 -->
-						<div class="col-12 float-left" id="QuoteArea"
-							style="display: none; font-size: 0.8em;">
-							<div class='card'>
-								<div class='card-body'>
-									<img id="quote_profile" src="" alt='no_image'
-										class='rounded-circle' width='30'> <a
-										class='card-title text-dark' id="quote_nickname"></a> <a
-										class='card-subtitle mb-2 text-muted' id="quote_atid"></a>
-									<div class='card-text mt-2 mb-0' style="height: 100%;"
-										id="quote_content"></div>
-									<div class="quote_file mt-2" style="display: none;">
-										<img id="quote_img" src="<%=context %>" class="img-fluid" />
-										<div id="show_quote_video"
-											class="embed-responsive embed-responsive-16by9">
-											<video controls id="quote_video" src="<%=context %>">
+				<!--GOD 글쓰기 팝업 시작-->
+				<form action="../god/write" method="post"
+					enctype="Multipart/form-data" onsubmit="return checkWrite()">
+					<!--실제 값을 보내는곳 -->
+					<input type="hidden" name="ucode" value="${user.getUcode() }">
+					<input type="hidden" name="savebcode"> <input type="hidden"
+						name="bcontent"> <input type="hidden" name="bregdate">
+					<input type="hidden" name="btype"> <input type="hidden"
+						name="banchor" value="0"> <input type="hidden"
+						name="image"> <input type="hidden" name="video"> <input
+						type="hidden" name="vote"> <input type="hidden"
+						name="save"> <input type="hidden" name="bsaveorrsvd">
+					<input type="hidden" name="bbcode"> <input type="hidden"
+						name="hashtags">
+					<!--실제 값을 보내는곳 끝 -->
+					<div class="modal fade" id="writeForm" data-backdrop="static"
+						data-keyboard="false" tabindex="-1"
+						aria-labelledby="exampleModalLabel" aria-hidden="true">
+						<div class="modal-dialog modal-dialog-scrollable">
+							<div class="modal-content">
+								<div class="modal-header">
+									<fieldset class="w-100">
+										<button type="button" id="selectToAtid" class="btn btn-light"
+											data-toggle="modal" data-target="#towhom">받는 사람</button>
+										<button type="button" id="realCloseWrite" class="close"
+											data-dismiss="modal" style="display: none;"></button>
+										<button type="button" id="closeWrite" class="close"
+											style="float: right;" data-toggle="modal"
+											data-target="#saveModal" aria-label="Close">
+											<span aria-hidden="true">&times;</span>
+										</button>
+										<a style="float: right; color: black; text-decoration: none;"
+											data-toggle="modal" data-target="#tempForm">임시 저장한 봄 <span
+											class="badge badge-success" id="sumNum"></span>
+										</a>
+									</fieldset>
+								</div>
+								<div class="modal-body col-12">
+									<!-- 인용부분 -->
+									<div class="col-12 float-left" id="QuoteArea"
+										style="display: none; font-size: 0.8em;">
+										<div class='card'>
+											<div class='card-body'>
+												<img id="quote_profile" src="" alt='no_image'
+													class='rounded-circle' width='30'> <a
+													class='card-title text-dark' id="quote_nickname"></a> <a
+													class='card-subtitle mb-2 text-muted' id="quote_atid"></a>
+												<div class='card-text mt-2 mb-0' style="height: 100%;"
+													id="quote_content"></div>
+												<div class="quote_file mt-2" style="display: none;">
+													<img id="quote_img" src="<%=context %>" class="img-fluid" />
+													<div id="show_quote_video"
+														class="embed-responsive embed-responsive-16by9">
+														<video controls id="quote_video" src="<%=context %>">
+														</video>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<!--인용부분 끝 -->
+									<!--답글 부분-->
+									<div id="ReplyArea" style="display: none; font-size: 0.8em;">
+										<a id="toreply" style="color: #B2B2B2"></a>에게 보내는 답글
+									</div>
+									<!--답글부분 끝-->
+									<img src="<%=context %>/profile_image/${user.uimage}"
+										class="rounded-circle col-1 float-left mt-3"
+										style="padding: 0px;" width="50" width="50">
+									<div contentEditable="true" id="writeTextarea"
+										class="col-11 float-left mt-3" placeholder="당신의 이야기를 들려주세요."
+										autofocus></div>
+									<!--투표-->
+									<div class="card" id="vote_form" style="display: none;">
+										<ul class="list-group list-group-flush">
+											<li class="list-group-item">
+												<div class="form-group">
+													<input type="text" name="vselect1" class="form-control"
+														placeholder="선택1">
+												</div>
+												<div class="form-group">
+													<input type="text" name="vselect2" class="form-control"
+														placeholder="선택2">
+												</div>
+												<div class="form-group" id="pick3" style="display: none;">
+													<input type="text" name="vselect3" class="form-control"
+														placeholder="선택3(선택 사항)">
+												</div>
+												<div class="form-group" id="pick4" style="display: none;">
+													<input type="text" name="vselect4" class="form-control"
+														placeholder="선택4(선택 사항)">
+												</div>
+												<button type="button" id="plusSelect"
+													class="btn btn-outline-secondary btn-sm">+</button>
+											</li>
+											<li class="list-group-item">
+												<!--복수선택 on / null 로 전달 -->
+												<div class="form-check">
+													<input class="form-check-input" type="checkbox"
+														id="multipleChk" name="multipleChk"> <label
+														class="form-check-label" for="multipleChk"> 중복 투표
+													</label>
+												</div>
+											</li>
+											<li class="list-group-item">
+												<h5 class="card-title">투표 기간</h5>
+												<div class="form-row">
+													<label for="day" class="col-md-3 mr-5 ml-2">일</label> <label
+														for="hour" class="col-md-3 mr-5">시</label> <label
+														for="min" class="col-md-3">분</label>
+												</div>
+												<div class="form-row">
+													<select id="date" name="date"
+														class="form-control col-md-3 mr-5 ml-2"
+														required="required">
+														<c:forEach var="i" begin="0" end="7" step="1">
+															<c:if test="${i eq '1'}">
+																<option selected="selected">${i}</option>
+															</c:if>
+															<c:if test="${i ne '1'}">
+																<option>${i}</option>
+															</c:if>
+														</c:forEach>
+													</select> <select name="hour" id="hour"
+														class="form-control col-md-3 mr-5" required="required">
+														<c:forEach var="i" begin="0" end="23" step="1">
+															<option>${i}</option>
+														</c:forEach>
+													</select> <select name="min" id="min" class="form-control col-md-3"
+														required="required">
+														<c:forEach var="i" begin="0" end="59" step="1">
+															<option>${i}</option>
+														</c:forEach>
+													</select>
+												</div>
+											</li>
+										</ul>
+									</div>
+									<!--파일첨부 -->
+									<div class="select_file">
+										<img id="image" src="" class="img-fluid" />
+										<div class="embed-responsive embed-responsive-16by9"
+											style="display: none;">
+											<video id="video">
 											</video>
 										</div>
 									</div>
+									<!--예약시간표시 -->
+									<div id="setTime" class="text-success" style="font-size: 0.8em">
+
+									</div>
+									<!--답글권한 select-->
+									<select name="bpermission"
+										class="custom-select custom-select-sm">
+										<option value="All" selected>모든 사람이 답글 권한을 가집니다</option>
+										<option value="Follower">내가 팔로우하는 사람들만 답글 권한을 가집니다</option>
+										<option value="Nobody">아무도 답글 권한이 없습니다</option>
+									</select>
+								</div>
+								<div class="modal-footer">
+									<fieldset class="w-100">
+										<span class="btn-group" role="group"
+											aria-label="Basic example">
+											<button type="button" id="mediaDelete" class="btn btn-danger"
+												style="display: none;">미디어 삭제</button> <label id="media"
+											class="btn btn-outline-secondary rounded-left"
+											for="media_file">미디어</label> <input name="attach" type="file"
+											class="custom-file-input" accept="video/*, image/*"
+											id="media_file">
+											<button type="button" id="displayVote"
+												class="btn btn-outline-secondary">투표</button>
+											<button type="button" id="voteDelete" class="btn btn-danger"
+												style="display: none;">투표 삭제</button>
+											<button type="button" class="btn btn-outline-secondary"
+												id="reserveBtn" data-toggle="modal"
+												data-target="#reserveForm">예약하기</button>
+										</span>
+										<button type="submit" id="writeSubmit"
+											class="btn btn-success float-right" disabled>봄</button>
+									</fieldset>
 								</div>
 							</div>
 						</div>
-						<!--인용부분 끝 -->
-						<!--답글 부분-->
-						<div id="ReplyArea" style="display: none; font-size: 0.8em;">
-							<a id="toreply" style="color: #B2B2B2"></a>에게 보내는 답글
-						</div>
-						<!--답글부분 끝-->
-						<img src="<%=context %>/profile_image/${user.uimage}"
-							class="rounded-circle col-1 float-left mt-3"
-							style="padding: 0px;" width="50" width="50">
-						<div contentEditable="true" id="writeTextarea"
-							class="col-11 float-left mt-3" placeholder="당신의 이야기를 들려주세요."
-							autofocus></div>
-						<!--투표-->
-						<div class="card" id="vote_form" style="display: none;">
-							<ul class="list-group list-group-flush">
-								<li class="list-group-item">
-									<div class="form-group">
-										<input type="text" name="vselect1" class="form-control"
-											placeholder="선택1">
-									</div>
-									<div class="form-group">
-										<input type="text" name="vselect2" class="form-control"
-											placeholder="선택2">
-									</div>
-									<div class="form-group" id="pick3" style="display: none;">
-										<input type="text" name="vselect3" class="form-control"
-											placeholder="선택3(선택 사항)">
-									</div>
-									<div class="form-group" id="pick4" style="display: none;">
-										<input type="text" name="vselect4" class="form-control"
-											placeholder="선택4(선택 사항)">
-									</div>
-									<button type="button" id="plusSelect"
-										class="btn btn-outline-secondary btn-sm">+</button>
-								</li>
-								<li class="list-group-item">
-									<!--복수선택 on / null 로 전달 -->
-									<div class="form-check">
-										<input class="form-check-input" type="checkbox"
-											id="multipleChk" name="multipleChk"> <label
-											class="form-check-label" for="multipleChk"> 중복 투표 </label>
-									</div>
-								</li>
-								<li class="list-group-item">
-									<h5 class="card-title">투표 기간</h5>
+					</div>
+					<!--GOD 글쓰기 팝업 끝-->
+					<!--GOD 예약 창 시작-->
+					<div class="modal" id="reserveForm" data-backdrop="static"
+						data-keyboard="false" tabindex="-1"
+						aria-labelledby="exampleModalLabel2" aria-hidden="true"
+						backdrop="false">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title">봄 예약하기</h5>
 									<div class="form-row">
-										<label for="day" class="col-md-3 mr-5 ml-2">일</label> <label
-											for="hour" class="col-md-3 mr-5">시</label> <label for="min"
-											class="col-md-3">분</label>
+										<button type="button" id="reserveDelete"
+											class="btn btn-light btn-sm mr-1" style="display: none;">지우기</button>
+										<button type="button" id="reserveChk"
+											class="btn btn-success btn-sm float-right">예약</button>
+									</div>
+								</div>
+								<div id="checkTime" class="alert alert-danger" role="alert">
+									날짜가 맞지 않습니다. 다시 확인해 주세요.</div>
+								<div class="modal-body col-12">
+									<h5 class="card-title">
+										날짜 <span id="alertTime"></span>
+									</h5>
+									<div class="form-row">
+										<label for="year" class="col-md-3 mr-5 ml-2">년</label> <label
+											for="month" class="col-md-3 mr-5">월</label> <label for="day2"
+											class="col-md-3">일</label>
 									</div>
 									<div class="form-row">
-										<select id="date" name="date"
-											class="form-control col-md-3 mr-5 ml-2" required="required">
-											<c:forEach var="i" begin="0" end="7" step="1">
-												<c:if test="${i eq '1'}">
-													<option selected="selected">${i}</option>
-												</c:if>
-												<c:if test="${i ne '1'}">
-													<option>${i}</option>
-												</c:if>
-											</c:forEach>
-										</select> <select name="hour" id="hour"
-											class="form-control col-md-3 mr-5" required="required">
-											<c:forEach var="i" begin="0" end="23" step="1">
-												<option>${i}</option>
-											</c:forEach>
-										</select> <select name="min" id="min" class="form-control col-md-3"
-											required="required">
-											<c:forEach var="i" begin="0" end="59" step="1">
-												<option>${i}</option>
-											</c:forEach>
-										</select>
-									</div>
-								</li>
-							</ul>
-						</div>
-						<!--파일첨부 -->
-						<div class="select_file">
-							<img id="image" src="" class="img-fluid" />
-							<div class="embed-responsive embed-responsive-16by9"
-								style="display: none;">
-								<video id="video">
-								</video>
-							</div>
-						</div>
-						<!--예약시간표시 -->
-						<div id="setTime" class="text-success" style="font-size: 0.8em">
-
-						</div>
-						<!--답글권한 select-->
-						<select name="bpermission" class="custom-select custom-select-sm">
-							<option value="All" selected>모든 사람이 답글 권한을 가집니다</option>
-							<option value="Follower">내가 팔로우하는 사람들만 답글 권한을 가집니다</option>
-							<option value="Nobody">아무도 답글 권한이 없습니다</option>
-						</select>
-					</div>
-					<div class="modal-footer">
-						<fieldset class="w-100">
-							<span class="btn-group" role="group" aria-label="Basic example">
-								<button type="button" id="mediaDelete" class="btn btn-danger"
-									style="display: none;">미디어 삭제</button> <label id="media"
-								class="btn btn-outline-secondary rounded-left" for="media_file">미디어</label>
-								<input name="attach" type="file" class="custom-file-input"
-								accept="video/*, image/*" id="media_file">
-								<button type="button" id="displayVote"
-									class="btn btn-outline-secondary">투표</button>
-								<button type="button" id="voteDelete" class="btn btn-danger"
-									style="display: none;">투표 삭제</button>
-								<button type="button" class="btn btn-outline-secondary"
-									id="reserveBtn" data-toggle="modal" data-target="#reserveForm">예약하기</button>
-							</span>
-							<button type="submit" id="writeSubmit"
-								class="btn btn-success float-right" disabled>봄</button>
-						</fieldset>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!--GOD 글쓰기 팝업 끝-->
-		<!--GOD 예약 창 시작-->
-		<div class="modal" id="reserveForm" data-backdrop="static"
-			data-keyboard="false" tabindex="-1"
-			aria-labelledby="exampleModalLabel2" aria-hidden="true"
-			backdrop="false">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title">봄 예약하기</h5>
-						<div class="form-row">
-							<button type="button" id="reserveDelete"
-								class="btn btn-light btn-sm mr-1" style="display: none;">지우기</button>
-							<button type="button" id="reserveChk"
-								class="btn btn-success btn-sm float-right">예약</button>
-						</div>
-					</div>
-					<div id="checkTime" class="alert alert-danger" role="alert">
-						날짜가 맞지 않습니다. 다시 확인해 주세요.</div>
-					<div class="modal-body col-12">
-						<h5 class="card-title">
-							날짜 <span id="alertTime"></span>
-						</h5>
-						<div class="form-row">
-							<label for="year" class="col-md-3 mr-5 ml-2">년</label> <label
-								for="month" class="col-md-3 mr-5">월</label> <label for="day2"
-								class="col-md-3">일</label>
-						</div>
-						<div class="form-row">
-							<!--올해 계산 -->
-							<%
+										<!--올해 계산 -->
+										<%
 								SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy");
 								Date d = new Date();
 
 								int year = Integer.parseInt(sdf1.format(d));
 							%>
-							<select name="year" id="year"
-								class="form-control col-md-3 mr-5 ml-2" required="required">
-								<option value="<%=year%>년" selected="selected"><%=year%></option>
-								<option value="<%=year + 1%>년"><%=year + 1%></option>
-								<option value="<%=year + 2%>년"><%=year + 2%></option>
-							</select> <select name="month" id="month"
-								class="form-control col-md-3 mr-5" required="required">
-								<option value="01월">1</option>
-								<option value="02월">2</option>
-								<option value="03월">3</option>
-								<option value="04월">4</option>
-								<option value="05월">5</option>
-								<option value="06월">6</option>
-								<option value="07월">7</option>
-								<option value="08월">8</option>
-								<option value="09월">9</option>
-								<option value="10월">10</option>
-								<option value="11월">11</option>
-								<option value="12월">12</option>
-							</select> <select name="day" id="day2" class="form-control col-md-3"
-								required="required">
-								<option value="01일">1</option>
-								<option value="02일">2</option>
-								<option value="03일">3</option>
-								<option value="04일">4</option>
-								<option value="05일">5</option>
-								<option value="06일">6</option>
-								<option value="07일">7</option>
-								<option value="08일">8</option>
-								<option value="09일">9</option>
-								<option value="10일">10</option>
-								<option value="11일">11</option>
-								<option value="12일">12</option>
-								<option value="13일">13</option>
-								<option value="14일">14</option>
-								<option value="15일">15</option>
-								<option value="16일">16</option>
-								<option value="17일">17</option>
-								<option value="18일">18</option>
-								<option value="19일">19</option>
-								<option value="20일">20</option>
-								<option value="21일">21</option>
-								<option value="22일">22</option>
-								<option value="23일">23</option>
-								<option value="24일">24</option>
-								<option value="25일">25</option>
-								<option value="26일">26</option>
-								<option value="27일">27</option>
-								<option value="28일">28</option>
-								<option value="29일">29</option>
-								<option value="30일">30</option>
-								<option value="31일">31</option>
-							</select>
-						</div>
-						<div class="form-row mt-1">
-							<label for="hours" class="col-md-3 mr-5 ml-2">시간</label> <label
-								for="minute" class="col-md-3">분</label>
-						</div>
-						<div class="form-row">
-							<select name="hours" id="hours"
-								class="form-control col-md-3 mr-5 ml-2" required="required">
-								<option value="00시">0</option>
-								<option value="01시">1</option>
-								<option value="02시">2</option>
-								<option value="03시">3</option>
-								<option value="04시">4</option>
-								<option value="05시">5</option>
-								<option value="06시">6</option>
-								<option value="07시">7</option>
-								<option value="08시">8</option>
-								<option value="09시">9</option>
-								<option value="10시">10</option>
-								<option value="11시">11</option>
-								<option value="12시">12</option>
-								<option value="13시">13</option>
-								<option value="14시">14</option>
-								<option value="15시">15</option>
-								<option value="16시">16</option>
-								<option value="17시">17</option>
-								<option value="18시">18</option>
-								<option value="19시">19</option>
-								<option value="20시">20</option>
-								<option value="21시">21</option>
-								<option value="22시">22</option>
-								<option value="23시">23</option>
-							</select> <select name="minute" id="minute" class="form-control col-md-3"
-								required="required">
-								<option value="00분">0</option>
-								<option value="01분">1</option>
-								<option value="02분">2</option>
-								<option value="03분">3</option>
-								<option value="04분">4</option>
-								<option value="05분">5</option>
-								<option value="06분">6</option>
-								<option value="07분">7</option>
-								<option value="08분">8</option>
-								<option value="09분">9</option>
-								<option value="10분">10</option>
-								<option value="11분">11</option>
-								<option value="12분">12</option>
-								<option value="13분">13</option>
-								<option value="14분">14</option>
-								<option value="15분">15</option>
-								<option value="16분">16</option>
-								<option value="17분">17</option>
-								<option value="18분">18</option>
-								<option value="19분">19</option>
-								<option value="20분">20</option>
-								<option value="21분">21</option>
-								<option value="22분">22</option>
-								<option value="23분">23</option>
-								<option value="24분">24</option>
-								<option value="25분">25</option>
-								<option value="26분">26</option>
-								<option value="27분">27</option>
-								<option value="28분">28</option>
-								<option value="29분">29</option>
-								<option value="30분">30</option>
-								<option value="31분">31</option>
-								<option value="32분">32</option>
-								<option value="33분">33</option>
-								<option value="34분">34</option>
-								<option value="35분">35</option>
-								<option value="36분">36</option>
-								<option value="37분">37</option>
-								<option value="38분">38</option>
-								<option value="39분">39</option>
-								<option value="40분">40</option>
-								<option value="41분">41</option>
-								<option value="42분">42</option>
-								<option value="43분">43</option>
-								<option value="44분">44</option>
-								<option value="45분">45</option>
-								<option value="46분">46</option>
-								<option value="47분">47</option>
-								<option value="48분">48</option>
-								<option value="49분">49</option>
-								<option value="50분">50</option>
-								<option value="51분">51</option>
-								<option value="52분">52</option>
-								<option value="53분">53</option>
-								<option value="54분">54</option>
-								<option value="55분">55</option>
-								<option value="56분">56</option>
-								<option value="57분">57</option>
-								<option value="58분">58</option>
-								<option value="59분">59</option>
-							</select>
-						</div>
-					</div>
-					<div class="modal-footer">
+										<select name="year" id="year"
+											class="form-control col-md-3 mr-5 ml-2" required="required">
+											<option value="<%=year%>년" selected="selected"><%=year%></option>
+											<option value="<%=year + 1%>년"><%=year + 1%></option>
+											<option value="<%=year + 2%>년"><%=year + 2%></option>
+										</select> <select name="month" id="month"
+											class="form-control col-md-3 mr-5" required="required">
+											<option value="01월">1</option>
+											<option value="02월">2</option>
+											<option value="03월">3</option>
+											<option value="04월">4</option>
+											<option value="05월">5</option>
+											<option value="06월">6</option>
+											<option value="07월">7</option>
+											<option value="08월">8</option>
+											<option value="09월">9</option>
+											<option value="10월">10</option>
+											<option value="11월">11</option>
+											<option value="12월">12</option>
+										</select> <select name="day" id="day2" class="form-control col-md-3"
+											required="required">
+											<option value="01일">1</option>
+											<option value="02일">2</option>
+											<option value="03일">3</option>
+											<option value="04일">4</option>
+											<option value="05일">5</option>
+											<option value="06일">6</option>
+											<option value="07일">7</option>
+											<option value="08일">8</option>
+											<option value="09일">9</option>
+											<option value="10일">10</option>
+											<option value="11일">11</option>
+											<option value="12일">12</option>
+											<option value="13일">13</option>
+											<option value="14일">14</option>
+											<option value="15일">15</option>
+											<option value="16일">16</option>
+											<option value="17일">17</option>
+											<option value="18일">18</option>
+											<option value="19일">19</option>
+											<option value="20일">20</option>
+											<option value="21일">21</option>
+											<option value="22일">22</option>
+											<option value="23일">23</option>
+											<option value="24일">24</option>
+											<option value="25일">25</option>
+											<option value="26일">26</option>
+											<option value="27일">27</option>
+											<option value="28일">28</option>
+											<option value="29일">29</option>
+											<option value="30일">30</option>
+											<option value="31일">31</option>
+										</select>
+									</div>
+									<div class="form-row mt-1">
+										<label for="hours" class="col-md-3 mr-5 ml-2">시간</label> <label
+											for="minute" class="col-md-3">분</label>
+									</div>
+									<div class="form-row">
+										<select name="hours" id="hours"
+											class="form-control col-md-3 mr-5 ml-2" required="required">
+											<option value="00시">0</option>
+											<option value="01시">1</option>
+											<option value="02시">2</option>
+											<option value="03시">3</option>
+											<option value="04시">4</option>
+											<option value="05시">5</option>
+											<option value="06시">6</option>
+											<option value="07시">7</option>
+											<option value="08시">8</option>
+											<option value="09시">9</option>
+											<option value="10시">10</option>
+											<option value="11시">11</option>
+											<option value="12시">12</option>
+											<option value="13시">13</option>
+											<option value="14시">14</option>
+											<option value="15시">15</option>
+											<option value="16시">16</option>
+											<option value="17시">17</option>
+											<option value="18시">18</option>
+											<option value="19시">19</option>
+											<option value="20시">20</option>
+											<option value="21시">21</option>
+											<option value="22시">22</option>
+											<option value="23시">23</option>
+										</select> <select name="minute" id="minute"
+											class="form-control col-md-3" required="required">
+											<option value="00분">0</option>
+											<option value="01분">1</option>
+											<option value="02분">2</option>
+											<option value="03분">3</option>
+											<option value="04분">4</option>
+											<option value="05분">5</option>
+											<option value="06분">6</option>
+											<option value="07분">7</option>
+											<option value="08분">8</option>
+											<option value="09분">9</option>
+											<option value="10분">10</option>
+											<option value="11분">11</option>
+											<option value="12분">12</option>
+											<option value="13분">13</option>
+											<option value="14분">14</option>
+											<option value="15분">15</option>
+											<option value="16분">16</option>
+											<option value="17분">17</option>
+											<option value="18분">18</option>
+											<option value="19분">19</option>
+											<option value="20분">20</option>
+											<option value="21분">21</option>
+											<option value="22분">22</option>
+											<option value="23분">23</option>
+											<option value="24분">24</option>
+											<option value="25분">25</option>
+											<option value="26분">26</option>
+											<option value="27분">27</option>
+											<option value="28분">28</option>
+											<option value="29분">29</option>
+											<option value="30분">30</option>
+											<option value="31분">31</option>
+											<option value="32분">32</option>
+											<option value="33분">33</option>
+											<option value="34분">34</option>
+											<option value="35분">35</option>
+											<option value="36분">36</option>
+											<option value="37분">37</option>
+											<option value="38분">38</option>
+											<option value="39분">39</option>
+											<option value="40분">40</option>
+											<option value="41분">41</option>
+											<option value="42분">42</option>
+											<option value="43분">43</option>
+											<option value="44분">44</option>
+											<option value="45분">45</option>
+											<option value="46분">46</option>
+											<option value="47분">47</option>
+											<option value="48분">48</option>
+											<option value="49분">49</option>
+											<option value="50분">50</option>
+											<option value="51분">51</option>
+											<option value="52분">52</option>
+											<option value="53분">53</option>
+											<option value="54분">54</option>
+											<option value="55분">55</option>
+											<option value="56분">56</option>
+											<option value="57분">57</option>
+											<option value="58분">58</option>
+											<option value="59분">59</option>
+										</select>
+									</div>
+								</div>
+								<div class="modal-footer">
 
-						<button type="button" class="close" id="reserveClose"
-							data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!--GOD 예약 창 끝-->
-		<!--GOD 임시저장 창 시작-->
-		<div class="modal" id="tempForm" data-backdrop="static"
-			data-keyboard="false" tabindex="-1"
-			aria-labelledby="exampleModalLabel2" aria-hidden="true"
-			backdrop="false">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title">임시 저장한 봄</h5>
-						<button type="button" id="editSave"
-							class="btn btn-success btn-sm float-right">수정</button>
-					</div>
-					<div class="modal-body col-12">
-						<ul class="nav nav-tabs" id="myTab" role="tablist">
-							<li class="nav-item" role="presentation"><a
-								class="nav-link active" id="save-tab" data-toggle="tab"
-								href="#save">저장 <span class="badge badge-success"
-									id="saveNum"></span>
-							</a></li>
-							<li class="nav-item" role="presentation"><a class="nav-link"
-								id="reserve-tab" data-toggle="tab" href="#reserve">예약 <span
-									class="badge badge-success" id="reserveNum"></span>
-							</a></li>
-						</ul>
-						<div class="tab-content" id="myTabContent">
-							<div class="tab-pane fade show active" id="save">
-								<ul class="list-group" id="saveList">
-								</ul>
-							</div>
-							<div class="tab-pane fade" id="reserve">
-								<ul class="list-group" id="reserveList">
-								</ul>
+									<button type="button" class="close" id="reserveClose"
+										data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
 							</div>
 						</div>
 					</div>
-					<div class="modal-footer">
-						<div id="editBtnGroup" class="mr-auto" style="display: none;">
-							<button type="button" id="cancelEditSave"
-								class="btn btn-secondary btn-sm">취소</button>
-							<button type="button" id="deleteEditSave"
-								class="btn btn-danger btn-sm">삭제</button>
+					<!--GOD 예약 창 끝-->
+					<!--GOD 임시저장 창 시작-->
+					<div class="modal" id="tempForm" data-backdrop="static"
+						data-keyboard="false" tabindex="-1"
+						aria-labelledby="exampleModalLabel2" aria-hidden="true"
+						backdrop="false">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title">임시 저장한 봄</h5>
+									<button type="button" id="editSave"
+										class="btn btn-success btn-sm float-right">수정</button>
+								</div>
+								<div class="modal-body col-12">
+									<ul class="nav nav-tabs" id="myTab" role="tablist">
+										<li class="nav-item" role="presentation"><a
+											class="nav-link active" id="save-tab" data-toggle="tab"
+											href="#save">저장 <span class="badge badge-success"
+												id="saveNum"></span>
+										</a></li>
+										<li class="nav-item" role="presentation"><a
+											class="nav-link" id="reserve-tab" data-toggle="tab"
+											href="#reserve">예약 <span class="badge badge-success"
+												id="reserveNum"></span>
+										</a></li>
+									</ul>
+									<div class="tab-content" id="myTabContent">
+										<div class="tab-pane fade show active" id="save">
+											<ul class="list-group" id="saveList">
+											</ul>
+										</div>
+										<div class="tab-pane fade" id="reserve">
+											<ul class="list-group" id="reserveList">
+											</ul>
+										</div>
+									</div>
+								</div>
+								<div class="modal-footer">
+									<div id="editBtnGroup" class="mr-auto" style="display: none;">
+										<button type="button" id="cancelEditSave"
+											class="btn btn-secondary btn-sm">취소</button>
+										<button type="button" id="deleteEditSave"
+											class="btn btn-danger btn-sm">삭제</button>
+									</div>
+									<button type="button" class="close" id="saveClose"
+										data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+							</div>
 						</div>
-						<button type="button" class="close" id="saveClose"
-							data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
+					</div>
+					<!--GOD 임시저장 창 끝-->
+					<!--GOD 종료 전 저장 묻는 팝업 -->
+					<div class="modal fade" id="saveModal" tabindex="-1"
+						aria-labelledby="saveModal" aria-hidden="true">
+						<div class="modal-dialog modal-dialog-centered modal-sm">
+							<div class="modal-content">
+								<div class="modal-header">
+									봄을 저장하시겠습니까?
+									<button type="button" class="close" data-dismiss="modal"
+										aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body text-center">
+									이 내용을 저장하시면 <br> 다음에 이어서 작성하실 수 있습니다.
+								</div>
+								<div class="modal-footer">
+									<button type="button" id="notsaveBtn" class="btn btn-secondary">
+										아뇨 괜찮습니다</button>
+									<button type="submit" id="saveBtn" class="btn btn-success">저장</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!--GOD 저장 팝업 끝-->
+				</form>
+				<!--답글보낼 사람 선택하는 MODAL-->
+				<div class="modal fade" id="towhom" tabindex="-1">
+					<div class="modal-dialog modal-sm modal-dialog-scrollable">
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal"
+									aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<div class="modal-body">
+								<div class="form-row col-12">
+									<input name="search_user" class="form-control col-8 mr-1 ml-2"
+										type="search" placeholder="사용자 입력">
+									<button onclick="search_user('<%=context %>');"
+										class="btn btn-outline-success col-3 float-right ml-1"
+										type="button">검색</button>
+								</div>
+								<ul id="followlist" class="list-group list-group-flush">
+									<!-- <li class="list-group-item list-group-item-action">Cras justo odio</li> -->
+								</ul>
+							</div>
+							<div class="modal-footer">
+								<button type="button" class="btn btn-sm btn-outline-secondary"
+									data-dismiss="modal">취소</button>
+								<button id="selectSendUser" type="button"
+									class="btn btn-sm btn-outline-success">선택</button>
+							</div>
+						</div>
 					</div>
 				</div>
-			</div>
-		</div>
-		<!--GOD 임시저장 창 끝-->
-		<!--GOD 종료 전 저장 묻는 팝업 -->
-		<div class="modal fade" id="saveModal" tabindex="-1"
-			aria-labelledby="saveModal" aria-hidden="true">
-			<div class="modal-dialog modal-dialog-centered modal-sm">
-				<div class="modal-content">
-					<div class="modal-header">
-						봄을 저장하시겠습니까?
-						<button type="button" class="close" data-dismiss="modal"
-							aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-					</div>
-					<div class="modal-body text-center">
-						이 내용을 저장하시면 <br> 다음에 이어서 작성하실 수 있습니다.
-					</div>
-					<div class="modal-footer">
-						<button type="button" id="notsaveBtn" class="btn btn-secondary">
-							아뇨 괜찮습니다</button>
-						<button type="submit" id="saveBtn" class="btn btn-success">저장</button>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!--GOD 저장 팝업 끝-->
-	</form>
-	<!--답글보낼 사람 선택하는 MODAL-->
-	<div class="modal fade" id="towhom" tabindex="-1">
-		<div class="modal-dialog modal-sm modal-dialog-scrollable">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal"
-						aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div class="modal-body">
-					<div class="form-row col-12">
-						<input name="search_user" class="form-control col-8 mr-1 ml-2"
-							type="search" placeholder="사용자 입력">
-						<button onclick="search_user('<%=context %>');"
-							class="btn btn-outline-success col-3 float-right ml-1"
-							type="button">검색</button>
-					</div>
-					<ul id="followlist" class="list-group list-group-flush">
-						<!-- <li class="list-group-item list-group-item-action">Cras justo odio</li> -->
-					</ul>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-sm btn-outline-secondary"
-						data-dismiss="modal">취소</button>
-					<button id="selectSendUser" type="button"
-						class="btn btn-sm btn-outline-success">선택</button>
-				</div>
-			</div>
-		</div>
-	</div>
 
-	<!--GOD 글쓰기 폼 기능-->
-	<script type="text/javascript">
+				<!--GOD 글쓰기 폼 기능-->
+				<script type="text/javascript">
 		/*예약을 해뒀는지(현재시간으로 안바뀌게)*/
 		var reserve=0; //0 안함 1 함 -> bregdate 설정
 		var btype=0; // 0 = noraml, 1=reply, 2=scrap
@@ -1665,62 +1678,60 @@ label {
 			imgorvideo=0;
 		});
 		</script>
-	<!--GOD 글쓰기 기능 끝-->
+				<!--GOD 글쓰기 기능 끝-->
 
-	<!--BEAR 더보기 창  -->
-	<div class="modal fade" id="morebtn" data-backdrop="static"
-		data-keyboard="false" tabindex="-1"
-		aria-labelledby="exampleModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-lg">
-			<div class="modal-content">
-				<div class="modal-header">
-					<div class="modal-body col-12">
-						<div class="card-header">
-							<h4 style="text-align: center;">
-								팔로우 추천
-								<button style="float: right;" onclick="closemodal()">x</button>
-							</h4>
-							<div class="card-body" style="padding: 5px;">
-								<div class="card">
-									<div class="card-body"
-										style="font-size: 0.8rem; padding: 10px;">
-										<c:forEach var="justFollowMe1" items="${suggestFlist2 }" begin="0" end="2">
+				<!--BEAR 더보기 창  -->
+				<div class="modal fade" id="morebtn" data-backdrop="static"
+					data-keyboard="false" tabindex="-1"
+					aria-labelledby="exampleModalLabel" aria-hidden="true">
+					<div class="modal-dialog modal-lg">
+						<div class="modal-content">
+							<div class="modal-header">
+								<div class="modal-body col-12">
+									<div class="card-header">
+										<h4 style="text-align: center;">
+											팔로우 추천
+											<button style="float: right;" onclick="closemodal()">x</button>
+										</h4>
+										<div class="card-body" style="padding: 5px;">
 											<div class="card">
 												<div class="card-body"
 													style="font-size: 0.8rem; padding: 10px;">
-													<img
-														src="<%=context %>/profile_image/${justFollowMe1.uimage}"
-														class="rounded-circle" width="40" height="40"> <a
-														class="card-title text-dark">${justFollowMe1.unickName}</a>
-													<a class="card-subtitle mb-2 text-muted">@${justFollowMe1.uatid}</a>
-													<c:if test="${justFollowMe1.uonline eq 1 }">
-														<img src="<%=context%>/image/online.png" width="20"
-															height="20">
-													</c:if>
-													<div>
-														<button type="button"
-															class="btn btn-outline-success btn-sm float-right"
-															style="font-size: 1.2rem;"
-															onclick="followchk(${justFollowMe1.uucode})"
-															name="k${justFollowMe1.uucode}">팔로우</button>
+													<c:forEach var="justFollowMe1" items="${suggestFlist2 }">
+														<div class="card">
+															<div class="card-body"
+																style="font-size: 0.8rem; padding: 10px;">
+																<img
+																	src="<%=context %>/profile_image/${justFollowMe1.uimage}"
+																	class="rounded-circle" width="40" height="40"> <a
+																	class="card-title text-dark">${justFollowMe1.unickName}</a>
+																<a class="card-subtitle mb-2 text-muted">@${justFollowMe1.uatid}</a>
+																<c:if test="${justFollowMe1.uonline eq 1 }">
+																	<img src="<%=context%>/image/online.png" width="20"
+																		height="20">
+																</c:if>
+																<div>
+																	<button type="button"
+																		class="btn btn-outline-success btn-sm float-right"
+																		style="font-size: 1.2rem;"
+																		onclick="followchk(${justFollowMe1.uucode})"
+																		name="k${justFollowMe1.uucode}">팔로우</button>
+																</div>
+																<h3 id="bearsize" style="padding-left: 40px">&nbsp&nbsp${justFollowMe1.uintro}</h3>
 
-													</div>
-													<h3 id="bearsize" style="padding-left: 40px">&nbsp&nbsp${justFollowMe1.uintro}</h3>
-
+															</div>
+														</div>
+													</c:forEach>
 												</div>
 											</div>
-										</c:forEach>
+										</div>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-		</div>
-	</div>
-
-	<!-- /#wrapper -->
+				<!-- /#wrapper -->
 </body>
 
 </html>

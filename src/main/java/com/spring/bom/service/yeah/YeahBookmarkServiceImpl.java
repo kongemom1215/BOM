@@ -1,19 +1,18 @@
 package com.spring.bom.service.yeah;
 
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.spring.bom.dao.yeah.BookmarkDao;
-import com.spring.bom.model.yeah.YeahBoard;
+import com.spring.bom.dao.yeah.YeahBookmarkDao;
+import com.spring.bom.model.yeah.YeahBookmark;
 import com.spring.bom.model.yeah.UserBookmarkBoard;
 
 
 @Service
-public class BookmarkServiceImpl implements BookmarkService {
+public class YeahBookmarkServiceImpl implements YeahBookmarkService {
    @Autowired
-   private BookmarkDao bmd;
+   private YeahBookmarkDao bmd;
 	
 	
 	@Override
@@ -26,18 +25,20 @@ public class BookmarkServiceImpl implements BookmarkService {
 
 
 
+
+
 	@Override
-	public int delete(YeahBoard board) {
-		System.out.println("BookmarkServiceImpl board.bcode -> " + board.getBcode());
-		return bmd.delete(board);
+	public int update(YeahBookmark bm) {
+		// TODO Auto-generated method stub
+		return bmd.update(bm);
 	}
 
 
 
 	@Override
-	public int deleteAll(String ucode) {
-		
-		return bmd.deleteAll(ucode);
+	public int updateAll(String ucode) {
+		// TODO Auto-generated method stub
+		return bmd.updateAll(ucode);
 	}
 
 

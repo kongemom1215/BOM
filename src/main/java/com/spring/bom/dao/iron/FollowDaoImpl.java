@@ -34,5 +34,11 @@ public class FollowDaoImpl implements FollowDao {
 		System.out.println("[kiwoong] FollowDaoImpl fwInsert start....");
 		return session.insert("fwInsert",follow);
 	}
-
+	
+	@Override
+	public int unfollow(Follow follow) {
+		System.out.println("[kiwoong] FollowDaoImpl unfoloow start ....");
+		int result = session.delete("unfollow",follow);
+		return result;
+	}
 }

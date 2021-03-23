@@ -62,10 +62,13 @@
 				</a> <a href="/hoon/explore"
 					class="list-group-item list-group-item-action"> <img
 					src="/img/search.svg" width="15" height="15"> 검색하기
-				</a> <a href="alarm" class="list-group-item list-group-item-action">
+				</a> 
+				<!-- 
+				<a href="alarm" class="list-group-item list-group-item-action">
 					<img src="/img/bell.svg" width="15" height="15"> 알림 <span
 					class="badge badge-success">1</span>
 				</a>
+				 -->
 				<!-- bear1 -->
 				<a href="/bear/chat" class="list-group-item list-group-item-action">
 					<img src="/img/send.svg" width="15" height="15"> 쪽지
@@ -78,11 +81,14 @@
 				</a> <a href="/right/moreSee"
 					class="list-group-item list-group-item-action"> <img
 					src="/img/more.svg" width="15" height="15"> 더보기
-				</a><a href="#" class="list-group-item list-group-item-action">
+				</a>
+				<!-- 
+				<a href="#" class="list-group-item list-group-item-action">
 					<button type="button" class="btn btn-outline-success">
 						<img src="/img/write.svg" width="15" height="15"> 글 쓰기
 					</button>
 				</a>
+				 -->
 				<div class="card">
 					<div class="card-body">
 						<img src="<%=context %>/profile_image/${user.uimage }"

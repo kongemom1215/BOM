@@ -36,9 +36,10 @@
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
 	integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
 	crossorigin="anonymous"></script>
-<script src="/js/jquery.min.js"></script>
+<!-- <script src="/js/jquery.min.js"></script> -->
 <script src="/js/bootstrap.bundle.min.js"></script>
 <script src="/js/bootstrap.bundle.js"></script>
+<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <style>
 #bearsize {
 	width: 550px;
@@ -199,37 +200,52 @@ function viewBoardOptions(bbcode,bindex){
 	});
 }
 
+//팔로우 추천 가져가야할 
+//팔로우 추천 더보기 닫기 기능
+function closemodal(){
+	location.reload();
+}
 //팔로우 하는 로직
 function followchk(number){
-	
 	//name 에 k + number 쓰는 태그를찾아서 text변경
 	var textareaVal = $("button[name=k"+number+"]").text();
 	console.log("textareaVal + textareaVal" + textareaVal)
-	
 	var msg = { uopcode :number};
 	$.ajax({
 		url: '<%=context%>/bear/followchk',
 		data: msg,
 		type: "post",
-
 		success: function (res) {
 			console.log("저장성공 - > " +res)
-			
 			if(res == "1"){
 				console.log("저장성공")
 				  $("button[name=k"+number+"]").text("팔로잉");
 				  $("button[name=k"+number+"]").attr("class","btn btn-success btn-sm float-right");
-		
+				  $("button[name=k"+number+"]").attr("onclick","unfollow("+number+")");
 			}else 
 				{console.log("저장실패")}
-				
-			 
 		}
-});	 
+	});	 
 }
-
-function closemodal(){
-	location.href="../iron/timeline";
+//언팔로우 
+function unfollow(number){
+	console.log("언팔로우 시작  number -> " + number);
+	var msg = {fopcode  : number};
+	$.ajax({
+		url: '<%=context%>/bear/unfollow',
+		data: msg,
+		type: "post",
+		success: function (res){
+			if(res == 1 ){
+				console.log("저장성공 - > " +res)
+				 $("button[name=k"+number+"]").text("언팔함");
+				  $("button[name=k"+number+"]").attr("class","btn btn-danger btn-sm float-right");
+				  $("button[name=k"+number+"]").attr("onclick","followchk("+number+")");					
+			}else{					
+				alert("삭제하지못했습니다.")
+			}				
+		}			
+	});
 }
 </script>
 </head>
@@ -250,10 +266,13 @@ function closemodal(){
 				</a> <a href="/hoon/explore"
 					class="list-group-item list-group-item-action"> <img
 					src="/img/search.svg" width="15" height="15"> 검색하기
-				</a> <a href="alarm" class="list-group-item list-group-item-action">
+				</a>
+				<!-- 
+				<a href="alarm" class="list-group-item list-group-item-action">
 					<img src="/img/bell.svg" width="15" height="15"> 알림 <span
 					class="badge badge-success">1</span>
 				</a>
+				 -->
 				<!-- bear1 -->
 				<a href="/bear/chat" class="list-group-item list-group-item-action">
 					<img src="/img/send.svg" width="15" height="15"> 쪽지
@@ -289,7 +308,8 @@ function closemodal(){
 							</div>
 						</div>
 					</div>
-					<button type="button" class="btn btn-success" onclick="location.href='../coffee/logout'">로그아웃</button>
+					<button type="button" class="btn btn-success"
+						onclick="location.href='../coffee/logout'">로그아웃</button>
 				</div>
 			</div>
 		</div>
@@ -366,19 +386,22 @@ function closemodal(){
 
 						<c:if test="${board.battach!=null }">
 							<c:if test="${board.battachType=='image'}">
-								<img class="img-thumnail" width="300"
+								<img class="img-fluid"
 									src="<%=context %>/image/${board.battachSrc}" />
 							</c:if>
 							<c:if test="${board.battachType=='video'}">
-								<video controls width="300">
-									<source src="<%=context %>/video/${board.battachSrc}"
-										type="video/mp4">
-									<source src="<%=context %>/video/${board.battachSrc}"
-										type="video/webm">
-									해당 브라우저에는 지원하지 않는 비디오입니다.
-								</video>
+								<div class="embed-responsive embed-responsive-16by9">
+									<video controls>
+										<source src="<%=context %>/video/${board.battachSrc}"
+											type="video/mp4">
+										<source src="<%=context %>/video/${board.battachSrc}"
+											type="video/webm">
+										해당 브라우저에는 지원하지 않는 비디오입니다.
+									</video>
+								</div>
 							</c:if>
 						</c:if>
+
 						<div align="center">
 							<div class="btn-group col-md-12" role="group"
 								aria-label="Button group with nested dropdown">
@@ -581,6 +604,7 @@ function closemodal(){
 		<!-- /#page-content-wrapper -->
 
 		<!-- 오른쪽 사이드바 -->
+		<!-- 사이드바 팔로우 가져가야할 구간 시작 -->
 		<div class="bg-light border-left" id="sidebar-wrapper2">
 			<div class="list-group list-group-flush">
 				<div class="list-group-item list-group-item-action bg-light">
@@ -604,7 +628,8 @@ function closemodal(){
 											<img src="<%=context %>/profile_image/${justFollowMe.uimage}"
 												class="rounded-circle" width="20" height="20"> <a
 												class="card-title text-dark">${justFollowMe.unickName}</a> <a
-												class="card-subtitle mb-2 text-muted">@${justFollowMe.uatid}</a>
+												class="card-subtitle mb-2 text-muted"
+												href="/iron/profile?uatid=${justFollowMe.uatid}">@${justFollowMe.uatid}</a>
 											<button type="button"
 												class="btn btn-outline-success btn-sm float-right"
 												style="font-size: 0.8rem;"
@@ -614,38 +639,37 @@ function closemodal(){
 									</div>
 								</c:forEach>
 							</c:if>
+							<%--
 							<!-- 팔로우하는 유저가 없을 경우 관심항목이 비슷한 사람을 추천 -->
 							<c:if test="${suggestFlist2_size<1 }">
 								<c:forEach var="justFollowMe" items="${suggestFlist2 }">
 									<div class="card">
-										<div class="card-body"
-											style="font-size: 0.8rem; padding: 10px;">
-											<img
-												src="${resourcePath }/profile_image/${justFollowMe.uimage}"
-												class="rounded-circle" width="20" height="20"> <a
-												class="card-title text-dark">${justFollowMe.unickName}</a> <a
-												class="card-subtitle mb-2 text-muted">@${justFollowMe.uatid}</a>
+										<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
+											<img src="${resourcePath }/profile_image/${justFollowMe.uimage}" class="rounded-circle" width="20"
+												height="20">
+												<a class="card-title text-dark">${justFollowMe.unickName}</a>
+												<a class="card-subtitle mb-2 text-muted">@${justFollowMe.uatid}</a>
 											<button type="button"
 												class="btn btn-outline-success btn-sm float-right"
 												style="font-size: 0.8rem;">팔로우</button>
 										</div>
 									</div>
 								</c:forEach>
-							</c:if>
+							</c:if> --%>
 						</div>
 						<c:if test="${suggestFlist2_size>0 }">
 							<button type="button" class="btn btn-outline-success"
 								id="writeBtn" data-toggle="modal" data-target="#morebtn">더보기
 							</button>
 						</c:if>
-
 					</div>
 				</div>
+				<!-- 사이드바 팔로우 가져가야할 구간 끝 -->
 
 				<div class="list-group-item list-group-item-action bg-light"
 					style="padding: 5px;">
 					<div class="card bg-light mb-3">
-						<div class="card-header">실시간 해시태그</div>
+						<div class="card-header">해시태그</div>
 						<div class="card-body" style="padding: 5px;">
 							<c:forEach var="tag" items="${tag_list}" varStatus="status">
 								<c:if test="${status.count <=3 }">
@@ -664,6 +688,7 @@ function closemodal(){
 						</div>
 					</div>
 				</div>
+
 				<div class="list-group-item list-group-item-action bg-light"
 					style="padding: 5px; font-size: 0.8rem;">
 					<div class="card">

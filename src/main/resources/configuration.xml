@@ -79,7 +79,7 @@
 			alias="YeahBoard" />
 		<typeAlias type="com.spring.bom.model.yeah.YeahUser_Info"
 			alias="YeahUser_Info" />
-		<typeAlias type="com.spring.bom.model.yeah.YeahFollow"
-			alias="YeahFollow" />
+		<typeAlias type="com.spring.bom.model.yeah.YeahBookmark"
+			alias="YeahBookmark" />
 	</typeAliases>
 </configuration>

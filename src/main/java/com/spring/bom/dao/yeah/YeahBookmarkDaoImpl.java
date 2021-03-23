@@ -2,20 +2,17 @@ package com.spring.bom.dao.yeah;
 
 
 import java.util.List;
-import java.util.Map;
-
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.spring.bom.model.yeah.YeahBoard;
 import com.spring.bom.model.yeah.YeahBookmark;
 import com.spring.bom.model.yeah.UserBookmarkBoard;
 
 
 
 @Repository
-public class BookmarkDaoImpl implements BookmarkDao{
+public class YeahBookmarkDaoImpl implements YeahBookmarkDao{
 
 	@Autowired
 	private SqlSession session;    
@@ -57,38 +54,55 @@ public class BookmarkDaoImpl implements BookmarkDao{
 	}
 
 	@Override
-	public int delete(YeahBoard board) {
-	    System.out.println("BookmarkDaoImpl delete...");  
-		int delete = 0;
-	
+	public int update(YeahBookmark bm) {
+	    System.out.println("BookmarkDaoImpl update...");  
+		int workCount = 0;
+		
 		try {
-			System.out.println("BookmarkDaoImpl  board.bcode -> " + board.getBcode());
-	    	delete = session.delete("delete",board);
-	    		
+			System.out.println("BookmarkDaoImpl update getUcode->" + bm.getUcode());
+			
+            /*
+    		 * 1. ucode & bcode 의 조건이 만족하는 컬럼의 bbtype을 0처리
+    		 * 2. ucode & bcode 의 조건이 만족하는 컬럼의 ltype = 0 이면 delete 
+    		 */
+			 int result1 = session.update("oneBookmarkCancel1", bm);
+			 System.out.println("Check update result1 -> "+result1);
+			 int result2 = session.delete("oneBookmarkCancel2", bm);
+			 System.out.println("Check update result2 -> "+result2);
+			 workCount = result1 + result2;
+			 //workCount -> 0, 1, 2 -> 삭제된 것 이 없는것.(0)
 		} catch (Exception e) {
-			System.out.println("BookmarkDaoImpl Exception =>" +e.getMessage());
+			System.out.println("BookmarkDaoImpl update Exception =>" +e.getMessage());
 		}  
-
-		return delete;
+		
+		return workCount;
 	}
 
 	@Override
-	public int deleteAll(String ucode) {
+	public int updateAll(String ucode) {
 		System.out.println("BookmarkDaoImpl deleteAll");
-		int deleteAll = 0;
+		int updateAllCount = 0;
 		try {
-			deleteAll = session.delete("deleteAll" , ucode);
-		
+			 
+			/*
+			 * 1. ucode & bcode 의 조건이 만족하는 컬럼의 bbtype을 0처리 2. ucode & bcode 의 조건이 만족하는 컬럼의
+			 * ltype = 0 이면 delete
+			 */
+    		 
+			 int result1 = session.update("AllBookmarkCancel1", ucode);
+			 System.out.println("Check update result1 -> "+result1);
+			 int result2 = session.delete("AllBookmarkCancel2", ucode);
+			 System.out.println("Check update result2 -> "+result2);
+			 updateAllCount = result1 + result2;
+			 //workCount -> 0 or N -> 삭제된 것 이 없는것.(0)
 		}catch (Exception e) {
 			System.out.println("BookmarkDaoImpl Exception => " +e.getMessage());
 			
 		}
 		
 		
-		return deleteAll;
-	}
-
-	
+		return updateAllCount;
+	}	
 
 	
 }

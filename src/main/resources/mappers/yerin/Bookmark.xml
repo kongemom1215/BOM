@@ -4,54 +4,66 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="YeahBookmark">
-   <select id="ubmBoardListMapper" parameterType="int" resultType="UserBookmarkBoard">
-		SELECT  lb.ucode ucode, b.bcontent bcontent, b.blikecount blikecount, ui.uatid uatid, ui.unickname unickname, 
-		                ui.uimage uimage, b.ucode ucode, b.bcode bcode, b.battach battach, b.bbcode, b.btype,
-		                lb.ltype ltype, lb.bbtype bbtype, lb.ldate ldate, lb.bdate bdate, b.breplycount breplycount, b.bquotecount bquotecount,
-		         -- 원글(105번글) bbcode(100번글)의 작성자 정보
-		        NVL2(b.bbcode, get_user_info(1,b.ucode), '없음') uimage,
-		        NVL2(b.bbcode, get_user_info(2,b.ucode), '없음') unickname,
-		        NVL2(b.bbcode, get_user_info(3,b.ucode), '없음') uatid,
-		        b.bregdate
-		FROM    user_info ui, like_bookmark lb, board b 
-		WHERE   lb.ucode = #{ucode}
-		AND	 	lb.bbtype = 1
-		AND     lb.bcode = b.bcode
-		AND     b.ucode = ui.ucode
+	<select id="ubmBoardListMapper" parameterType="int"
+		resultType="UserBookmarkBoard">
+		SELECT lb.ucode ucode, b.bcontent bcontent, b.blikecount
+		blikecount, ui.uatid uatid, ui.unickname unickname,
+		ui.uimage uimage, b.ucode ucode, b.bcode bcode, b.battach battach, b.bbcode,
+		b.btype,
+		lb.ltype ltype, lb.bbtype bbtype, lb.ldate ldate, lb.bdate bdate,
+		b.breplycount breplycount, b.bquotecount bquotecount,
+		-- 원글(105번글) bbcode(100번글)의 작성자 정보
+		NVL2(b.bbcode, get_user_info(1,b.ucode), '없음') uimage,
+		NVL2(b.bbcode, get_user_info(2,b.ucode), '없음') unickname,
+		NVL2(b.bbcode, get_user_info(3,b.ucode), '없음') uatid,
+		b.bregdate
+		FROM user_info ui, like_bookmark lb, board b
+		WHERE lb.ucode = #{ucode}
+		AND lb.bbtype = 1
+		AND lb.bcode = b.bcode
+		AND
+		b.ucode = ui.ucode
 		order by lb.bdate desc
-      
-   </select>
-   
-   
 
-    <delete id="delete" parameterType="YeahBoard">
-       delete 
-       from like_bookmark 
-       where ucode = #{ucode}
-       and  bcode = #{bcode}
-  
-    
-    </delete>
+	</select>
+	
+	<update id="oneBookmarkCancel1" parameterType="YeahBookmark">
+		update like_bookmark
+		set bbtype = 0, bdate = ''
+		where ucode = #{ucode}
+		and bcode = #{bcode}
+	</update>
+	
+	<delete id="oneBookmarkCancel2" parameterType="YeahBookmark">
+		delete
+		from  like_bookmark
+		where ucode = #{ucode}
+		and   bcode = #{bcode}
+		and   ltype = 0 or ltype is null
+	</delete>
+	
+	<update id="AllBookmarkCancel1" parameterType="String">
+		update like_bookmark
+		set bbtype = 0, bdate = ''
+		where ucode = #{ucode}
+	</update>
+	
+	<delete id="AllBookmarkCancel2" parameterType="String">
+		delete
+		from like_bookmark
+		where ucode = #{ucode}
+		and ltype = 0 or ltype is null
 
-    <delete id="deleteAll" parameterType="String">
-      delete
-      from like_bookmark
-      where ucode = #{ucode}
-      
-    </delete> 
- 
- 
-      
-    <select id="ubmQuoteBoard" parameterType="int" resultType="UserBookmarkBoard">
-   select b.bcode, b.bcontent, b.battach, u.unickname, u.uatid, u.uimage,b.bregdate
-       
-       from board b, user_info u
-       where b.bcode = #{bbcode}
-       and   b.ucode = u.ucode
-    </select>
-   
-      
- 
+	</delete>
 
-
+   <!-- 인용 -->
+	<select id="ubmQuoteBoard" parameterType="int"
+		resultType="UserBookmarkBoard">
+		select b.bcode, b.bcontent, b.battach, u.unickname, u.uatid,
+		u.uimage,b.bregdate
+		from board b, user_info u
+		where b.bcode = #{bbcode}
+		and b.ucode = u.ucode
+	</select>
+	
 </mapper>

@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -22,17 +21,20 @@ import org.springframework.web.servlet.ModelAndView;
 import com.spring.bom.model.bear.Chat;
 import com.spring.bom.model.bear.User;
 import com.spring.bom.model.iron.Follow;
+import com.spring.bom.model.iron.HashTag;
 import com.spring.bom.model.iron.User_Info;
 import com.spring.bom.service.bear.ChatService;
 import com.spring.bom.service.iron.FollowService;
+import com.spring.bom.service.iron.HashTagService;
 
 @Controller
 public class Bear_Controller {
 	@Autowired
 	private ChatService cs;
-    @Autowired 
-    private FollowService fs;
-	 
+	@Autowired
+	private FollowService fs;
+	@Autowired
+	private HashTagService hs;
 
 	List<Chat> roomlist = new ArrayList<Chat>();
 	static int ccode = 0;
@@ -52,25 +54,28 @@ public class Bear_Controller {
 		System.out.println("세션에 저장되어있는 ucode = " + kiwoong);
 
 		User_Info loginUser = (User_Info) session.getAttribute("user");
-		//팔로우 추천1 나와 관심사가 곂치는 유저를 추천
+		// 팔로우 추천1 나와 관심사가 곂치는 유저를 추천
 		User_Info user1 = new User_Info();
 		user1.setUcode(kiwoong);
 		List<Follow> suggestFlist1 = fs.getSuggestFollowList1(user1.getUcode());
 		model.addAttribute("suggestFlist1_size", suggestFlist1.size());
 		model.addAttribute("suggestFlist1", suggestFlist1);
-		//팔로우 추천2 나를 팔로우하는 유저 추천
+		// 팔로우 추천2 나를 팔로우하는 유저 추천
 		System.out.println("[JungChurlController] Do -> fs.getSuggestFollowList()");
 		List<Follow> suggestFlist2 = fs.getSuggestFollowList2(user1.getUcode());
 		System.out.println("[JungChurlController] Result : listSize is " + suggestFlist2.size());
-		
-		//리스트 suggestFlist2 에 있는 값들을 랜덤으로 돌림  
+
+		// 리스트 suggestFlist2 에 있는 값들을 랜덤으로 돌림
 		Collections.shuffle(suggestFlist2);
 		model.addAttribute("suggestFlist2_size", suggestFlist2.size());
 		model.addAttribute("suggestFlist2", suggestFlist2);
-		
-		
-		
-		
+
+		// 실시간 해시태그 순위
+		System.out.println("[JungChurlController] Do -> hts.getHashTagRanking()");
+		List<HashTag> hashtagList = hs.getHashTagRanking();
+		for (int i = 0; i < hashtagList.size(); i++)
+			hashtagList.get(i).setHrank(i + 1);
+		model.addAttribute("tag_list", hashtagList);
 
 		List<User> useronline = cs.uonline(user);
 		List<User> userinfo = cs.userinfo(kiwoong);
@@ -224,12 +229,30 @@ public class Bear_Controller {
 		follow.setUcode(sessionId);
 		follow.setFopcode(uopcode1);
 
-		
-		  int result = fs.fwInsert(follow); 
-		String kkk =  Integer.toString(result);
-		  return kkk;
-		  
-		
+		int result = fs.fwInsert(follow);
+		String kkk = Integer.toString(result);
+		return kkk;
+
+	}
+
+	// 언팔로우하는 로직
+	@RequestMapping(value = "bear/unfollow")
+	@ResponseBody
+	public String unfollow(String fopcode, HttpSession session) {
+
+		int sessionId = (int) session.getAttribute("ucode");
+		int fopcode1 = Integer.parseInt(fopcode);
+
+		Follow follow = new Follow();
+		follow.setUcode(sessionId);
+		follow.setFopcode(fopcode1);
+
+		int result = fs.unfollow(follow);
+		System.out.println("언팔로우 결과값  - > " + result);
+		String kkk = Integer.toBinaryString(result);
+
+		return kkk;
+
 	}
 
 }

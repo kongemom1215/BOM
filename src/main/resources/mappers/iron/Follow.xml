@@ -39,4 +39,6 @@
 		, fopcode, ftime, FBLOCKSTATE)VALUES
 		(#{ucode},#{fopcode},TO_CHAR(SYSDATE, 'YYYY-MM-DD HH24:MI:SS'),0)
 	</insert>
+	
+	<delete parameterType="Iron_Follow" id="unfollow">delete from follow where ucode = #{ucode} and fopcode = #{fopcode} </delete>
 </mapper>

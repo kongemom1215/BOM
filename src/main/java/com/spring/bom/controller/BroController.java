@@ -48,11 +48,10 @@ public class BroController {
 	public String login(User_info ui, HttpServletRequest req, String uEmail, Model model) throws Exception{
 		HttpSession session = req.getSession();
 		User_info login = bs.loginCheck(ui);
-		
 		System.out.println("login data check -- login.ucode -> "+login.getuCode());
 		System.out.println("login data check -- login.ustate -> "+login.getuState());
-		if(login == null) {
-			session.setAttribute("login", login);
+		if(login==null) {
+			session.setAttribute("login", null);
 			System.out.println("login off");
 			System.out.println("controller uEamil-->"+uEmail);
 			bs.logout(uEmail);

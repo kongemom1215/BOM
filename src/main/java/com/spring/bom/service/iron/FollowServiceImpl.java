@@ -35,4 +35,10 @@ public class FollowServiceImpl implements FollowService {
 		
 		return fd.fwInsert(follow);
 	}
+	
+	@Override
+	public int unfollow(Follow follow) {
+		System.out.println("[kiwoong] FollowServiceImpl unfollow");
+		return fd.unfollow(follow);
+	}
 }
