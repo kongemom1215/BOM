@@ -124,7 +124,7 @@ label {
 			var uAtid = $('#upload_uatid').val();
 			alert("uatid "+uAtid);
 			$.ajax({
-				url : '<%=context%>/checkAtid?uAtid=' + uAtid,
+				url : '/checkAtid?uAtid=' + uAtid,
 				type : 'post',
 				success : function(data) {
 					console.log("1 = 중복o / 0 = 중복x : " + data);
@@ -976,6 +976,31 @@ label {
 		</div>
 	</div>
 	<!-- 오른쪽 사이드바 끝 -->
+
+	<!-- 프로필 수정 Modal -->
+	<div class="modal fade" id="staticBackdrop" data-backdrop="static"
+		data-keyboard="false" tabindex="-1"
+		aria-labelledby="staticBackdropLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+					<button type="button" class="close" data-dismiss="modal"
+						aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">...</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary"
+						data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary">Understood</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	</div>
+
 
 	<!--GOD 글쓰기 팝업 시작-->
 	<form action="../god/write" method="post" enctype="Multipart/form-data"

@@ -13,13 +13,14 @@ public class RFollowServiceImpl implements RFollowService {
 	@Autowired
 	private RFollowDao fd;
 	
-	//팔로워 조회
+	//session ucode --> 팔로우 팔로잉 바꿔서 조회함
+	//팔로잉 조회
 	@Override
 	public List<RFollow> selectFollower(int ucode) {
 		System.out.println("RFollowServiceImpl selectFollower start");
 		return fd.selectFollower(ucode);
 	}
-	//팔로잉 조회
+	//팔로워 조회
 	@Override
 	public List<RFollow> selectFollowing(int ucode) {
 		System.out.println("RFollowServiceImpl selectFollowing start");
@@ -49,6 +50,30 @@ public class RFollowServiceImpl implements RFollowService {
 		System.out.println("RFollowServiceImpl selectBlockFollowing start");
 		return fd.selectBlockFollowing(ucode);
 	}
+	
+	//RequestParam uatid
+	@Override
+	public List<RFollow> selectFollower_p(String uatid) {
+		System.out.println("RFollowServiceImpl selectFollower_p start");
+		return fd.selectFollower_p(uatid);
+	}
+	@Override
+	public List<RFollow> selectFollowing_p(String uatid) {
+		System.out.println("RFollowServiceImpl selectFollowing_p start");
+		return fd.selectFollowing_p(uatid);
+	}
+	@Override
+	public List<RFollow> selectBlockFollower_p(String uatid) {
+		System.out.println("RFollowServiceImpl selectBlockFollower_p start");
+		return fd.selectBlockFollower_p(uatid);
+	}
+	@Override
+	public List<RFollow> selectBlockFollowing_p(String uatid) {
+		System.out.println("RFollowServiceImpl selectBlockFollowing_p start");
+		return fd.selectBlockFollowing_p(uatid);
+	}
+	
+
 	
 	
 

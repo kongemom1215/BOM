@@ -2,39 +2,80 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.spring.bom.dao.right.RFollowDao">
-<!-- 팔로워 조회 -->
-<select id="rightselectFollower" resultType="RFollow">
- select f.fopcode, f.ftime, u.ustate, u.uimage, u.uatid, u.unickname, COUNT(*)OVER() as followercnt
- from follow f, user_info u, block b 
- where u.ucode = f.fopcode and f.ucode = #{ucode} and f.ucode = b.ucode and b.bopcode != f.fopcode and u.ustate = '1'
- group by f.fopcode, f.ftime, u.ustate, u.uimage, u.uatid, u.unickname
-</select>
-<!-- 팔로워 block 조회 -->
-<select id="rightselectblockFollower" resultType="RFollow">
-select f.fopcode, Count(*)over() as bfollowercnt
-from follow f, block b
-where f.ucode = #{ucode} and f.ucode = b.ucode and f.fopcode=b.bopcode
-</select>
-<!-- 팔로잉 조회 -->
-<select id="rightselectFollowing" resultType="RFollow">
-select f.ucode, f.ftime, u.ustate, u.uimage, u.uatid, u.unickname, COUNT(*)OVER() as followingcnt
-from follow f, user_info u 
-where u.ucode = f.ucode and f.fopcode = #{ucode} and u.ustate = '1'
-group by f.ucode, f.ftime, u.ustate, u.uimage, u.uatid, u.unickname
-</select>
-<!-- 팔로잉 block 조회 -->
-<select id="rightselectblockFollowing" resultType="RFollow">
-select f.ucode, Count(*)over() as bfollowingcnt
-from follow f, block b
-where f.fopcode = #{ucode} and f.ucode = b.ucode and f.fopcode=b.bopcode
-</select>
-<!-- 팔로잉 취소 -->
-<delete id="rightdeleteFollowing" parameterType="RFollow">
-delete from follow where ucode = #{ucode} and fopcode = #{fopcode}
-</delete>
-<!-- 팔로우 팔로잉 추가 -->
-<insert id="rightaddfollowing" parameterType="RFollow">
-insert into follow values(#{ucode},#{fopcode},to_char(sysdate,'yyyy-mm-dd hh24:mi:ss'),null )
-</insert>
+
+	<!-- 로그인중 계정의 -->
+	<!-- 팔로워 조회 -->
+	<select id="rightselectFollower" resultType="RFollow">
+		select f.ucode, f.ftime, u.ustate, u.uimage, u.uatid, u.unickname,
+		COUNT(*)OVER() as followingcnt
+		from follow f, user_info u
+		where u.ucode = f.ucode and f.fopcode = #{ucode} and u.ustate = '1'
+		group by f.ucode, f.ftime, u.ustate, u.uimage, u.uatid, u.unickname
+	</select>
+	<!-- 차단한 리스트 조회 -->
+	<select id="rightselectblockFollower" resultType="RFollow">
+		select bopcode from block where ucode = #{ucode}
+	</select>
+	<!-- 팔로잉 조회 -->
+	<select id="rightselectFollowing" resultType="RFollow">
+		select f.fopcode, f.ftime, u.ustate, u.uimage, u.uatid, u.unickname,
+		COUNT(*)OVER() as followercnt
+		from follow f, user_info u
+		where u.ustate = '1' and f.ucode = #{ucode} and u.ucode = f.fopcode
+		group by f.fopcode, f.ftime, u.ustate, u.uimage, u.uatid, u.unickname
+	</select>
+	<!-- 차단당한 리스트 조회 -->
+	<select id="rightselectblockFollowing" resultType="RFollow">
+		select ucode from block where bopcode = #{ucode}
+	</select>
+
+	<!-- 해당 프로필 계정의 -->
+	<!-- 팔로워 조회 -->
+	<select id="rightselectprofileFollower" resultType="RFollow">
+		select f.ucode, f.ftime, u.ustate, u.uimage, u.uatid, u.unickname,
+		COUNT(*)OVER() as followercnt
+		from follow f, user_info u
+		where u.ustate = '1'
+		and f.fopcode = (select ucode from user_info where uatid = #{uatid})
+		and u.ucode = f.ucode
+		group by f.ucode, f.ftime, u.ustate, u.uimage, u.uatid, u.unickname
+	</select>
+	<select id="rightselectprofileFollowerBlock"
+		resultType="RFollow">
+		select f.ucode, Count(*)over() as bfollowercnt
+		from follow f, block b
+		where f.fopcode = (select ucode from user_info where uatid = #{uatid})
+		and f.fopcode = b.ucode
+		and f.ucode=b.bopcode
+	</select>
+	<!-- 팔로잉 조회 -->
+	<select id="rightselectprofileFollowing" resultType="RFollow">
+		select f.fopcode, f.ftime, u.ustate, u.uimage, u.uatid, u.unickname,
+		COUNT(*)OVER() as followingcnt
+		from follow f, user_info u
+		where
+		u.ustate = '1'
+		and f.ucode = (select ucode from user_info where uatid = #{uatid})
+		and u.ucode = f.fopcode
+		group by f.fopcode, f.ftime, u.ustate, u.uimage, u.uatid, u.unickname
+	</select>
+	<select id="rightselectprofileFollowingBlock"
+		resultType="RFollow">
+		select f.fopcode, Count(*)over() as bfollowingcnt
+		from follow f, block b
+		where f.ucode = (select ucode from user_info where uatid = #{uatid})
+		and f.fopcode = b.ucode
+		and f.ucode=b.bopcode
+	</select>
+
+	<!-- 팔로잉 취소 -->
+	<delete id="rightdeleteFollowing" parameterType="RFollow">
+		delete from follow where ucode = #{ucode} and fopcode = #{fopcode}
+	</delete>
+	<!-- 팔로우 팔로잉 추가 -->
+	<insert id="rightaddfollowing" parameterType="RFollow">
+		insert into follow values(#{ucode},#{fopcode},to_char(sysdate,'yyyy-mm-dd
+		hh24:mi:ss'),null )
+	</insert>
 
 </mapper>

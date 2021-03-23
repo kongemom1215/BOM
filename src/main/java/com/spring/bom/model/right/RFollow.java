@@ -20,6 +20,7 @@ public class RFollow {
 	private int followingcnt; //팔로잉 수
 	private int bfollowercnt; //내가 차단한 팔로워 수
 	private int bfollowingcnt; //나를 차단한 팔로잉 수
+	private int bopcode; //내가 차단한 사람
 	
 	public int getUcode() {
 		return ucode;
@@ -116,6 +117,12 @@ public class RFollow {
 	}
 	public void setBfollowingcnt(int bfollowingcnt) {
 		this.bfollowingcnt = bfollowingcnt;
+	}
+	public int getBopcode() {
+		return bopcode;
+	}
+	public void setBopcode(int bopcode) {
+		this.bopcode = bopcode;
 	}
 	
 	

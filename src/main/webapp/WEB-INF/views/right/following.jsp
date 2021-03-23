@@ -122,38 +122,53 @@ label {
 </style>
 </head>
 <script type="text/javascript">
+//팔로우 추천 가져가야할 
+//팔로우 추천 더보기 닫기 기능
+function closemodal(){
+	location.reload();
+}
 //팔로우 하는 로직
-	function followchk(number){
-		
-		//name 에 k + number 쓰는 태그를찾아서 text변경
-		var textareaVal = $("button[name=k"+number+"]").text();
-		console.log("textareaVal + textareaVal" + textareaVal)
-		
-		var msg = { uopcode :number};
-		$.ajax({
-			url: '<%=context%>/bear/followchk',
-			data: msg,
-			type: "post",
-
-			success: function (res) {
-				console.log("저장성공 - > " +res)
-				
-				if(res == "1"){
-					console.log("저장성공")
-					  $("button[name=k"+number+"]").text("팔로잉");
-					  $("button[name=k"+number+"]").attr("class","btn btn-success btn-sm float-right");
-			
-				}else 
-					{console.log("저장실패")}
-					
-				 
-			}
+function followchk(number){
+	//name 에 k + number 쓰는 태그를찾아서 text변경
+	var textareaVal = $("button[name=k"+number+"]").text();
+	console.log("textareaVal + textareaVal" + textareaVal)
+	var msg = { uopcode :number};
+	$.ajax({
+		url: '<%=context%>/bear/followchk',
+		data: msg,
+		type: "post",
+		success: function (res) {
+			console.log("저장성공 - > " +res)
+			if(res == "1"){
+				console.log("저장성공")
+				  $("button[name=k"+number+"]").text("팔로잉");
+				  $("button[name=k"+number+"]").attr("class","btn btn-success btn-sm float-right");
+				  $("button[name=k"+number+"]").attr("onclick","unfollow("+number+")");
+			}else 
+				{console.log("저장실패")}
+		}
 	});	 
-	}
-	
-	function closemodal(){
-		location.reload();
-	}
+}
+//언팔로우 
+function unfollow(number){
+	console.log("언팔로우 시작  number -> " + number);
+	var msg = {fopcode  : number};
+	$.ajax({
+		url: '<%=context%>/bear/unfollow',
+		data: msg,
+		type: "post",
+		success: function (res){
+			if(res == 1 ){
+				console.log("저장성공 - > " +res);
+				 $("button[name=k"+number+"]").text("언팔함");
+				  $("button[name=k"+number+"]").attr("class","btn btn-danger btn-sm float-right");
+				  $("button[name=k"+number+"]").attr("onclick","followchk("+number+")");					
+			}else{					
+				alert("삭제하지못했습니다.");
+			}				
+		}			
+	});
+}
 </script>
 <body>
 
@@ -171,17 +186,20 @@ label {
 				</a> <a href="/hoon/explore"
 					class="list-group-item list-group-item-action"> <img
 					src="/img/search.svg" width="15" height="15"> 검색하기
-				</a> 				<!-- <a href="alarm" class="list-group-item list-group-item-action">
+				</a>
+				<!-- 
+				<a href="alarm" class="list-group-item list-group-item-action">
 					<img src="/img/bell.svg" width="15" height="15"> 알림 <span
 					class="badge badge-success">1</span>
-				</a> -->
+				</a>
+				 -->
 				<!-- bear1 -->
 				<a href="/bear/chat" class="list-group-item list-group-item-action">
 					<img src="/img/send.svg" width="15" height="15"> 쪽지
 				</a> <a href="/yeah/bookmark"
 					class="list-group-item list-group-item-action"> <img
 					src="/img/bookmark.svg" width="15" height="15"> 북마크
-				</a> <a href="/iron/profile/uatid=${user.uatid }"
+				</a> <a href="/iron/profile?uatid=${user.uatid }"
 					class="list-group-item list-group-item-action"> <img
 					src="/img/user.svg" width="15" height="15"> 프로필
 				</a> <a href="/right/moreSee"
@@ -200,7 +218,7 @@ label {
 							class="card-title text-dark" style="font-size: 0.8em">${user.unickName }</a><br>
 						<a class="card-subtitle mb-2 text-muted" style="font-size: 0.8em">@${user.uatid }</a>
 					</div>
-					<button type="button" class="btn btn-success">로그아웃</button>
+					<button type="button" class="btn btn-success"	onclick="location.href='../coffee/logout'">로그아웃</button>
 				</div>
 		</div>
 	</div>
@@ -209,37 +227,74 @@ label {
 		<!-- Page Content -->
 		<div id="page-content-wrapper">
 				<nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
-					<button class="btn btn-success" id="menu-toggle" onclick="location.href='follower'">←</button>
+					<button class="btn btn-success" id="menu-toggle" onclick="location.href='../iron/profile?uatid=${uatid}'">←</button>
 				</nav>
 			<div class="container-fluid">
 				<p>
 				<div class="card">
 					<div align="center">
 						<p>
-						<button type="button" class="btn btn-outline-success" onclick="location.href='follower'">팔로워</button><p>
-						<h2>팔로잉</h2> ${followerList[0].followercnt - followerBlockList[0].bfollowercnt}명 
+						<button type="button" class="btn btn-outline-success" onclick="location.href='follower?uatid=${uatid}'">팔로워</button><p>
+						<h2>팔로잉</h2> ${pfollowingList[0].followingcnt - pfollowingBlockList[0].bfollowingcnt}명 
 						
-							<c:forEach var="fl" items="${followerList}" varStatus="status">
+							<c:forEach var="fl" items="${pfollowingList}" varStatus="status">
 							<c:set var="blockcount" value="0"/>
-								<c:forEach var="bl" items="${followerBlockList}">
+								<c:forEach var="bl" items="${pfollowingBlockList}">
 										<c:if test="${fl.fopcode eq bl.fopcode}">
 										<c:set var="blockcount" value="${blockcount + 1}"/>
 										</c:if>
 								</c:forEach>
 								<c:if test="${blockcount eq '0' }">
-									<!-- 전 fl.ucode 다음 fl.ucode가 다를시 출력! -->
+									<!-- 로그인 계정 차단한 리스트와 비교 -->
+									<c:set var="blockcount2" value="0" />
+									<c:forEach var="bl" items="${followerBlockList}">
+										<c:if test="${fl.fopcode eq bl.bopcode}">
+											<c:set var="blockcount2" value="${blockcount2 + 1}" />
+										</c:if>
+									</c:forEach>
+									<c:if test="${blockcount2 eq '0' }">
+									<!-- 로그인 계정 차단당한 리스트와 비교 -->
+									<c:set var="blockcount3" value="0" />
+									<c:forEach var="bl" items="${followingBlockList}">
+										<c:if test="${fl.fopcode eq bl.ucode}">
+											<c:set var="blockcount3" value="${blockcount3 + 1}" />
+										</c:if>
+									</c:forEach>
+									<c:if test="${blockcount3 eq '0' }">
 									<div class="card">
-												<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
-												<img src="<%=context %>/profile_image/${fl.uimage}" class="rounded-circle" width="20"
-													height="20">
-													<a class="card-title text-dark">${fl.unickName}</a>
-													<a class="card-subtitle mb-2 text-muted">@${fl.uatid}</a>
+										<div class="card-body"
+											style="font-size: 0.8rem; padding: 10px;">
+											<img src="<%=context %>/profile_image/${fl.uimage}"
+												class="rounded-circle" width="20" height="20"> <a
+												class="card-title text-dark">${fl.unickName}</a> <a
+												class="card-subtitle mb-2 text-muted">@${fl.uatid}</a>
+											<c:set var="checkfollowing" value="0" />
+											<c:forEach var="fr" items="${followingList}" varStatus="status">
+												<c:choose>
+													<c:when test="${fl.fopcode eq fr.fopcode}">
+														<c:set var="checkfollowing" value="${checkfollowing + 1}" />
+													</c:when>
+													<c:otherwise>
+														<c:set var="checkfollowing" value="${checkfollowing + 0}" />
+													</c:otherwise>
+												</c:choose>
+											</c:forEach>
+											<c:if test="${checkfollowing eq '0' }">
+												<button type="button"
+													class="btn btn-success btn-sm float-right"
+													style="font-size: 0.8rem;"
+													onclick="location.href='addfollowingtofollowing?fopcode=${fl.fopcode}&uatid=${uatid}'">팔로우</button>
+											</c:if>
+											<c:if test="${checkfollowing eq '1' }">
 												<button type="button"
 													class="btn btn-outline-success btn-sm float-right"
-													style="font-size: 0.8rem;" onclick="location.href='followerDelete?fopcode=${fl.fopcode}'">팔로잉</button>
-												</div>
-									
+													style="font-size: 0.8rem;" 
+													onclick="location.href='followerDeletetofollowing?fopcode=${fl.fopcode}&uatid=${uatid }'">팔로잉</button>
+											</c:if>
+										</div>
 									</div>
+									</c:if>
+									</c:if>
 							     </c:if>
 							</c:forEach>
 							<br>
@@ -251,15 +306,22 @@ label {
 		<!-- /#page-content-wrapper -->
 
 		<!-- 오른쪽 사이드바 -->
+		<!-- 사이드바 팔로우 가져가야할 구간 시작 -->
 		<div class="bg-light border-left" id="sidebar-wrapper2">
 			<div class="list-group list-group-flush">
+				<!-- 사이드바검색 시작-->
 				<div class="list-group-item list-group-item-action bg-light">
 					<div id="drop_the_text">
 						<!-- 엔터치면 searchData() 실행 -->
-						<input class="form-control" id="search" placeholder="봄 검색"
-							onkeypress="if( event.keyCode == 13 ){searchData();}">
+						<form class="well form-search" action="/hoon/searchView"
+							method="get" id="jh_form">
+							<input class="form-control" id="search" placeholder="봄 검색"
+								name="search"
+								onkeypress="if( event.keyCode == 13 ){searchData();}">
+						</form>
 					</div>
 				</div>
+				<!-- 사이드바검색 끝-->
 				<div class="list-group-item list-group-item-action bg-light"
 					style="padding: 5px;">
 					<div class="card bg-light mb-3">
@@ -274,7 +336,8 @@ label {
 											<img src="<%=context %>/profile_image/${justFollowMe.uimage}"
 												class="rounded-circle" width="20" height="20"> <a
 												class="card-title text-dark">${justFollowMe.unickName}</a> <a
-												class="card-subtitle mb-2 text-muted">@${justFollowMe.uatid}</a>
+												class="card-subtitle mb-2 text-muted"
+												href="/iron/profile?uatid=${justFollowMe.uatid}">@${justFollowMe.uatid}</a>
 											<button type="button"
 												class="btn btn-outline-success btn-sm float-right"
 												style="font-size: 0.8rem;"
@@ -284,24 +347,23 @@ label {
 									</div>
 								</c:forEach>
 							</c:if>
+							<%--
 							<!-- 팔로우하는 유저가 없을 경우 관심항목이 비슷한 사람을 추천 -->
 							<c:if test="${suggestFlist2_size<1 }">
 								<c:forEach var="justFollowMe" items="${suggestFlist2 }">
 									<div class="card">
-										<div class="card-body"
-											style="font-size: 0.8rem; padding: 10px;">
-											<img
-												src="${resourcePath }/profile_image/${justFollowMe.uimage}"
-												class="rounded-circle" width="20" height="20"> <a
-												class="card-title text-dark">${justFollowMe.unickName}</a> <a
-												class="card-subtitle mb-2 text-muted">@${justFollowMe.uatid}</a>
+										<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
+											<img src="${resourcePath }/profile_image/${justFollowMe.uimage}" class="rounded-circle" width="20"
+												height="20">
+												<a class="card-title text-dark">${justFollowMe.unickName}</a>
+												<a class="card-subtitle mb-2 text-muted">@${justFollowMe.uatid}</a>
 											<button type="button"
 												class="btn btn-outline-success btn-sm float-right"
 												style="font-size: 0.8rem;">팔로우</button>
 										</div>
 									</div>
 								</c:forEach>
-							</c:if>
+							</c:if> --%>
 						</div>
 						<c:if test="${suggestFlist2_size>0 }">
 							<button type="button" class="btn btn-outline-success"
@@ -310,40 +372,31 @@ label {
 						</c:if>
 					</div>
 				</div>
+				<!-- 사이드바 팔로우 가져가야할 구간 끝 -->
+
 				<div class="list-group-item list-group-item-action bg-light"
 					style="padding: 5px;">
 					<div class="card bg-light mb-3">
-						<div class="card-header">실시간 트랜드</div>
+						<div class="card-header">해시태그</div>
 						<div class="card-body" style="padding: 5px;">
-							<div class="card">
-								<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
-									1위
-									<div>
-										<a href="#">#사랑해티모</a> <span class="float-right">11,333
-											봄</span>
+							<c:forEach var="tag" items="${tag_list}" varStatus="status">
+								<c:if test="${status.count <=3 }">
+									<div class="card">
+										<div class="card-body"
+											style="font-size: 0.8rem; padding: 10px;">
+											${tag.hrank}위
+											<div>
+												<a href="#">#${tag.hname}</a> <span class="float-right">${tag.hcount }
+													봄</span>
+											</div>
+										</div>
 									</div>
-								</div>
-							</div>
-							<div class="card">
-								<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
-									2위
-									<div>
-										<a href="#">#티세구</a> <span class="float-right">2,301 봄</span>
-									</div>
-								</div>
-							</div>
-							<div class="card">
-								<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
-									3위
-									<div>
-										<a href="#">#롤하고싶다</a> <span class="float-right">1,300
-											봄</span>
-									</div>
-								</div>
-							</div>
+								</c:if>
+							</c:forEach>
 						</div>
 					</div>
 				</div>
+
 				<div class="list-group-item list-group-item-action bg-light"
 					style="padding: 5px; font-size: 0.8rem;">
 					<div class="card">
@@ -358,49 +411,48 @@ label {
 	</div>
 	<!-- 오른쪽 사이드바 끝 -->
 	<!--BEAR 더보기 창  -->
-		<div class="modal fade" id="morebtn" data-backdrop="static"
-			data-keyboard="false" tabindex="-1"
-			aria-labelledby="exampleModalLabel" aria-hidden="true">
-			<div class="modal-dialog modal-lg">
-				<div class="modal-content">
-					<div class="modal-header">
-						<div class="modal-body col-12">
-							<div class="card-header">
-								<h4 style="text-align: center;">
-									팔로우 추천
-									<button style="float: right;" onclick="closemodal()">x</button>
-								</h4>
-								<div class="card-body" style="padding: 5px;">
-									<div class="card">
-										<div class="card-body"
-											style="font-size: 0.8rem; padding: 10px;">
-											<c:forEach var="justFollowMe1" items="${suggestFlist2 }">
-												<div class="card">
-													<div class="card-body"
-														style="font-size: 0.8rem; padding: 10px;">
-														<img
-															src="<%=context %>/profile_image/${justFollowMe1.uimage}"
-															class="rounded-circle" width="40" height="40"> <a
-															class="card-title text-dark">${justFollowMe1.unickName}</a>
-														<a class="card-subtitle mb-2 text-muted">@${justFollowMe1.uatid}</a>
-														<c:if test="${justFollowMe1.uonline eq 1 }">
-															<img src="<%=context%>/image/online.png" width="20"
-																height="20">
-														</c:if>
-														<div>
-															<button type="button"
-																class="btn btn-outline-success btn-sm float-right"
-																style="font-size: 1.2rem;"
-																onclick="followchk(${justFollowMe1.uucode})"
-																name="k${justFollowMe1.uucode}">팔로우</button>
-
-														</div>
-														<h3 id="bearsize" style="padding-left: 40px">&nbsp&nbsp${justFollowMe1.uintro}</h3>
+	<div class="modal fade" id="morebtn" data-backdrop="static"
+		data-keyboard="false" tabindex="-1"
+		aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<div class="modal-body col-12">
+						<div class="card-header">
+							<h4 style="text-align: center;">
+								팔로우 추천
+								<button style="float: right;" onclick="closemodal()">x</button>
+							</h4>
+							<div class="card-body" style="padding: 5px;">
+								<div class="card">
+									<div class="card-body"
+										style="font-size: 0.8rem; padding: 10px;">
+										<c:forEach var="justFollowMe1" items="${suggestFlist2 }">
+											<div class="card">
+												<div class="card-body"
+													style="font-size: 0.8rem; padding: 10px;">
+													<img
+														src="<%=context %>/profile_image/${justFollowMe1.uimage}"
+														class="rounded-circle" width="40" height="40"> <a
+														class="card-title text-dark">${justFollowMe1.unickName}</a>
+													<a class="card-subtitle mb-2 text-muted">@${justFollowMe1.uatid}</a>
+													<c:if test="${justFollowMe1.uonline eq 1 }">
+														<img src="<%=context%>/image/online.png" width="20"
+															height="20">
+													</c:if>
+													<div>
+														<button type="button"
+															class="btn btn-outline-success btn-sm float-right"
+															style="font-size: 1.2rem;"
+															onclick="followchk(${justFollowMe1.uucode})"
+															name="k${justFollowMe1.uucode}">팔로우</button>
 
 													</div>
+													<h3 id="bearsize" style="padding-left: 40px">&nbsp&nbsp${justFollowMe1.uintro}</h3>
+
 												</div>
-											</c:forEach>
-										</div>
+											</div>
+										</c:forEach>
 									</div>
 								</div>
 							</div>
@@ -409,6 +461,7 @@ label {
 				</div>
 			</div>
 		</div>
+	</div>
 	<!-- /#wrapper -->
 </body>
 

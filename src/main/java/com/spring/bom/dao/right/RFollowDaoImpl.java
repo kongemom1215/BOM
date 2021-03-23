@@ -10,13 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.spring.bom.model.right.RFollow;
-import com.spring.bom.model.right.RInterest;
 
 @Repository
 public class RFollowDaoImpl implements RFollowDao {
 	@Autowired
 	private SqlSession session;
 	
+	//session ucode
 	//팔로워 조회
 	@Override
 	public List<RFollow> selectFollower(int ucode) {
@@ -103,5 +103,59 @@ public class RFollowDaoImpl implements RFollowDao {
 
 		return followingBlockList;
 	}
+	
+	//RequestParam uatid
+	@Override
+	public List<RFollow> selectFollower_p(String uatid) {
+		System.out.println("RFollowDaoImpl List<RFollow> selectFollower_p start..");
+		List<RFollow> pfollowerList = new ArrayList<RFollow>();
+		try {
+			pfollowerList = session.selectList("rightselectprofileFollower", uatid);
+		} catch (Exception e) {
+			System.out.println("RFollowDaoImpl List<RFollow> selectFollower_p Exception->"+e.getMessage());
+		}
+
+		return pfollowerList;
+	}
+	@Override
+	public List<RFollow> selectFollowing_p(String uatid) {
+		System.out.println("RFollowDaoImpl List<RFollow> selectFollowing_p start..");
+		List<RFollow> pfollowingList = new ArrayList<RFollow>();
+		try {
+			System.out.println("#RFollowDaoImpl List<RFollow> selectFollowing_p select 전 start..");
+			pfollowingList = session.selectList("rightselectprofileFollowing", uatid);
+			System.out.println("##RFollowDaoImpl List<RFollow> selectFollowing_p select 후 start..");
+		} catch (Exception e) {
+			System.out.println("RFollowDaoImpl List<RFollow> selectFollowing_p Exception->"+e.getMessage());
+		}
+		System.out.println("RFollowDaoImpl pfollowingList : "+pfollowingList);
+		return pfollowingList;
+	}
+	@Override
+	public List<RFollow> selectBlockFollower_p(String uatid) {
+		System.out.println("RFollowDaoImpl List<RFollow> selectBlockFollower_p start..");
+		List<RFollow> pfollowerBlockList = new ArrayList<RFollow>();
+		try {
+			pfollowerBlockList = session.selectList("rightselectprofileFollowerBlock", uatid);
+		} catch (Exception e) {
+			System.out.println("RFollowDaoImpl List<RFollow> selectBlockFollower_p Exception->"+e.getMessage());
+		}
+
+		return pfollowerBlockList;
+	}
+	@Override
+	public List<RFollow> selectBlockFollowing_p(String uatid) {
+		System.out.println("RFollowDaoImpl List<RFollow> selectBlockFollowing_p start..");
+		List<RFollow> pfollowingBlockList = new ArrayList<RFollow>();
+		try {
+			pfollowingBlockList = session.selectList("rightselectprofileFollowingBlock", uatid);
+		} catch (Exception e) {
+			System.out.println("RFollowDaoImpl List<RFollow> selectBlockFollowing_p Exception->"+e.getMessage());
+		}
+
+		return pfollowingBlockList;
+	}
+	
+	
 
 }
