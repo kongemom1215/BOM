@@ -72,4 +72,32 @@ public class CoffeeBoardDaoImpl implements CoffeeBoardDao {
 		return list;
 	}
 
+	@Override
+	public void deleteBom(int bcode) {
+		BoardUser_info bui = new BoardUser_info();
+		bui.setBcode(bcode);
+		session.update("coffeeDeleteBom", bui);
+		
+	}
+
+	@Override
+	public String selectBbcodeUpdate(int bcode) {
+		BoardUser_info bui = new BoardUser_info();
+		bui.setBcode(bcode);
+		int bbcode = 0;
+		try {
+			bbcode = session.selectOne("selectBbcodebyBcode", bui);
+			bui.setBbcode(bbcode);
+			if(bbcode!=0) {
+				session.update("updatebyBbcode",bui);
+			}
+			
+		}catch (Exception e) {
+			System.out.println("CoffeeBoardDaoImpl selectBbcodeUpdate Exception ->"+e.getMessage());
+		}
+		String result ="";
+		result = result+bbcode;
+		return result;
+	}
+
 }

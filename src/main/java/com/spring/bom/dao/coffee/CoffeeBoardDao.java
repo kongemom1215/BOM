@@ -13,4 +13,6 @@ public interface CoffeeBoardDao {
 	List<BoardUser_info> accusationList(String search);
 	List<BoardUser_info> sensorList(String search);
 	List<BoardUser_info> restoreList(String search);
+	void deleteBom(int bcode);
+	String selectBbcodeUpdate(int bcode);
 }

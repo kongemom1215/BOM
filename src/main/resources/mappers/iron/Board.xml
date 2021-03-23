@@ -118,9 +118,8 @@
 		board b,
 		user_info ui , like_bookmark lb
 		where b.bcode = #{bcode}
-		and
-		b.ucode =
-		ui.ucode
+		and	b.ucode = ui.ucode
+		and b.bstate = 1
 		and b.bcode = lb.bcode(+)
 	</select>
 	<select id="ReplyList" parameterType="Iron_Board"
@@ -142,8 +141,8 @@
 		and btype =
 		'reply'
 		and b.ucode = ui.ucode
-		and
-		b.bcode = lb.bcode(+)
+		and	b.bcode = lb.bcode(+)
+		and b.bstate = 1
 		order by bregdate desc
 	</select>
 	<select id="MyBoardList" parameterType="Iron_Board"
@@ -163,8 +162,7 @@
 		user_info ui, like_bookmark lb
 		where
 		ui.ucode = #{ucode}
-		and b.bstate =
-		1
+		and b.bstate = 1
 		and b.btype = 'normal'
 		and b.ucode =
 		ui.ucode
@@ -191,8 +189,8 @@
 		and b.bstate =
 		1
 		and b.btype = 'reply'
-		and b.ucode =
-		ui.ucode
+		and b.ucode = ui.ucode
+		and b.bstate = 1
 		and b.bcode = lb.bcode(+)
 		order by bregdate desc
 	</select>
@@ -215,8 +213,8 @@
 		ui.ucode = #{ucode}
 		and b.bstate = 1
 		and b.battach is not null
-		and
-		b.ucode = ui.ucode
+		and b.ucode = ui.ucode
+		and b.bstate = 1
 		and b.bcode = lb.bcode(+)
 		order by bregdate desc
 	</select>
@@ -239,8 +237,8 @@
 		ui.ucode = #{ucode}
 		and b.bstate = 1
 		and lb.ltype = 1
-		and b.ucode =
-		ui.ucode
+		and b.ucode = ui.ucode
+		and b.bstate = 1
 		and b.bcode = lb.bcode(+)
 		order by bregdate desc
 	</select>
@@ -251,5 +249,6 @@
 		from board b, user_info u
 		where b.bcode = #{bbcode}
 		and b.ucode = u.ucode
+		and b.bstate = 1
 	</select>
 </mapper>

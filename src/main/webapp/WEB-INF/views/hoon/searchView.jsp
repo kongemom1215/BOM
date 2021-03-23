@@ -137,6 +137,8 @@ window.onload = function(){	//주혜
 }
 
 function goSingleBoard(bbcode,bindex){
+	event.stopPropagation();
+
 	alert(bbcode+'로 이동합니다.');
 	location.href = '../iron/singleBoard?bcode='+bbcode;
 }
@@ -232,6 +234,25 @@ function unfollow(number){
 			}				
 		}			
 	});
+}
+
+//경빈
+//글 삭제 하는 로직
+function deleteBom(loginUcode, bUcode, sIndex, class_index){
+	event.stopPropagation();
+	/* alert('loginUcode->'+loginUcode);
+	alert('bUcode->'+bUcode);
+	alert('sIndex->'+sIndex); */
+	if(loginUcode == bUcode){
+		if (confirm("정말 삭제하시겠습니까?") == true){    //확인
+			$('.coffeeDeleteBom'+class_index+'_'+sIndex).submit();
+		}else{   //취소
+		    return;
+		} 
+	}else{
+		alert("타인의 글은 삭제할 수 없습니다.");
+		return;
+	} 
 }
 </script>
 </head>
@@ -351,6 +372,8 @@ function unfollow(number){
 			</nav>
 			<script type="text/javascript">
 			function searchdel(){
+				event.stopPropagation();
+
 				$('.listdel').remove();
 			}
 					$("#del_ajax").click(function(){
@@ -434,9 +457,25 @@ function unfollow(number){
 						<p>
 							<c:forEach var="junghun" items="${searchlistall }"
 								varStatus="status">
+								<!-- 경빈 part 시작 -->
 								<div class="card">
-									<div class="card-body">
-										<button type="button" class="btn btn-light float-right">⋯</button>
+									<div class="card-body"
+										onclick="goSingleBoard(${junghun.bcode},${status.index });">
+										<form action="/coffee/deleteBom_singleBoard"
+											class="coffeeDeleteBom1_${status.index }"
+											name="coffeeDeleteBom${status.index }" method="post">
+											<input type="hidden" name="coffeeBoardBcode"
+												value="${junghun.bcode }"> <input type="hidden"
+												name="coffeeBoardUatid" value="${junghun.uatid }">
+											<%-- <input type="hidden" class="coffeeStatusIndex" value="${status.index }"> --%>
+											<%-- <input type="hidden" name="coffeeLoginUcode" value="${user.ucode }"> --%>
+											<button type="button" class="btn btn-light float-right"
+												onclick="deleteBom(${loginUser.ucode }, ${junghun.ucode }, ${status.index },1);">
+												<img src="/img/coffee/trash.svg" width="15" height="15">
+											</button>
+										</form>
+										<!-- 경빈 part 끝 -->
+
 										<img src="<%=context %>/profile_image/${junghun.uimage }"
 											alt="no_image" class="rounded-circle" width="50" width="50">
 										<a class="card-title text-dark">${junghun.unickName}</a> <a
@@ -543,18 +582,25 @@ function unfollow(number){
 							</c:forEach>
 					</c:if>
 					<c:forEach var="junghun" items="${listSearch }" varStatus="status">
+						<!-- 경빈 part 시작 -->
 						<div class="card">
-							<div class="card-body" id="singleBoard"
+							<div class="card-body"
 								onclick="goSingleBoard(${junghun.bcode},${status.index });">
-								<button type="button"
-									class="btn btn-light dropdown-toggle caret-off float-right">⋯</button>
-								<div class="dropdown-menu">
-									<%-- <c:if test="${tl_element.loginUcode == user.ucode }">
-												<a class="dropdown-item" href="#">봄 삭제</a>
-										</c:if> --%>
-									<a class="dropdown-item" href="#">봄 신고</a> <a
-										class="dropdown-item" href="#">봄 분석</a>
-								</div>
+								<form action="/coffee/deleteBom_singleBoard"
+									class="coffeeDeleteBom2_${status.index }"
+									name="coffeeDeleteBom${status.index }" method="post">
+									<input type="hidden" name="coffeeBoardBcode"
+										value="${junghun.bcode }"> <input type="hidden"
+										name="coffeeBoardUatid" value="${junghun.uatid }">
+									<%-- <input type="hidden" class="coffeeStatusIndex" value="${status.index }"> --%>
+									<%-- <input type="hidden" name="coffeeLoginUcode" value="${user.ucode }"> --%>
+									<button type="button" class="btn btn-light float-right"
+										onclick="deleteBom(${loginUser.ucode }, ${junghun.ucode }, ${status.index },2);">
+										<img src="/img/coffee/trash.svg" width="15" height="15">
+									</button>
+								</form>
+								<!-- 경빈 part 끝 -->
+
 								<img src="<%=context %>/profile_image/${junghun.uimage }"
 									alt="no_image" class="rounded-circle" width="50" width="50">
 								<a class="card-title text-dark">${junghun.unickName}</a> <a
@@ -692,10 +738,26 @@ function unfollow(number){
 					<c:if test="${listNew.size() == 0 }">
 						<c:forEach var="junghun" items="${searchlistall }"
 							varStatus="status">
+
+							<!-- 경빈 part 시작 -->
 							<div class="card">
 								<div class="card-body"
 									onclick="goSingleBoard(${junghun.bcode},${status.index });">
-									<button type="button" class="btn btn-light float-right">⋯</button>
+									<form action="/coffee/deleteBom_singleBoard"
+										class="coffeeDeleteBom3_${status.index }"
+										name="coffeeDeleteBom${status.index }" method="post">
+										<input type="hidden" name="coffeeBoardBcode"
+											value="${junghun.bcode }"> <input type="hidden"
+											name="coffeeBoardUatid" value="${junghun.uatid }">
+										<%-- <input type="hidden" class="coffeeStatusIndex" value="${status.index }"> --%>
+										<%-- <input type="hidden" name="coffeeLoginUcode" value="${user.ucode }"> --%>
+										<button type="button" class="btn btn-light float-right"
+											onclick="deleteBom(${loginUser.ucode }, ${junghun.ucode }, ${status.index },3);">
+											<img src="/img/coffee/trash.svg" width="15" height="15">
+										</button>
+									</form>
+									<!-- 경빈 part 끝 -->
+
 									<img src="<%=context %>/profile_image/${junghun.uimage }"
 										alt="no_image" class="rounded-circle" width="50" width="50">
 									<a class="card-title text-dark">${junghun.unickName}</a> <a
@@ -801,10 +863,26 @@ function unfollow(number){
 						</c:forEach>
 					</c:if>
 					<c:forEach var="junghun" items="${listNew }" varStatus="status">
+
+						<!-- 경빈 part 시작 -->
 						<div class="card">
 							<div class="card-body"
 								onclick="goSingleBoard(${junghun.bcode},${status.index });">
-								<button type="button" class="btn btn-light float-right">⋯</button>
+								<form action="/coffee/deleteBom_singleBoard"
+									class="coffeeDeleteBom4_${status.index }"
+									name="coffeeDeleteBom${status.index }" method="post">
+									<input type="hidden" name="coffeeBoardBcode"
+										value="${junghun.bcode }"> <input type="hidden"
+										name="coffeeBoardUatid" value="${junghun.uatid }">
+									<%-- <input type="hidden" class="coffeeStatusIndex" value="${status.index }"> --%>
+									<%-- <input type="hidden" name="coffeeLoginUcode" value="${user.ucode }"> --%>
+									<button type="button" class="btn btn-light float-right"
+										onclick="deleteBom(${loginUser.ucode }, ${junghun.ucode }, ${status.index },4);">
+										<img src="/img/coffee/trash.svg" width="15" height="15">
+									</button>
+								</form>
+								<!-- 경빈 part 끝 -->
+
 								<img src="<%=context %>/profile_image/${junghun.uimage }"
 									alt="no_image" class="rounded-circle" width="50" width="50">
 								<a class="card-title text-dark">${junghun.unickName}</a> <a
@@ -917,10 +995,26 @@ function unfollow(number){
 					<c:if test="${searchbattach.size() == 0}">
 						<c:forEach var="junghun" items="${searchbattach2 }"
 							varStatus="Status">
+
+							<!-- 경빈 part 시작 -->
 							<div class="card">
 								<div class="card-body"
 									onclick="goSingleBoard(${junghun.bcode},${status.index });">
-									<button type="button" class="btn btn-light float-right">⋯</button>
+									<form action="/coffee/deleteBom_singleBoard"
+										class="coffeeDeleteBom5_${status.index }"
+										name="coffeeDeleteBom${status.index }" method="post">
+										<input type="hidden" name="coffeeBoardBcode"
+											value="${junghun.bcode }"> <input type="hidden"
+											name="coffeeBoardUatid" value="${junghun.uatid }">
+										<%-- <input type="hidden" class="coffeeStatusIndex" value="${status.index }"> --%>
+										<%-- <input type="hidden" name="coffeeLoginUcode" value="${user.ucode }"> --%>
+										<button type="button" class="btn btn-light float-right"
+											onclick="deleteBom(${loginUser.ucode }, ${junghun.ucode }, ${status.index },5);">
+											<img src="/img/coffee/trash.svg" width="15" height="15">
+										</button>
+									</form>
+									<!-- 경빈 part 끝 -->
+
 									<img src="<%=context %>/profile_image/${junghun.uimage }"
 										alt="no_image" class="rounded-circle" width="50" width="50">
 									<a class="card-title text-dark">${junghun.unickName}</a> <a
@@ -983,11 +1077,27 @@ function unfollow(number){
 						</c:forEach>
 					</c:if>
 					<c:forEach var="junghun" items="${searchbattach }"
-						varStatus="Status">
+						varStatus="status">
+
+						<!-- 경빈 part 시작 -->
 						<div class="card">
 							<div class="card-body"
 								onclick="goSingleBoard(${junghun.bcode},${status.index });">
-								<button type="button" class="btn btn-light float-right">⋯</button>
+								<form action="/coffee/deleteBom_singleBoard"
+									class="coffeeDeleteBom6_${status.index }"
+									name="coffeeDeleteBom${status.index }" method="post">
+									<input type="hidden" name="coffeeBoardBcode"
+										value="${junghun.bcode }"> <input type="hidden"
+										name="coffeeBoardUatid" value="${junghun.uatid }">
+									<%-- <input type="hidden" class="coffeeStatusIndex" value="${status.index }"> --%>
+									<%-- <input type="hidden" name="coffeeLoginUcode" value="${user.ucode }"> --%>
+									<button type="button" class="btn btn-light float-right"
+										onclick="deleteBom(${loginUser.ucode }, ${junghun.ucode }, ${status.index },6);">
+										<img src="/img/coffee/trash.svg" width="15" height="15">
+									</button>
+								</form>
+								<!-- 경빈 part 끝 -->
+
 								<img src="<%=context %>/profile_image/${junghun.uimage }"
 									alt="no_image" class="rounded-circle" width="50" width="50">
 								<a class="card-title text-dark">${junghun.unickName}</a> <a
@@ -1102,11 +1212,27 @@ function unfollow(number){
 						" ${search } " 검색된 동영상이 없습니다
 					</c:if>
 					<c:if test="${searchbattachvideo.size()==0 }">
-						<c:forEach var="junghun" items="${searchbattachvideo2 }">
+						<c:forEach var="junghun" items="${searchbattachvideo2 }" varStatus="status">
+
+							<!-- 경빈 part 시작 -->
 							<div class="card">
 								<div class="card-body"
 									onclick="goSingleBoard(${junghun.bcode},${status.index });">
-									<button type="button" class="btn btn-light float-right">⋯</button>
+									<form action="/coffee/deleteBom_singleBoard"
+										class="coffeeDeleteBom7_${status.index }"
+										name="coffeeDeleteBom${status.index }" method="post">
+										<input type="hidden" name="coffeeBoardBcode"
+											value="${junghun.bcode }"> <input type="hidden"
+											name="coffeeBoardUatid" value="${junghun.uatid }">
+										<%-- <input type="hidden" class="coffeeStatusIndex" value="${status.index }"> --%>
+										<%-- <input type="hidden" name="coffeeLoginUcode" value="${user.ucode }"> --%>
+										<button type="button" class="btn btn-light float-right"
+											onclick="deleteBom(${loginUser.ucode }, ${junghun.ucode }, ${status.index },7);">
+											<img src="/img/coffee/trash.svg" width="15" height="15">
+										</button>
+									</form>
+									<!-- 경빈 part 끝 -->
+
 									<img src="<%=context %>/profile_image/${junghun.uimage }"
 										alt="no_image" class="rounded-circle" width="50" width="50">
 									<a class="card-title text-dark">${junghun.unickName}</a> <a
@@ -1222,11 +1348,27 @@ function unfollow(number){
 						</c:forEach>
 					</c:if>
 
-					<c:forEach var="junghun" items="${searchbattachvideo }">
+					<c:forEach var="junghun" items="${searchbattachvideo }" varStatus="status">
+
+						<!-- 경빈 part 시작 -->
 						<div class="card">
 							<div class="card-body"
 								onclick="goSingleBoard(${junghun.bcode},${status.index });">
-								<button type="button" class="btn btn-light float-right">⋯</button>
+								<form action="/coffee/deleteBom_singleBoard"
+									class="coffeeDeleteBom8_${status.index }"
+									name="coffeeDeleteBom${status.index }" method="post">
+									<input type="hidden" name="coffeeBoardBcode"
+										value="${junghun.bcode }"> <input type="hidden"
+										name="coffeeBoardUatid" value="${junghun.uatid }">
+									<%-- <input type="hidden" class="coffeeStatusIndex" value="${status.index }"> --%>
+									<%-- <input type="hidden" name="coffeeLoginUcode" value="${user.ucode }"> --%>
+									<button type="button" class="btn btn-light float-right"
+										onclick="deleteBom(${loginUser.ucode }, ${junghun.ucode }, ${status.index },8);">
+										<img src="/img/coffee/trash.svg" width="15" height="15">
+									</button>
+								</form>
+								<!-- 경빈 part 끝 -->
+
 								<img src="<%=context %>/profile_image/${junghun.uimage }"
 									alt="no_image" class="rounded-circle" width="50" width="50">
 								<a class="card-title text-dark">${junghun.unickName}</a> <a
@@ -1347,18 +1489,18 @@ function unfollow(number){
 	<div class="bg-light border-left" id="sidebar-wrapper2">
 		<div class="list-group list-group-flush">
 			<!-- 사이드바검색 시작-->
-				<div class="list-group-item list-group-item-action bg-light">
-					<div id="drop_the_text">
-						<!-- 엔터치면 searchData() 실행 -->
-						<form class="well form-search" action="/hoon/searchView" method="get"
-							id="jh_form">
-							<input class="form-control" id="search" placeholder="봄 검색"
-								name="search"
-								onkeypress="if( event.keyCode == 13 ){searchData();}">
-						</form>
-					</div>
+			<div class="list-group-item list-group-item-action bg-light">
+				<div id="drop_the_text">
+					<!-- 엔터치면 searchData() 실행 -->
+					<form class="well form-search" action="/hoon/searchView"
+						method="get" id="jh_form">
+						<input class="form-control" id="search" placeholder="봄 검색"
+							name="search"
+							onkeypress="if( event.keyCode == 13 ){searchData();}">
+					</form>
 				</div>
-				<!-- 사이드바검색 끝-->
+			</div>
+			<!-- 사이드바검색 끝-->
 			<div class="list-group-item list-group-item-action bg-light"
 				style="padding: 5px;">
 				<div class="card bg-light mb-3">

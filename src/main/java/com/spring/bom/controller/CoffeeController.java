@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.spring.bom.model.bro.User_info;
@@ -60,9 +61,91 @@ public class CoffeeController {
 			uis.logout(ui);
 			session.invalidate();
 		}catch (Exception e) {
-			System.out.println("CoffeeController "+url+" ->"+e.getMessage());
+			System.out.println("CoffeeController logout ->"+e.getMessage());
 		}
 		
+		return url;
+	}
+	
+	@PostMapping(value = "/coffee/deleteBom_Profile")
+	public String deleteBom_Profile(HttpServletRequest req, Model model) {
+		String url = "redirect:/iron/profile";
+		System.out.println("CoffeeController deleteBom_Profile start..");
+//		int bcode = Integer.parseInt(req.getParameter("coffeeBoardBcode"));
+//		System.out.println("CoffeeController deleteBom bcode->"+bcode);
+		
+//		return url+"?uatid=iron";
+		return url+"?uatid="+deleteBom(req);
+	}
+	
+	public String deleteBom(HttpServletRequest req) {
+		HttpSession session = req.getSession();
+		int bcode = -1;
+		User_Info ui = new User_Info();
+		String delBoardUatid = "";
+		int bbcode = 0;
+		try {
+			ui = (User_Info)session.getAttribute("user");
+			bcode = Integer.parseInt(req.getParameter("coffeeBoardBcode"));
+			delBoardUatid = req.getParameter("coffeeBoardUatid");
+			System.out.println("CoffeeController deleteBom bcode->"+bcode);
+			System.out.println("CoffeeController deleteBom login ucode->"+ui.getUcode());
+			if(delBoardUatid.equals(ui.getUatid())) {	//지울 보드의 uatid가 로그인한 회원의 uatid와 동일하면 지운다.
+				bs.deleteBom(bcode);
+			}
+			bbcode = Integer.parseInt(bs.selectBbcodeUpdate(bcode));
+			System.out.println("CoffeeController deleteBom_singleboard bbcode->"+bbcode);
+		}catch (Exception e) {
+			System.out.println("CoffeeController deleteBom ->"+e.getMessage());
+		}
+		return ui.getUatid();
+	}
+	
+	@PostMapping(value = "/coffee/deleteBom_singleBoard")
+	public String deleteBom_singleBoard(HttpServletRequest req) {
+		String url = "redirect:/iron/singleBoard";
+		System.out.println("CoffeeController deleteBom_singleBoard start..");
+		HttpSession session = req.getSession();
+		int bcode = 0;
+		int bbcode = 0;
+		User_Info ui = new User_Info();
+		String delBoardUatid = "";
+		int originValue = 0;
+		try {
+			ui = (User_Info)session.getAttribute("user");
+			bcode = Integer.parseInt(req.getParameter("coffeeBoardBcode"));
+//			System.out.println("CoffeeController deleteBom_singleBoard 1");
+			delBoardUatid = req.getParameter("coffeeBoardUatid");
+//			System.out.println("CoffeeController deleteBom_singleBoard 2");
+			originValue = Integer.parseInt(req.getParameter("coffeeBoardOrigin"));	//singleBoard에서 최상위 글인 경우 1값을 가져온다.
+			System.out.println("CoffeeController deleteBom_singleBoard bcode->"+bcode);
+			System.out.println("CoffeeController deleteBom_singleBoard login ucode->"+ui.getUcode());
+			if(delBoardUatid.equals(ui.getUatid())) {	//지울 보드의 uatid가 로그인한 회원의 uatid와 동일하면 지운다.
+				bs.deleteBom(bcode);
+				
+			}
+			bbcode = Integer.parseInt(bs.selectBbcodeUpdate(bcode));
+			System.out.println("CoffeeController deleteBom_singleBoard bbcode->"+bbcode);
+			if(originValue == 1) {
+				url = "redirect:/iron/timeline";
+			}else {
+				url += "?bcode="+bbcode;
+			}
+		}catch (Exception e) {
+			System.out.println("CoffeeController deleteBom_singleBoard Exception->"+e.getMessage());
+		}
+		return url;
+	}
+	
+	
+	
+	
+	@PostMapping(value = "/coffee/deleteBom_timeline")
+	public String deleteBom_timeline(HttpServletRequest req, Model model) {
+		String url = "redirect:/iron/timeline";
+		System.out.println("CoffeeController deleteBom_timeline start..");
+		deleteBom(req);
+//		System.out.println(url+"?uatid="+ui.getUatid());
 		return url;
 	}
 	

@@ -247,6 +247,25 @@ function unfollow(number){
 		}			
 	});
 }
+
+//경빈
+//글 삭제 하는 로직
+function deleteBom(loginUcode, bUcode, sIndex){
+	event.stopPropagation();
+	/* alert('loginUcode->'+loginUcode);
+	alert('bUcode->'+bUcode);
+	alert('sIndex->'+sIndex); */
+	if(loginUcode == bUcode){
+		if (confirm("정말 삭제하시겠습니까?") == true){    //확인
+			$('.coffeeDeleteBom'+sIndex).submit();
+		}else{   //취소
+		    return;
+		} 
+	}else{
+		alert("타인의 글은 삭제할 수 없습니다.");
+		return;
+	} 
+}
 </script>
 </head>
 
@@ -329,8 +348,20 @@ function unfollow(number){
 				<!-- 단일 게시글 내용 출력 -->
 				<div class="card">
 					<div class="card-body">
-						<button type="button"
-							class="btn btn-light float-right dropdown-toggle caret-off">⋯</button>
+						<!-- 경빈 part1 -->
+						<form action="/coffee/deleteBom_singleBoard"
+							class="coffeeDeleteBomOrigin" name="coffeeDeleteBomOrigin"
+							method="post">
+							<input type="hidden" name="coffeeBoardBcode"
+								value="${board.bcode }"> <input type="hidden"
+								name="coffeeBoardUatid" value="${board.uatid }"> <input
+								type="hidden" name="coffeeBoardOrigin" value="1">
+							<button type="button" class="btn btn-light float-right"
+								onclick="deleteBom(${user.ucode}, ${board.ucode }, 'Origin')">
+								<img src="/img/coffee/trash.svg" width="15" height="15">
+							</button>
+						</form>
+						<!-- 경빈 part1 끝 -->
 						<div class="dropdown-menu">
 							<%-- <c:if test="${tl_element.loginUcode == user.ucode }">
 											<a class="dropdown-item" href="#">봄 삭제</a>
@@ -458,10 +489,15 @@ function unfollow(number){
 				<!-- 단일 게시글 댓글 내용 출력 -->
 				<c:forEach var="reply" items="${replylist }" varStatus="status">
 					<div class="card">
-						<div class="card-body" id="singleBoard"
-							onclick="goSingleBoard(${reply.bcode},${status.index });">
-							<button type="button"
-								class="btn btn-light dropdown-toggle caret-off float-right">⋯</button>
+						<!-- 경빈 part2 -->
+						<div class="card-body" id="singleBoard" onclick="goSingleBoard(${reply.bcode},${status.index });">
+							 <form action="/coffee/deleteBom_singleBoard" class="coffeeDeleteBom${status.index }" method="post"> 
+								<input type="hidden" name="coffeeBoardBcode" value="${reply.bcode }">
+								<input type="hidden" name="coffeeBoardUatid" value="${reply.uatid }">
+								<input type="hidden" name="coffeeBoardOrigin" value="0">
+								<button type="button" class="btn btn-light float-right" onclick="deleteBom(${user.ucode}, ${board.ucode }, ${status.index })"><img src="/img/coffee/trash.svg" width = "15" height = "15"></button>
+							</form>
+							<!-- 경빈 part2 끝 -->
 							<div class="dropdown-menu">
 								<%-- <c:if test="${tl_element.loginUcode == user.ucode }">
 												<a class="dropdown-item" href="#">봄 삭제</a>

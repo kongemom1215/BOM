@@ -122,5 +122,14 @@
    	<update id="coffeeUpdateBstate" parameterType="CoffeeBoardUser_info">
    		UPDATE board SET bstate = #{bstate} WHERE bcode = #{bcode}
    	</update>
-   
+   	<update id="coffeeDeleteBom" parameterType="CoffeeBoardUser_info">
+   		UPDATE board SET bstate = 0 WHERE bcode = #{bcode}
+   	</update>
+	<select id="selectBbcodebyBcode" parameterType="CoffeeBoardUser_info" resultType="int">
+		SELECT nvl(bbcode, 0) FROM board WHERE bcode = #{bcode}
+	</select>
+	<update id="updatebyBbcode" parameterType="CoffeeBoardUser_info">
+		UPDATE board SET breplycount = breplycount -1 WHERE bcode = #{bbcode}
+	
+	</update>
 </mapper>

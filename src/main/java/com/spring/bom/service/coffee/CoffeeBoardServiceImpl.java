@@ -60,4 +60,15 @@ public class CoffeeBoardServiceImpl implements CoffeeBoardService {
 		return list;
 	}
 
+	@Override
+	public void deleteBom(int bcode) {
+		bd.deleteBom(bcode);
+		
+	}
+
+	@Override
+	public String selectBbcodeUpdate(int bcode) {
+		return bd.selectBbcodeUpdate(bcode);
+	}
+
 }

@@ -173,6 +173,7 @@ label {
 	}
 	
 	function goSingleBoard(bbcode,bindex){
+		event.stopPropagation();
 		alert(bbcode+'로 이동합니다.');
 		location.href = 'singleBoard?bcode='+bbcode;
 	}
@@ -274,6 +275,25 @@ label {
 				}				
 			}			
 		});
+	}
+	
+	//경빈
+	//글 삭제 하는 로직
+	function deleteBom(loginUcode, bUcode, sIndex, class_index){
+		event.stopPropagation();
+		/* alert('loginUcode->'+loginUcode);
+		alert('bUcode->'+bUcode);
+		alert('sIndex->'+sIndex); */
+		if(loginUcode == bUcode){
+			if (confirm("정말 삭제하시겠습니까?") == true){    //확인
+				$('.coffeeDeleteBom'+class_index+'_'+sIndex).submit();
+			}else{   //취소
+			    return;
+			} 
+		}else{
+			alert("타인의 글은 삭제할 수 없습니다.");
+			return;
+		} 
 	}
 </script>
 <body>
@@ -421,10 +441,18 @@ label {
 						<c:if test="${myBoardList.size() == 0 }">
 							작성된 봄이 없습니다
 						</c:if>
-						<c:forEach var="board" items="${myBoardList }">
+						<!-- 경빈 -->
+						<c:forEach var="board" items="${myBoardList }" varStatus="status">
 							<div class="card">
-								<div class="card-body">
-									<button type="button" class="btn btn-light float-right">⋯</button>
+								<div class="card-body" onclick=" goSingleBoard(${board.bcode},${status.index });">
+									<form action="/coffee/deleteBom_Profile" class="coffeeDeleteBom1_${status.index }" name="coffeeDeleteBom${status.index }" method="post">
+										<input type="hidden" name="coffeeBoardBcode" value="${board.bcode }">
+										<input type="hidden" name="coffeeBoardUatid" value="${board.uatid }">
+										<%-- <input type="hidden" class="coffeeStatusIndex" value="${status.index }"> --%>
+										<%-- <input type="hidden" name="coffeeLoginUcode" value="${user.ucode }"> --%>
+										<button type="button" class="btn btn-light float-right" onclick="deleteBom(${user.ucode }, ${board.ucode }, ${status.index },1);"><img src="/img/coffee/trash.svg" width = "15" height = "15"></button>
+									</form>
+									<!-- 경빈 part 끝 -->
 									<img src="<%=context %>/profile_image/${board.uimage}"
 										class="rounded-circle" width="50" width="50"> <a
 										class="card-title text-dark">${board.unickName}</a> <a
@@ -542,10 +570,18 @@ label {
 						<c:if test="${myReplyBoardList.size() == 0 }">
 							작성된 댓글이 없습니다.
 						</c:if>
-						<c:forEach var="board" items="${myReplyBoardList}">
+						<!-- 경빈 -->
+						<c:forEach var="board" items="${myReplyBoardList }" varStatus="status">
 							<div class="card">
-								<div class="card-body">
-									<button type="button" class="btn btn-light float-right">⋯</button>
+								<div class="card-body" onclick=" goSingleBoard(${board.bcode},${status.index });">
+									<form action="/coffee/deleteBom_Profile" class="coffeeDeleteBom2_${status.index }" name="coffeeDeleteBom${status.index }" method="post">
+										<input type="hidden" name="coffeeBoardBcode" value="${board.bcode }">
+										<input type="hidden" name="coffeeBoardUatid" value="${board.uatid }">
+										<%-- <input type="hidden" class="coffeeStatusIndex" value="${status.index }"> --%>
+										<%-- <input type="hidden" name="coffeeLoginUcode" value="${user.ucode }"> --%>
+										<button type="button" class="btn btn-light float-right" onclick="deleteBom(${user.ucode }, ${board.ucode }, ${status.index },2);"><img src="/img/coffee/trash.svg" width = "15" height = "15"></button>
+									</form>
+									<!-- 경빈 part 끝 -->
 									<img src="<%=context %>/profile_image/${board.uimage}"
 										class="rounded-circle" width="50" width="50"> <a
 										class="card-title text-dark">${board.unickName}</a> <a
@@ -664,10 +700,18 @@ label {
 						<c:if test="${myMediaBoardList.size() == 0 }">
 							사진 또는 동영상 글이 없습니다
 						</c:if>
-						<c:forEach var="board" items="${myMediaBoardList}">
+						<!-- 경빈 -->
+						<c:forEach var="board" items="${myMediaBoardList }" varStatus="status">
 							<div class="card">
-								<div class="card-body">
-									<button type="button" class="btn btn-light float-right">⋯</button>
+								<div class="card-body" onclick=" goSingleBoard(${board.bcode},${status.index });">
+									<form action="/coffee/deleteBom_Profile" class="coffeeDeleteBom3_${status.index }" name="coffeeDeleteBom${status.index }" method="post">
+										<input type="hidden" name="coffeeBoardBcode" value="${board.bcode }">
+										<input type="hidden" name="coffeeBoardUatid" value="${board.uatid }">
+										<%-- <input type="hidden" class="coffeeStatusIndex" value="${status.index }"> --%>
+										<%-- <input type="hidden" name="coffeeLoginUcode" value="${user.ucode }"> --%>
+										<button type="button" class="btn btn-light float-right" onclick="deleteBom(${user.ucode }, ${board.ucode }, ${status.index },3);"><img src="/img/coffee/trash.svg" width = "15" height = "15"></button>
+									</form>
+									<!-- 경빈 part 끝 -->
 									<img src="<%=context %>/profile_image/${board.uimage}"
 										class="rounded-circle" width="50" width="50"> <a
 										class="card-title text-dark">${board.unickName}</a> <a
@@ -749,10 +793,18 @@ label {
 						<c:if test="${myLikeBoardList.size() == 0 }">
 							좋아요한 글이 없습니다
 						</c:if>
-						<c:forEach var="board" items="${myLikeBoardList}">
+						<!-- 경빈 -->
+						<c:forEach var="board" items="${myLikeBoardList }" varStatus="status">
 							<div class="card">
-								<div class="card-body">
-									<button type="button" class="btn btn-light float-right">⋯</button>
+								<div class="card-body" onclick=" goSingleBoard(${board.bcode},${status.index });">
+									<form action="/coffee/deleteBom_Profile" class="coffeeDeleteBom4_${status.index }" name="coffeeDeleteBom${status.index }" method="post">
+										<input type="hidden" name="coffeeBoardBcode" value="${board.bcode }">
+										<input type="hidden" name="coffeeBoardUatid" value="${board.uatid }">
+										<%-- <input type="hidden" class="coffeeStatusIndex" value="${status.index }"> --%>
+										<%-- <input type="hidden" name="coffeeLoginUcode" value="${user.ucode }"> --%>
+										<button type="button" class="btn btn-light float-right" onclick="deleteBom(${user.ucode }, ${board.ucode }, ${status.index },4);"><img src="/img/coffee/trash.svg" width = "15" height = "15"></button>
+									</form>
+									<!-- 경빈 part 끝 -->
 									<img src="<%=context %>/profile_image/${board.uimage}"
 										class="rounded-circle" width="50" width="50"> <a
 										class="card-title text-dark">${board.unickName}</a> <a

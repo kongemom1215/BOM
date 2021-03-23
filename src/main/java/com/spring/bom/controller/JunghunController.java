@@ -79,6 +79,8 @@ public class JunghunController {
 		System.out.println("hoon Controller search Start");
 		System.out.println("Controller ::" + search);
 		User_Info loginUser = (User_Info) session.getAttribute("user");
+		System.out.println("#### [Hoon] searchView -> " + loginUser.getUcode());
+		model.addAttribute("loginUser",loginUser);
 		System.out.println("explore -> " + loginUser.getUemail());
 		if (search.trim().equals("") || search.trim() == null) {
 			return "hoon/explore";

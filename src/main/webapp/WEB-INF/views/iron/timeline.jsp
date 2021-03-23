@@ -229,6 +229,25 @@ label {
 			}			
 		});
 	}
+	
+	//경빈
+	//글 삭제 하는 로직
+	function deleteBom(loginUcode, bUcode, sIndex){
+		event.stopPropagation();
+		/* alert('loginUcode->'+loginUcode);
+		alert('bUcode->'+bUcode);
+		alert('sIndex->'+sIndex); */
+		if(loginUcode == bUcode){
+			if (confirm("정말 삭제하시겠습니까?") == true){    //확인
+				$('.coffeeDeleteBom'+sIndex).submit();
+			}else{   //취소
+			    return;
+			} 
+		}else{
+			alert("타인의 글은 삭제할 수 없습니다.");
+			return;
+		} 
+	}
 </script>
 </head>
 
@@ -334,15 +353,24 @@ label {
 
 					<c:forEach var="tl_element" items="${tl_list }" varStatus="status">
 						<div class="card">
-							<div class="card-body" id="singleBoard"
-								onclick="goSingleBoard(${tl_element.bcode},${status.index });">
-								<button type="button"
-									class="btn btn-light dropdown-toggle caret-off float-right">⋯</button>
-								<div class="dropdown-menu">
-									<c:if test="${tl_element.loginUcode == user.ucode }">
-										<a class="dropdown-item" href="#">봄 삭제</a>
-									</c:if>
-								</div>
+							<!-- 경빈 part -->
+							<%-- <div class="card-body" id="singleBoard"
+								onclick="goSingleBoard(${tl_element.bcode},${status.index });"> --%>
+								<div class="card-body" id="singleBoard" onclick="goSingleBoard(${reply.bcode},${status.index });">
+									<form action="/coffee/deleteBom_timeline" class="coffeeDeleteBom${status.index }" method="post"> 
+										<input type="hidden" name="coffeeBoardBcode" value="${tl_element.bcode }">
+										<input type="hidden" name="coffeeBoardUatid" value="${tl_element.uatid }">
+										<button type="button" class="btn btn-light float-right" onclick="deleteBom(${user.ucode}, ${tl_element.ucode }, ${status.index })"><img src="/img/coffee/trash.svg" width = "15" height = "15"></button>
+										<%-- <button type="button"
+											class="btn btn-light dropdown-toggle caret-off float-right">⋯</button>
+										
+										<div class="dropdown-menu">
+											<c:if test="${tl_element.ucode == user.ucode }">
+												
+											</c:if>
+										</div> --%>
+									</form>
+									<!-- 경빈 part 끝 -->
 								<img src="<%=context %>/profile_image/${tl_element.uimage }"
 									alt="no_image" class="rounded-circle" width="50" width="50">
 								<a class="card-title text-dark">${tl_element.unickName }</a> <a
