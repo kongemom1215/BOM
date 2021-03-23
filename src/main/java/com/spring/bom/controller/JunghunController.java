@@ -149,6 +149,33 @@ public class JunghunController {
 		}
 		model.addAttribute("searchbattachvideo", searchbattachvideo);
 		System.out.println(searchbattachvideo.size() + "::  동영상첨부파일 ");
+		
+		List<Junghun> searchbattach2 = js.searchbattach2(junghun);
+
+		for (int i = 0; i < searchbattach2.size(); i++) {
+			if (searchbattach2.get(i).getBattach() != null) {
+				System.out.println("[" + i + "]" + " battach Data : " + searchbattach2.get(i).getBattach());
+				searchbattach2.get(i).setBattachType(searchbattach2.get(i).getBattach().substring(0, 5));
+				searchbattach2.get(i).setBattachSrc(searchbattach2.get(i).getBattach().substring(6));
+				System.out.println("battach Type : " + searchbattach2.get(i).getBattachType() + " / battach Source : "
+						+ searchbattach2.get(i).getBattachSrc());
+			}
+		}
+		model.addAttribute("searchbattach2", searchbattach2);
+		System.out.println(searchbattach2.size() + "::  사진첨부파일2 ");
+
+		List<Junghun> searchbattachvideo2 = js.searchbattachvideo2(junghun);
+		for (int i = 0; i < searchbattachvideo2.size(); i++) {
+			if (searchbattachvideo2.get(i).getBattach() != null) {
+				System.out.println("[" + i + "]" + " battach Data : " + searchbattachvideo2.get(i).getBattach());
+				searchbattachvideo2.get(i).setBattachType(searchbattachvideo2.get(i).getBattach().substring(0, 5));
+				searchbattachvideo2.get(i).setBattachSrc(searchbattachvideo2.get(i).getBattach().substring(6));
+				System.out.println("battach Type : " + searchbattachvideo2.get(i).getBattachType()
+						+ " / battach Source : " + searchbattachvideo2.get(i).getBattachSrc());
+			}
+		}
+		model.addAttribute("searchbattachvideo2", searchbattachvideo2);
+		System.out.println(searchbattachvideo2.size() + "::  동영상첨부파일2 ");
 
 		// 실시간 해시태그 순위
 		System.out.println("[junghun] Do -> hts.getHashTagRanking()");

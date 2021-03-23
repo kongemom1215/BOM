@@ -101,4 +101,16 @@ public class JunghunServiceImpl implements JunghunService {
 		return jd.searchbattachvideo(junghun);
 	}
 
+	@Override
+	public List<Junghun> searchbattach2(Junghun junghun) {
+		// TODO Auto-generated method stub
+		return  jd.searchbattach2(junghun);
+	}
+
+	@Override
+	public List<Junghun> searchbattachvideo2(Junghun junghun) {
+		// TODO Auto-generated method stub
+		return jd.searchbattachvideo2(junghun);
+	}
+
 }

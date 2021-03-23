@@ -20,6 +20,8 @@ public interface JunghunService {
 	List<Junghun> searchlistall(Junghun junghun);
 	List<Junghun> searchbattach(Junghun junghun);
 	List<Junghun> searchbattachvideo(Junghun junghun);
+	List<Junghun> searchbattach2(Junghun junghun);
+	List<Junghun> searchbattachvideo2(Junghun junghun);
 	List<Follow> getSuggestFollowList1(int ucode);	//관심사가 겹치는 유저 추천
 	
 	List<Follow> getSuggestFollowList2(int ucode);	//나를 팔로우하는 유저 추천

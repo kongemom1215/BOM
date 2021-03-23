@@ -134,6 +134,18 @@ public class JunghunDaoImpl implements JunghunDao{
 		return session.selectList("searchbattachvideo",junghun);
 	}
 
+	@Override
+	public List<Junghun> searchbattach2(Junghun junghun) {
+		// TODO Auto-generated method stub
+		return session.selectList("searchbattach2",junghun);
+	}
+
+	@Override
+	public List<Junghun> searchbattachvideo2(Junghun junghun) {
+		// TODO Auto-generated method stub
+		return session.selectList("searchbattachvideo2",junghun);
+	}
+
 
 }
 

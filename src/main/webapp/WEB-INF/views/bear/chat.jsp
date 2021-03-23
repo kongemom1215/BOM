@@ -783,13 +783,19 @@ img {
 		<!-- 사이드바 팔로우 가져가야할 구간 시작 -->
 		<div class="bg-light border-left" id="sidebar-wrapper2">
 			<div class="list-group list-group-flush">
+				<!-- 사이드바검색 시작-->
 				<div class="list-group-item list-group-item-action bg-light">
 					<div id="drop_the_text">
 						<!-- 엔터치면 searchData() 실행 -->
-						<input class="form-control" id="search" placeholder="봄 검색"
-							onkeypress="if( event.keyCode == 13 ){searchData();}">
+						<form class="well form-search" action="/hoon/searchView"
+							method="get" id="jh_form">
+							<input class="form-control" id="search" placeholder="봄 검색"
+								name="search"
+								onkeypress="if( event.keyCode == 13 ){searchData();}">
+						</form>
 					</div>
 				</div>
+				<!-- 사이드바검색 끝-->
 				<div class="list-group-item list-group-item-action bg-light"
 					style="padding: 5px;">
 					<div class="card bg-light mb-3">

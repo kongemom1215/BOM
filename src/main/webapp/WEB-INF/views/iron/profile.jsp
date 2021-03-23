@@ -348,20 +348,24 @@ label {
 				<!-- <nav
 					class="navbar navbar-expand-lg navbar-light bg-light border-bottom"
 					style="left: 241px; right: 241px; padding-bottom: 0px;"> -->
-				<!-- 프로필 정보출력 -->
+				<!-- 프로필 정보출력
+				<a href="../right/follower?uatid=${someone.uatid}">${someone.followCount}팔로우중</a>/<a href="../right/following?uatid=${someone.uatid}">${someone.followerCount}팔로워중</a>
+				
+				 -->
 				<div class="profile_head">
 					<div class="col-md-12">
 						<div
 							class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
 							<div class="col p-4 d-flex flex-column position-static">
 								<h3 class="mb-0">${someone.unickName }
-									<strong class="d-inline-block mb-2 text-primary">${someone.uatid }</strong>
+									<strong style="color: #33CC00;">@${someone.uatid }</strong>
 								</h3>
 								<div class="mb-1 text-muted">가입일 : ${user.uregDate }</div>
 								<c:if test="${someone.uintro!=null }">${someone.uintro}</c:if>
 								<c:if test="${someone.uintro==null }">Introduce - 소개글이 없습니다.</c:if>
-								<a href="#">${someone.followCount} 팔로우 /
-									${someone.followerCount} 팔로워</a>
+								<a href="../right/follower?uatid=${someone.uatid}">${someone.followCount}
+									팔로우중</a> / <a href="../right/following?uatid=${someone.uatid}">
+									${someone.followerCount}팔로워중</a>
 								<c:if test="${someone.ucode == user.ucode}">
 									<button type="button" class="btn btn-outline-success"
 										id="beditProfile" data-toggle="modal"
@@ -384,7 +388,7 @@ label {
 				<!-- </nav> -->
 				<nav
 					class="navbar navbar-expand-lg navbar-light bg-light border-bottom"
-					style="left: 241px; right: 241px; margin-top: 50px; padding-bottom: 0px;">
+					style="left: 100px; right: 241px; margin-top: 50px; padding-bottom: 0px;">
 
 					<ul class="nav nav-tabs nav-justified col-md-20" id="myTab"
 						role="tablist" style="width: 800px;">
@@ -871,13 +875,19 @@ label {
 		<!-- 사이드바 팔로우 가져가야할 구간 시작 -->
 		<div class="bg-light border-left" id="sidebar-wrapper2">
 			<div class="list-group list-group-flush">
+				<!-- 사이드바검색 시작-->
 				<div class="list-group-item list-group-item-action bg-light">
 					<div id="drop_the_text">
 						<!-- 엔터치면 searchData() 실행 -->
-						<input class="form-control" id="search" placeholder="봄 검색"
-							onkeypress="if( event.keyCode == 13 ){searchData();}">
+						<form class="well form-search" action="/hoon/searchView"
+							method="get" id="jh_form">
+							<input class="form-control" id="search" placeholder="봄 검색"
+								name="search"
+								onkeypress="if( event.keyCode == 13 ){searchData();}">
+						</form>
 					</div>
 				</div>
+				<!-- 사이드바검색 끝-->
 				<div class="list-group-item list-group-item-action bg-light"
 					style="padding: 5px;">
 					<div class="card bg-light mb-3">

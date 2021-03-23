@@ -34,7 +34,7 @@
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
 	integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
 	crossorigin="anonymous"></script>
-<script src="/js/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 <script src="/js/bootstrap.bundle.min.js"></script>
 <script src="/js/bootstrap.bundle.js"></script>
 <style>
@@ -72,7 +72,6 @@
 									$('#reg_submit').attr('disabled', true);
 
 							}else{
-								alert('function idCh() data 2');
 								$('#id_check').html('사용가능한 아이디입니다 :p');
 								$('#id_check').css('color', 'green');
 								$("#reg_submit").attr("disabled", false);
@@ -83,8 +82,117 @@
 					});
 				});
 			</script>
-</head>
+<style>
+#bearsize {
+	width: 550px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	text-align: left;
+}
 
+.dropdown-toggle.caret-off::after {
+	display: none;
+}
+
+a:hover {
+	text-decoration: none;
+	cursor: pointer;
+}
+
+.card-text:hover {
+	color: black;
+	text-decoration: none;
+}
+</style>
+<style>
+.dropdown-toggle.caret-off::after {
+	display: none;
+	resize: none;
+}
+
+div#writeTextarea {
+	min-height: 50px;
+	border: none;
+	resize: none;
+}
+
+div#writeTextarea:focus {
+	outline: none;
+	box-shadow: none;
+	-webkit-box-shadow: none;
+}
+
+select.custom-select {
+	margin-top: 10px;
+}
+
+select.custom-select:focus {
+	outline: none;
+	box-shadow: none;
+	-webkit-box-shadow: none;
+}
+/*placeholder 설정하기*/
+[contenteditable=true]:empty:before {
+	content: attr(placeholder);
+	display: block; /* For Firefox */
+}
+
+input[type="file"] {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	border: 0;
+}
+
+label {
+	margin: 0px;
+}
+
+.nav-tabs .nav-link:not(.active) {
+	border-color: transparent !important;
+	color: #28a745;
+}
+</style>
+</head>
+<script type="text/javascript">
+//팔로우 하는 로직
+	function followchk(number){
+		
+		//name 에 k + number 쓰는 태그를찾아서 text변경
+		var textareaVal = $("button[name=k"+number+"]").text();
+		console.log("textareaVal + textareaVal" + textareaVal)
+		
+		var msg = { uopcode :number};
+		$.ajax({
+			url: '<%=context%>/bear/followchk',
+			data: msg,
+			type: "post",
+
+			success: function (res) {
+				console.log("저장성공 - > " +res)
+				
+				if(res == "1"){
+					console.log("저장성공")
+					  $("button[name=k"+number+"]").text("팔로잉");
+					  $("button[name=k"+number+"]").attr("class","btn btn-success btn-sm float-right");
+			
+				}else 
+					{console.log("저장실패")}
+					
+				 
+			}
+	});	 
+	}
+	
+	function closemodal(){
+		location.reload();
+	}
+</script>
 <body>
 
 	<div class="d-flex" id="wrapper">
@@ -101,10 +209,10 @@
 				</a> <a href="/hoon/explore"
 					class="list-group-item list-group-item-action"> <img
 					src="/img/search.svg" width="15" height="15"> 검색하기
-				</a> <a href="alarm" class="list-group-item list-group-item-action">
+				</a> 				<!-- <a href="alarm" class="list-group-item list-group-item-action">
 					<img src="/img/bell.svg" width="15" height="15"> 알림 <span
 					class="badge badge-success">1</span>
-				</a>
+				</a> -->
 				<!-- bear1 -->
 				<a href="/bear/chat" class="list-group-item list-group-item-action">
 					<img src="/img/send.svg" width="15" height="15"> 쪽지
@@ -117,11 +225,12 @@
 				</a> <a href="/right/moreSee"
 					class="list-group-item list-group-item-action"> <img
 					src="/img/more.svg" width="15" height="15"> 더보기
-				</a><a href="#" class="list-group-item list-group-item-action">
+				</a>
+				<!-- <a href="#" class="list-group-item list-group-item-action">
 					<button type="button" class="btn btn-outline-success">
 						<img src="/img/write.svg" width="15" height="15"> 글 쓰기
 					</button>
-				</a>
+				</a> -->
 				<div class="card">
 					<div class="card-body">
 						<img src="<%=context %>/profile_image/${user.uimage }"
@@ -147,28 +256,32 @@
 						<input type="hidden" name="ucode" value="${ui.ucode }">
 						<p>
 						<h2>계정 정보 수정</h2>
+						<div class="card-body">
+						<table>
 						<!-- 이메일 -->
-						<div class="form-group">
-							<label for="uemail">이메일</label>
-								<span>${ui.uemail }</span>
-						</div>
+						<tr><td>
+							<label for="uemail">이메일</label></td><td><span class="tab">&#9;&nbsp;&nbsp;&nbsp;</span></td>
+							<td><span>${ui.uemail }</span></td>
+						</tr>
 						<!-- 아이디 -->
-						<div class="form-group">
-							<label for="uatid">아이디</label>
-									<input type="text" class="form-control" id="uatid" name="uatid" placeholder="ID" value="${ui.uatid }" required="required">
-									<!-- <input type="button" value="중복확인" class="btn btn-outline-success" onclick="idCh()"> -->
+						<tr>
+						<td>
+							<label for="uatid">아이디</label></td><td><span class="tab">&#9;</span></td>
+						<td><input type="text" class="form-control" id="uatid" name="uatid" placeholder="ID" value="${ui.uatid }" required="required">
+						</td>			<!-- <input type="button" value="중복확인" class="btn btn-outline-success" onclick="idCh()"> -->
 									
-							<div id="id_check"></div>
-						</div>
+						<tr><td colspan="3" style="text-align:center;"><div id="id_check"></div><br></td></tr>
 						<!-- 생년월일 -->
-						<div class="form-group">
-							<label for="user_id">생년월일</label>
-								<input type="date"  name="ubirth" required="required" value="${ui.ubirth }">
-						</div>
+						<tr>
+						<td>
+							<label for="user_id">생년월일</label></td><td><span class="tab">&#9;</span></td>
+						<td><input type="date"  name="ubirth" required="required" value="${ui.ubirth }"></td>
+						</tr>
 						<!-- 성별 -->
-						<div class="form-group">
-							<label for="ugender">성별</label>
-								<select class="form-select" id="inputGroupSelect01" name="ugender">
+						<tr>
+						<td>
+							<label for="ugender">성별</label></td><td><span class="tab">&#9;</span></td>
+						<td><select class="form-select" id="inputGroupSelect01" name="ugender">
 								<option selected value="${ui.ugender}">
 									<c:set var="ugender" scope = "session" value="${ui.ugender}"/>
 									<c:choose>
@@ -184,11 +297,13 @@
 										<option value="m">남</option>
 										<option value="w">여</option>
 								</select>
-						</div>
+						</td>
+						</tr>
 						<!-- 국가 -->
-						<div class="form-group">
-							<label for="unation">국가</label>
-								<select class="form-select" id="inputGroupSelect01" name="unation">
+						<tr>
+						<td>
+							<label for="unation">국가</label></td><td><span class="tab">&#9;</span></td>
+						<td><select class="form-select" id="inputGroupSelect01" name="unation">
 							    <option selected value="${ui.unation }">${ui.unation }</option>
 							    <option value="가나">가나</option>
 								<option value="가봉">가봉</option>
@@ -390,11 +505,13 @@
 								<option value="필리핀">필리핀</option>
 								<option value="홍콩(중국 특별행정구)">홍콩(중국 특별행정구)</option>
 								<option value="헝가리">헝가리</option>
-  								</select>
-						</div>
+  								</select></td>
+  						</tr>
 						<!-- 공개 범위 -->
-						<div class="form-group">
-							<label for="uprivate">공개 범위</label>
+						<tr>
+						<td>
+							<label for="uprivate">공개 범위</label></td><td><span class="tab">&#9;</span></td>
+						<td>
 							   <select class="form-select" id="inputGroupSelect01" name="uprivate">
 								<option selected value="${ui.uprivate}">
 							   	  <c:set var="uprivate" scope = "session" value="${ui.uprivate}"/>
@@ -410,12 +527,12 @@
 									 </option>
 								    <option value="0">전체 공개</option>
 								    <option value="1">필로워에게만</option>
-							  </select>						
-						</div>
+							  </select></td>		
+						</tr>
 						<!-- 쪽지 범위 -->
-						<div class="form-group">
-							<label for="uchat">쪽지 범위</label>
-								<select class="form-select" id="inputGroupSelect01" name="uchat">
+						<tr>
+						<td><label for="uchat">쪽지 범위</label></td><td><span class="tab">&#9;</span></td>
+						<td><select class="form-select" id="inputGroupSelect01" name="uchat">
 							    <option selected value="${ui.uchat}">
    	  								<c:set var="uchat" scope = "session" value="${ui.uchat}"/>
 									<c:choose>
@@ -430,12 +547,13 @@
 								 </option>
 							    <option value="0">전체</option>
 							    <option value="1">팔로워만</option>
-							  </select>
-						</div>
+							  </select></td>
+						</tr>
 						<!-- 알림 범위 -->
-						<div class="form-group">
-							<label for="ualarm">알림 범위</label>
-								<select class="form-select" id="inputGroupSelect01" name="ualarm">
+						<tr>
+						<td>
+							<label for="ualarm">알림 범위</label></td><td><span class="tab">&#9;</span></td>
+						<td><select class="form-select" id="inputGroupSelect01" name="ualarm">
 							    <option selected value="${ui.ualarm}">
 								   <c:set var="ualarm" scope = "session" value="${ui.ualarm}"/>
 								   <c:choose>
@@ -450,12 +568,15 @@
 								 </option>
 							    <option value="0">전체</option>
 							    <option value="1">팔로워만</option>
-							  </select>
-						</div>
+							  </select></td>
+						</tr>
 						<!-- 가입 일자 -->
-						<div class="form-group">
-							<label for="uregdate">가입 일자</label>
-								<span>${ui.uregdate }</span>
+						<tr>
+						<td>
+							<label for="uregdate">가입 일자</label></td><td><span class="tab">&#9;</span></td>
+						<td><span>${ui.uregdate }</span></td>
+						</tr>
+						</table>
 						</div>
 						<div class="form-group">
 							<input type="reset" value="수정취소" class="btn btn-outline-secondary" style="margin-right: 0.5%;'"> 
@@ -484,37 +605,49 @@
 					<div class="card bg-light mb-3">
 						<div class="card-header">팔로우 추천</div>
 						<div class="card-body" style="padding: 5px;">
-							<div class="card">
-								<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
-									<img src="/img/teemo.jpg" class="rounded-circle" width="20"
-										height="20"> <a class="card-title text-dark">닉네임</a> <a
-										class="card-subtitle mb-2 text-muted">@atid</a>
-									<button type="button"
-										class="btn btn-outline-success btn-sm float-right"
-										style="font-size: 0.8rem;">팔로우</button>
-								</div>
-							</div>
-							<div class="card">
-								<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
-									<img src="/img/teemo.jpg" class="rounded-circle" width="20"
-										height="20"> <a class="card-title text-dark">닉네임</a> <a
-										class="card-subtitle mb-2 text-muted">@atid</a>
-									<button type="button"
-										class="btn btn-outline-success btn-sm float-right"
-										style="font-size: 0.8rem;">팔로우</button>
-								</div>
-							</div>
-							<div class="card">
-								<div class="card-body" style="font-size: 0.8rem; padding: 10px;">
-									<img src="/img/teemo.jpg" class="rounded-circle" width="20"
-										height="20"> <a class="card-title text-dark">닉네임</a> <a
-										class="card-subtitle mb-2 text-muted">@atid</a>
-									<button type="button"
-										class="btn btn-outline-success btn-sm float-right"
-										style="font-size: 0.8rem;">팔로우</button>
-								</div>
-							</div>
+							<c:if test="${suggestFlist2_size>0 }">
+								<c:forEach var="justFollowMe" items="${suggestFlist2 }"
+									begin="0" end="2">
+									<div class="card">
+										<div class="card-body"
+											style="font-size: 0.8rem; padding: 10px;">
+											<img src="<%=context %>/profile_image/${justFollowMe.uimage}"
+												class="rounded-circle" width="20" height="20"> <a
+												class="card-title text-dark">${justFollowMe.unickName}</a> <a
+												class="card-subtitle mb-2 text-muted">@${justFollowMe.uatid}</a>
+											<button type="button"
+												class="btn btn-outline-success btn-sm float-right"
+												style="font-size: 0.8rem;"
+												onclick="followchk(${justFollowMe.uucode})"
+												name=k${justFollowMe.uucode}>팔로우</button>
+										</div>
+									</div>
+								</c:forEach>
+							</c:if>
+							<!-- 팔로우하는 유저가 없을 경우 관심항목이 비슷한 사람을 추천 -->
+							<c:if test="${suggestFlist2_size<1 }">
+								<c:forEach var="justFollowMe" items="${suggestFlist2 }">
+									<div class="card">
+										<div class="card-body"
+											style="font-size: 0.8rem; padding: 10px;">
+											<img
+												src="${resourcePath }/profile_image/${justFollowMe.uimage}"
+												class="rounded-circle" width="20" height="20"> <a
+												class="card-title text-dark">${justFollowMe.unickName}</a> <a
+												class="card-subtitle mb-2 text-muted">@${justFollowMe.uatid}</a>
+											<button type="button"
+												class="btn btn-outline-success btn-sm float-right"
+												style="font-size: 0.8rem;">팔로우</button>
+										</div>
+									</div>
+								</c:forEach>
+							</c:if>
 						</div>
+						<c:if test="${suggestFlist2_size>0 }">
+							<button type="button" class="btn btn-outline-success"
+								id="writeBtn" data-toggle="modal" data-target="#morebtn">더보기
+							</button>
+						</c:if>
 					</div>
 				</div>
 				<div class="list-group-item list-group-item-action bg-light"
@@ -564,6 +697,58 @@
 		</div>
 	</div>
 	<!-- 오른쪽 사이드바 끝 -->
+	<!--BEAR 더보기 창  -->
+		<div class="modal fade" id="morebtn" data-backdrop="static"
+			data-keyboard="false" tabindex="-1"
+			aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<div class="modal-body col-12">
+							<div class="card-header">
+								<h4 style="text-align: center;">
+									팔로우 추천
+									<button style="float: right;" onclick="closemodal()">x</button>
+								</h4>
+								<div class="card-body" style="padding: 5px;">
+									<div class="card">
+										<div class="card-body"
+											style="font-size: 0.8rem; padding: 10px;">
+											<c:forEach var="justFollowMe1" items="${suggestFlist2 }">
+												<div class="card">
+													<div class="card-body"
+														style="font-size: 0.8rem; padding: 10px;">
+														<img
+															src="<%=context %>/profile_image/${justFollowMe1.uimage}"
+															class="rounded-circle" width="40" height="40"> <a
+															class="card-title text-dark">${justFollowMe1.unickName}</a>
+														<a class="card-subtitle mb-2 text-muted">@${justFollowMe1.uatid}</a>
+														<c:if test="${justFollowMe1.uonline eq 1 }">
+															<img src="<%=context%>/image/online.png" width="20"
+																height="20">
+														</c:if>
+														<div>
+															<button type="button"
+																class="btn btn-outline-success btn-sm float-right"
+																style="font-size: 1.2rem;"
+																onclick="followchk(${justFollowMe1.uucode})"
+																name="k${justFollowMe1.uucode}">팔로우</button>
+
+														</div>
+														<h3 id="bearsize" style="padding-left: 40px">&nbsp&nbsp${justFollowMe1.uintro}</h3>
+
+													</div>
+												</div>
+											</c:forEach>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 	<!-- /#wrapper -->
 	
 	

@@ -9,7 +9,6 @@
 	
 	/* checknum Form Run */
 	function runChecknum(){
-		 alert("runChecknum Start..");
          document.getElementById('frm').submit();
 	}
 

@@ -85,7 +85,7 @@
 	<!-- 회원검색 -->
 	<select id="searchuser" parameterType="Junghun"
 		resultType="Junghun">
-		select uatid , unickname , uintro , uimage
+		select uatid , unickname , uintro , uimage , ucode
 		from user_info
 		where (
 		uatid like
@@ -126,7 +126,21 @@
 					and b.battach like 'image'||'%'
 				ORDER BY b.blikecount DESC
 	</select>
-	
+	<!-- 사진값 null 일때 회원사진검색 -->
+		<select id="searchbattach2" parameterType="Junghun" resultType="Junghun">
+				select b.bcontent , b.blikecount ,b.breplycount, b.bregdate
+		,b.bquotecount , u.uatid , u.unickname ,
+		b.ucode , b.battach ,b.bcode, u.uimage
+		from board b, user_info u 
+		where b.uCode = u.uCode
+        and u.ucode in (select ucode
+		from user_info
+		where (uatid like '%'||#{search}||'%'  or unickname like '%'||#{search}||'%' )
+		)
+        and b.battach is not null
+        and b.battach like 'image'||'%'
+        order by b.bregdate desc
+	</select>
 	<!-- 동영상검색  -->
 	<select id="searchbattachvideo" parameterType="Junghun" resultType="Junghun">
 	
@@ -142,7 +156,21 @@
 					and b.battach like 'video'||'%'
 				ORDER BY b.blikecount DESC
 	</select>
-		
+		<!-- 동영상값 null 일때 회원동영상검색 -->
+		<select id="searchbattachvideo2" parameterType="Junghun" resultType="Junghun">
+				select b.bcontent , b.blikecount ,b.breplycount, b.bregdate
+		,b.bquotecount , u.uatid , u.unickname ,
+		b.ucode , b.battach ,b.bcode, u.uimage
+		from board b, user_info u 
+		where b.uCode = u.uCode
+        and u.ucode in (select ucode
+		from user_info
+		where (uatid like '%'||#{search}||'%'  or unickname like '%'||#{search}||'%' )
+		)
+        and b.battach is not null
+        and b.battach like 'video'||'%'
+        order by b.bregdate desc
+	</select>	
 	<!-- explore 검색어순위 -->
 	<select id="searchcount" parameterType="Junghun"
 		resultType="Junghun">
