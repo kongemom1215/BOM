@@ -56,42 +56,34 @@
 	white-space: nowrap;
 	text-align: left;
 }
-
 .dropdown-toggle.caret-off::after {
 	display: none;
 }
-
 a:hover {
 	text-decoration: none;
 	cursor: pointer;
 }
-
 .card-text:hover {
 	color: black;
 	text-decoration: none;
 }
-
 .dropdown-toggle.caret-off::after {
 	display: none;
 	resize: none;
 }
-
 div#writeTextarea {
 	min-height: 50px;
 	border: none;
 	resize: none;
 }
-
 div#writeTextarea:focus {
 	outline: none;
 	box-shadow: none;
 	-webkit-box-shadow: none;
 }
-
 select.custom-select {
 	margin-top: 10px;
 }
-
 select.custom-select:focus {
 	outline: none;
 	box-shadow: none;
@@ -102,7 +94,6 @@ select.custom-select:focus {
 	content: attr(placeholder);
 	display: block; /* For Firefox */
 }
-
 input[type="file"] {
 	position: absolute;
 	width: 1px;
@@ -113,11 +104,9 @@ input[type="file"] {
 	clip: rect(0, 0, 0, 0);
 	border: 0;
 }
-
 label {
 	margin: 0px;
 }
-
 .nav-tabs .nav-link:not(.active) {
 	border-color: transparent !important;
 	color: #28a745;
@@ -129,20 +118,16 @@ label {
 function goProfile(){
 	location.href = "../iron/profile?uatid="+${user.uatid};
 }
-
 window.onload = function(){	//주혜
 	clickWriteBtn();
 	clickSaveBtn();
 	getFollower('<%=context %>');
 }
-
 function goSingleBoard(bbcode,bindex){
 	event.stopPropagation();
-
 	alert(bbcode+'로 이동합니다.');
 	location.href = '../iron/singleBoard?bcode='+bbcode;
 }
-
 function clickLikeBtn(bbcode,btnIndex){
 	event.stopPropagation();
 	var index = btnIndex;
@@ -165,7 +150,6 @@ function clickLikeBtn(bbcode,btnIndex){
 		}
 	});
 }
-
 function viewBoardOptions(bbcode,bindex){
 	event.stopPropagation();
 	var index = bindex;
@@ -235,7 +219,6 @@ function unfollow(number){
 		}			
 	});
 }
-
 //경빈
 //글 삭제 하는 로직
 function deleteBom(loginUcode, bUcode, sIndex, class_index){
@@ -373,7 +356,6 @@ function deleteBom(loginUcode, bUcode, sIndex, class_index){
 			<script type="text/javascript">
 			function searchdel(){
 				event.stopPropagation();
-
 				$('.listdel').remove();
 			}
 					$("#del_ajax").click(function(){
@@ -1588,7 +1570,7 @@ function deleteBom(loginUcode, bUcode, sIndex, class_index){
 	</div>
 
 	<!-- 오른쪽 사이드바 끝 -->
-	<!--GOD 글쓰기 팝업 시작-->
+<!--GOD 글쓰기 팝업 시작-->
 	<form action="../god/write" method="post" enctype="Multipart/form-data"
 		onsubmit="return checkWrite()">
 		<!--실제 값을 보내는곳 -->
@@ -1614,8 +1596,8 @@ function deleteBom(loginUcode, bUcode, sIndex, class_index){
 							<button type="button" id="realCloseWrite" class="close"
 								data-dismiss="modal" style="display: none;"></button>
 							<button type="button" id="closeWrite" class="close"
-								style="float: right;" data-toggle="modal"
-								data-target="#saveModal" aria-label="Close">
+								onclick="closeWriteModal('${search}');" style="float: right;"
+								data-toggle="modal" data-target="#saveModal" aria-label="Close">
 								<span aria-hidden="true">&times;</span>
 							</button>
 							<a style="float: right; color: black; text-decoration: none;"
@@ -1626,21 +1608,21 @@ function deleteBom(loginUcode, bUcode, sIndex, class_index){
 					</div>
 					<div class="modal-body col-12">
 						<!-- 인용부분 -->
-						<div class="col-12 float-left" id="QuoteArea"
+						<div class="col-12 float-left" id="QuoteArea2"
 							style="display: none; font-size: 0.8em;">
 							<div class='card'>
 								<div class='card-body'>
-									<img id="quote_profile" src="" alt='no_image'
+									<img id="quote_profile2" src="" alt='no_image'
 										class='rounded-circle' width='30'> <a
-										class='card-title text-dark' id="quote_nickname"></a> <a
-										class='card-subtitle mb-2 text-muted' id="quote_atid"></a>
+										class='card-title text-dark' id="quote_nickname2"></a> <a
+										class='card-subtitle mb-2 text-muted' id="quote_atid2"></a>
 									<div class='card-text mt-2 mb-0' style="height: 100%;"
-										id="quote_content"></div>
-									<div class="quote_file mt-2" style="display: none;">
-										<img id="quote_img" src="<%=context %>" class="img-fluid" />
-										<div id="show_quote_video"
+										id="quote_content2"></div>
+									<div class="quote_file2 mt-2" style="display: none;">
+										<img id="quote_img2" src="<%=context %>" class="img-fluid" />
+										<div id="show_quote_video2"
 											class="embed-responsive embed-responsive-16by9">
-											<video controls id="quote_video" src="<%=context %>">
+											<video controls id="quote_video2" src="<%=context %>">
 											</video>
 										</div>
 									</div>
@@ -2029,8 +2011,8 @@ function deleteBom(loginUcode, bUcode, sIndex, class_index){
 						이 내용을 저장하시면 <br> 다음에 이어서 작성하실 수 있습니다.
 					</div>
 					<div class="modal-footer">
-						<button type="button" id="notsaveBtn" class="btn btn-secondary">
-							아뇨 괜찮습니다</button>
+						<button type="button" id="notsaveBtn" class="btn btn-secondary"
+							onclick="saveModalClose('${search}');">아뇨 괜찮습니다</button>
 						<button type="submit" id="saveBtn" class="btn btn-success">저장</button>
 					</div>
 				</div>
@@ -2264,22 +2246,22 @@ function deleteBom(loginUcode, bUcode, sIndex, class_index){
 		function scrap_click(code, index,nickname, atid, profile, type, src, context){
 			var str="";
 			$("input[name=bbcode]").attr("value", code);
-			$("#QuoteArea").css("display","block");
-			$("#quote_nickname").text(nickname); 
+			$("#QuoteArea2").css("display","block");
+			$("#quote_nickname2").text(nickname); 
 			var content = $("input#tagContent"+index).attr('value');
-			$("#quote_content").html(content);
-			$("#quote_atid").text("@"+atid); 
-			$("#quote_profile").attr("src", profile);
+			$("#quote_content2").html(content);
+			$("#quote_atid2").text("@"+atid); 
+			$("#quote_profile2").attr("src", profile);
 			if(type=='image'){
-				$(".quote_file").css("display","block");
-				$("#show_quote_video").css("display","none");
+				$(".quote_file2").css("display","block");
+				$("#show_quote_video2").css("display","none");
 				var img=context+"/image/"+src;
-				$("#quote_img").attr("src", img);
+				$("#quote_img2").attr("src", img);
 			}
 			else if(type=='video'){
-				$(".quote_file").css("display","block");
+				$(".quote_file2").css("display","block");
 				var video=context+"/video/"+src;
-				$("#quote_video").attr("src", video);
+				$("#quote_video2").attr("src", video);
 			}
 			//투표버튼은 비활성화
 			$("#displayVote").attr("disabled","disabled");
@@ -2462,20 +2444,20 @@ function deleteBom(loginUcode, bUcode, sIndex, class_index){
 					if(data.btype == "quote"){
 						btype=2;
 						$("input[name=bbcode]").attr("value",data.bbcode);
-						$("#QuoteArea").css("display","block");
-						$("#quote_nickname").text(data.qnickname); 
-						$("#quote_content").html(data.qcontent);
-						$("#quote_atid").text("@"+data.qatid); 
-						$("#quote_profile").attr("src", data.qprofileimage);
+						$("#QuoteArea2").css("display","block");
+						$("#quote_nickname2").text(data.qnickname); 
+						$("#quote_content2").html(data.qcontent);
+						$("#quote_atid2").text("@"+data.qatid); 
+						$("#quote_profile2").attr("src", data.qprofileimage);
 						if((data.qattach).substring(0,5) == "image"){
-							$(".quote_file").css("display","block");
-							$("#show_quote_video").css("display","none");
-							$("img#quote_img").attr("src", $("img#quote_img").attr('src')+"/"+data.qattach);
+							$(".quote_file2").css("display","block");
+							$("#show_quote_video2").css("display","none");
+							$("img#quote_img2").attr("src", $("img#quote_img2").attr('src')+"/"+data.qattach);
 						}
 						else if((data.qattach).substring(0,5) == 'video'){
-							$(".quote_file").css("display","block");
-							$("#show_quote_video").css("display","block");
-							$("video#quote_video").attr("src", $("video#quote_video").attr('src')+"/"+data.qattach);
+							$(".quote_file2").css("display","block");
+							$("#show_quote_video2").css("display","block");
+							$("video#quote_video2").attr("src", $("video#quote_video").attr('src')+"/"+data.qattach);
 						}
 						
 						//투표버튼은 비활성화
@@ -2534,9 +2516,9 @@ function deleteBom(loginUcode, bUcode, sIndex, class_index){
 		}
 		
 		/*글쓰기에서 닫기눌렀을때 글이없으면 저장창 안띄우고 닫기*/
-		jQuery("#closeWrite").click(function(){
+		function closeWriteModal(search){
 			if(bvote==1){
-				location.href="../iron/timeline";
+				location.href="../hoon/searchView?search="+search;
 			}
 			else{
 				var write=$("#writeTextarea").html();
@@ -2544,19 +2526,18 @@ function deleteBom(loginUcode, bUcode, sIndex, class_index){
 					$("#saveModal .close").click();
 					$("#realCloseWrite").click();
 					//그리고 메인글로 돌아가
-					location.href="/iron/timeline";
+					location.href="../hoon/searchView?search="+search;
 				}
 			}
-		});
+		}
 		
 		/*마지막 저장창에서 저장안해 클릭*/
-		jQuery("#notsaveBtn").click(function(){
-			//$("#writeForm .close").click();
+		function saveModalClose(search){
 			$("#saveModal .close").click();
 			$("#realCloseWrite").click();
-			//그리고 메인글로 돌아가
-			location.href="/iron/timeline";
-		});
+			location.href="../hoon/searchView?search="+search;
+		}
+
 		
 		/*마지막 저장창에서 저장해 클릭*/
 		jQuery("#saveBtn").click(function(){

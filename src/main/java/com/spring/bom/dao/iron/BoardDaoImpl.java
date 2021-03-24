@@ -43,24 +43,18 @@ public class BoardDaoImpl implements BoardDao {
 			// 인용데이터 처리
 			for (int i = 0; i < bdlist.size(); i++) {
 				if (bdlist.get(i).getBtype().equals("quote")) {
-					Board quoteboard = session.selectOne("QuoteBoard", bdlist.get(i).getBbcode());
-					System.out.println("QuoteBoard--bdlist.get(i).getBbcode() --> " + bdlist.get(i).getBbcode());
-					System.out.println("쿼트문 실행");
+					int code=Integer.parseInt(bdlist.get(i).getBbcode());
+					
+					Board quoteboard = session.selectOne("Iron_QuoteBoard", bdlist.get(i).getBbcode());
 					bdlist.get(i).setQ_uimage(quoteboard.getUimage());
-					System.out.println("quoteboard.getUimage() -> " + quoteboard.getUimage());
 					bdlist.get(i).setQ_nickname(quoteboard.getUnickName());
 					bdlist.get(i).setQ_atid(quoteboard.getUatid());
 					bdlist.get(i).setQ_content(quoteboard.getBcontent());
 					bdlist.get(i).setQ_regdate(quoteboard.getBregDate());
 
 					if (quoteboard.getBattach() != null) {
-						System.out.println("quoteboard.getBattach() -> " + quoteboard.getBattach());
 						bdlist.get(i).setQ_attachsrc(quoteboard.getBattach().substring(6));
 						bdlist.get(i).setQ_attachtype(quoteboard.getBattach().substring(0, 5));
-						System.out.println(
-								"quoteboard.getBattach().substring(6) -> " + quoteboard.getBattach().substring(6));
-						System.out.println("quoteboard.getBattach().substring(0, 5) -> "
-								+ quoteboard.getBattach().substring(0, 5));
 					}
 				}
 			}

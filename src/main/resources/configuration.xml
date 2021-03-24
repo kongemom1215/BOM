@@ -19,6 +19,7 @@
 		<!-- bro -->
 		<typeAlias type="com.spring.bom.model.bro.User_info"
 			alias="User_info" />
+
 		<typeAlias type="com.spring.bom.model.bro.Interest"
 			alias="Interest" />
 
@@ -31,6 +32,8 @@
 			alias="GodHash" />
 		<typeAlias type="com.spring.bom.model.god.JHUser_info"
 			alias="GodUser" />
+		<typeAlias type="com.spring.bom.model.god.JHLike"
+			alias="JHLike" />
 
 		<!-- bear -->
 		<typeAlias type="com.spring.bom.model.bear.Chat"

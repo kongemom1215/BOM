@@ -1477,7 +1477,7 @@ function unfollow(number){
 		/*글쓰기에서 닫기눌렀을때 글이없으면 저장창 안띄우고 닫기*/
 		jQuery("#closeWrite").click(function(){
 			if(bvote==1){
-				location.href="../iron/timeline";
+				location.href="../hoon/explore";
 			}
 			else{
 				var write=$("#writeTextarea").html();
@@ -1485,7 +1485,7 @@ function unfollow(number){
 					$("#saveModal .close").click();
 					$("#realCloseWrite").click();
 					//그리고 메인글로 돌아가
-					location.href="/iron/timeline";
+					location.href="/hoon/explore";
 				}
 			}
 		});
@@ -1496,7 +1496,7 @@ function unfollow(number){
 			$("#saveModal .close").click();
 			$("#realCloseWrite").click();
 			//그리고 메인글로 돌아가
-			location.href="/iron/timeline";
+			location.href="/hoon/explore";
 		});
 		
 		/*마지막 저장창에서 저장해 클릭*/

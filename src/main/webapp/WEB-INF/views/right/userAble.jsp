@@ -10,8 +10,8 @@
 <body>
 <c:if test="${result2 > 0 }">
 	<script type="text/javascript">
-		alert("복구 되었습니다! 다시 봄에 오신걸 환영합니다 :)");
-		location.href = "/iron/timeline";
+		alert("복구 되었습니다! 다시 봄에 오신걸 환영합니다 :) 다시 로그인 해주세요.");
+		location.href = "/bro/index";
 	</script>
 </c:if>
 <c:if test="${result2 ==0 }">

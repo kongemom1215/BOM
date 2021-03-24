@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.spring.bom.model.god.JHBoard;
 import com.spring.bom.model.god.JHHashtag;
+import com.spring.bom.model.god.JHLike;
 import com.spring.bom.model.god.JHUser_info;
 import com.spring.bom.model.god.JHVote;
 import com.spring.bom.service.god.JHBoardService;
@@ -197,5 +198,14 @@ public class JuhyeController {
 		List<JHUser_info> searchList = us.getSearchList(search_value);
 
 		return searchList;
+	}
+	
+	@RequestMapping(value="god/AjaxLikeAction", produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public JHLike getUserLike(int bcode, int ucode) {
+		System.out.println("[GOD] start JuhyeController getUserLike");
+		JHLike like= us.getUserLike(bcode, ucode);
+		
+		return like;
 	}
 }

@@ -178,29 +178,82 @@ label {
 		location.href = 'singleBoard?bcode='+bbcode;
 	}
 	
-	function clickLikeBtn(bbcode,btnIndex){
+	function clickLikeBtn(bcode,index, user){
 		event.stopPropagation();
-		var index = btnIndex;
-		var bcode = bbcode;
-		var msg = '게시글['+bcode+']에 좋아요를 눌렀습니다!';
-		alert(msg);
 		$.ajax({
-			url : "<%=context%>/iron/AjaxLikeAction",
-			data:{ bcode: bcode }, 
+			url : "<%=context%>/god/AjaxLikeAction",
+			data:{ bcode: bcode, ucode:user}, 
 			dataType:'json',
 			success : function(data){
-				var str='';
-				$('#likeBtn'+index).empty();
-				if(data.ltype==0||data.ltype==null)
-					str += "<img src='/img/heart.svg' width='20' height='20'> " + data.likeCount
-				if(data.ltype==1)
-					str+= "<img src='/img/red_heart.svg' width='20' height='20'> "+ data.likeCount
-				$('#likeBtn'+index).append(str);
-				alert(".ajax clickLikeBtn str->"+str);
+				if(data.ltype==0){
+					$("#noheart"+index).css("display","none");
+					$("#doheart"+index).css("display","block");
+				}
+				else if(data.ltype==1){
+					$("#noheart"+index).css("display","block");
+					$("#doheart"+index).css("display","none");
+				}
+				$("#likecount"+index).text(data.likeCount);
 			}
 		});
 	}
-	
+	function clickLikeBtn2(bcode,index, user){
+		event.stopPropagation();
+		$.ajax({
+			url : "<%=context%>/god/AjaxLikeAction",
+			data:{ bcode: bcode, ucode:user}, 
+			dataType:'json',
+			success : function(data){
+				if(data.ltype==0){
+					$("#noheart2th"+index).css("display","none");
+					$("#doheart2th"+index).css("display","block");
+				}
+				else if(data.ltype==1){
+					$("#noheart2th"+index).css("display","block");
+					$("#doheart2th"+index).css("display","none");
+				}
+				$("#likecount2th"+index).text(data.likeCount);
+			}
+		});
+	}
+	function clickLikeBtn3(bcode,index, user){
+		event.stopPropagation();
+		$.ajax({
+			url : "<%=context%>/god/AjaxLikeAction",
+			data:{ bcode: bcode, ucode:user}, 
+			dataType:'json',
+			success : function(data){
+				if(data.ltype==0){
+					$("#noheart3th"+index).css("display","none");
+					$("#doheart3th"+index).css("display","block");
+				}
+				else if(data.ltype==1){
+					$("#noheart3th"+index).css("display","block");
+					$("#doheart3th"+index).css("display","none");
+				}
+				$("#likecount3th"+index).text(data.likeCount);
+			}
+		});
+	}
+	function clickLikeBtn4(bcode,index, user){
+		event.stopPropagation();
+		$.ajax({
+			url : "<%=context%>/god/AjaxLikeAction",
+			data:{ bcode: bcode, ucode:user}, 
+			dataType:'json',
+			success : function(data){
+				if(data.ltype==0){
+					$("#noheart4th"+index).css("display","none");
+					$("#doheart4th"+index).css("display","block");
+				}
+				else if(data.ltype==1){
+					$("#noheart4th"+index).css("display","block");
+					$("#doheart4th"+index).css("display","none");
+				}
+				$("#likecount4th"+index).text(data.likeCount);
+			}
+		});
+	}
 	function viewBoardOptions(bbcode,bindex){
 		event.stopPropagation();
 		var index = bindex;
@@ -444,13 +497,20 @@ label {
 						<!-- 경빈 -->
 						<c:forEach var="board" items="${myBoardList }" varStatus="status">
 							<div class="card">
-								<div class="card-body" onclick=" goSingleBoard(${board.bcode},${status.index });">
-									<form action="/coffee/deleteBom_Profile" class="coffeeDeleteBom1_${status.index }" name="coffeeDeleteBom${status.index }" method="post">
-										<input type="hidden" name="coffeeBoardBcode" value="${board.bcode }">
-										<input type="hidden" name="coffeeBoardUatid" value="${board.uatid }">
+								<div class="card-body"
+									onclick=" goSingleBoard(${board.bcode},${status.index });">
+									<form action="/coffee/deleteBom_Profile"
+										class="coffeeDeleteBom1_${status.index }"
+										name="coffeeDeleteBom${status.index }" method="post">
+										<input type="hidden" name="coffeeBoardBcode"
+											value="${board.bcode }"> <input type="hidden"
+											name="coffeeBoardUatid" value="${board.uatid }">
 										<%-- <input type="hidden" class="coffeeStatusIndex" value="${status.index }"> --%>
 										<%-- <input type="hidden" name="coffeeLoginUcode" value="${user.ucode }"> --%>
-										<button type="button" class="btn btn-light float-right" onclick="deleteBom(${user.ucode }, ${board.ucode }, ${status.index },1);"><img src="/img/coffee/trash.svg" width = "15" height = "15"></button>
+										<button type="button" class="btn btn-light float-right"
+											onclick="deleteBom(${user.ucode }, ${board.ucode }, ${status.index },1);">
+											<img src="/img/coffee/trash.svg" width="15" height="15">
+										</button>
 									</form>
 									<!-- 경빈 part 끝 -->
 									<img src="<%=context %>/profile_image/${board.uimage}"
@@ -541,12 +601,30 @@ label {
 												${board.bquoteCount }
 											</c:if>
 											</button>
-											<button type="button"
-												class="btn btn-secondary btn-light mr-3"
-												data-toggle="tooltip" data-placement="top" title="좋아요">
-												<img src="/img/heart.svg" width="20" height="20">
-												${board.blikeCount}
+											<!-- 좋아요 -->
+											<button id="likeBtn${status.index }" type="button"
+											class="btn btn-secondary btn-light mr-3"
+											data-toggle="tooltip" data-placement="top" title="좋아요"
+											onclick="clickLikeBtn(${board.bcode},${status.index }, ${user.ucode});">
+											<div class="form-row justify-content-center text-center">
+											<img src="/img/heart.svg" width="20" height="20" id="noheart${status.index }" style="display:none;"> 
+											<img src="/img/red_heart.svg" width="20" height="20" id="doheart${status.index }" style="display:none;"> 
+											<span id="likecount${status.index }" class="ml-1">${board.blikeCount }</span>
+											<c:if test="${board.ltype == 0 || board.ltype == null }">
+												<script type="text/javascript">
+													$("#noheart"+${status.index }).css("display","block");
+													$("#doheart"+${status.index }).css("display","none");
+												</script>
+											</c:if>
+											<c:if test="${board.ltype == 1 }">
+												<script type="text/javascript">
+													$("#noheart"+${status.index }).css("display","none");
+													$("#doheart"+${status.index }).css("display","block"); 
+												</script>
+											</c:if>
+											</div>
 											</button>
+
 											<button type="button"
 												class="btn btn-secondary btn-light mr-3 dropdown-toggle caret-off"
 												data-toggle="dropdown" aria-haspopup="true"
@@ -571,15 +649,23 @@ label {
 							작성된 댓글이 없습니다.
 						</c:if>
 						<!-- 경빈 -->
-						<c:forEach var="board" items="${myReplyBoardList }" varStatus="status">
+						<c:forEach var="board" items="${myReplyBoardList }"
+							varStatus="status">
 							<div class="card">
-								<div class="card-body" onclick=" goSingleBoard(${board.bcode},${status.index });">
-									<form action="/coffee/deleteBom_Profile" class="coffeeDeleteBom2_${status.index }" name="coffeeDeleteBom${status.index }" method="post">
-										<input type="hidden" name="coffeeBoardBcode" value="${board.bcode }">
-										<input type="hidden" name="coffeeBoardUatid" value="${board.uatid }">
+								<div class="card-body"
+									onclick=" goSingleBoard(${board.bcode},${status.index });">
+									<form action="/coffee/deleteBom_Profile"
+										class="coffeeDeleteBom2_${status.index }"
+										name="coffeeDeleteBom${status.index }" method="post">
+										<input type="hidden" name="coffeeBoardBcode"
+											value="${board.bcode }"> <input type="hidden"
+											name="coffeeBoardUatid" value="${board.uatid }">
 										<%-- <input type="hidden" class="coffeeStatusIndex" value="${status.index }"> --%>
 										<%-- <input type="hidden" name="coffeeLoginUcode" value="${user.ucode }"> --%>
-										<button type="button" class="btn btn-light float-right" onclick="deleteBom(${user.ucode }, ${board.ucode }, ${status.index },2);"><img src="/img/coffee/trash.svg" width = "15" height = "15"></button>
+										<button type="button" class="btn btn-light float-right"
+											onclick="deleteBom(${user.ucode }, ${board.ucode }, ${status.index },2);">
+											<img src="/img/coffee/trash.svg" width="15" height="15">
+										</button>
 									</form>
 									<!-- 경빈 part 끝 -->
 									<img src="<%=context %>/profile_image/${board.uimage}"
@@ -663,19 +749,37 @@ label {
 												onclick="scrap_click('${board.bcode}',${status.index },'${board.unickName }','${board.uatid }','<%=context %>/profile_image/${board.uimage }','${board.battachType}','${board.battachSrc}','<%=context %>');"
 												class="scrapSetting btn btn-secondary mr-3 btn-light"
 												data-toggle="modal" data-target="#writeForm">
-												<input type="hidden" value="${tl_element.bcontent}"
+												<input type="hidden" value="${board.bcontent}"
 													id="tagContent${status.index}"> <img
 													src="/img/bring.svg" width="20" height="20">
 												<c:if test="${board.bquoteCount ne 0}">
 												${board.bquoteCount }
 											</c:if>
 											</button>
-											<button type="button"
-												class="btn btn-secondary btn-light mr-3"
-												data-toggle="tooltip" data-placement="top" title="좋아요">
-												<img src="/img/heart.svg" width="20" height="20">
-												${board.blikeCount}
+											<!-- 좋아요 -->
+											<button id="likeBtn2th${status.index }" type="button"
+											class="btn btn-secondary btn-light mr-3"
+											data-toggle="tooltip" data-placement="top" title="좋아요"
+											onclick="clickLikeBtn2(${board.bcode},${status.index }, ${user.ucode});">
+											<div class="form-row justify-content-center text-center">
+											<img src="/img/heart.svg" width="20" height="20" id="noheart2th${status.index }" style="display:none;"> 
+											<img src="/img/red_heart.svg" width="20" height="20" id="doheart2th${status.index }" style="display:none;"> 
+											<span id="likecount2th${status.index }" class="ml-1">${board.blikeCount }</span>
+											<c:if test="${board.ltype == 0 || board.ltype == null }">
+												<script type="text/javascript">
+													$("#noheart2th"+${status.index }).css("display","block");
+													$("#doheart2th"+${status.index }).css("display","none");
+												</script>
+											</c:if>
+											<c:if test="${board.ltype == 1 }">
+												<script type="text/javascript">
+													$("#noheart2th"+${status.index }).css("display","none");
+													$("#doheart2th"+${status.index }).css("display","block"); 
+												</script>
+											</c:if>
+											</div>
 											</button>
+
 											<button type="button"
 												class="btn btn-secondary btn-light mr-3 dropdown-toggle caret-off"
 												data-toggle="dropdown" aria-haspopup="true"
@@ -701,15 +805,23 @@ label {
 							사진 또는 동영상 글이 없습니다
 						</c:if>
 						<!-- 경빈 -->
-						<c:forEach var="board" items="${myMediaBoardList }" varStatus="status">
+						<c:forEach var="board" items="${myMediaBoardList }"
+							varStatus="status">
 							<div class="card">
-								<div class="card-body" onclick=" goSingleBoard(${board.bcode},${status.index });">
-									<form action="/coffee/deleteBom_Profile" class="coffeeDeleteBom3_${status.index }" name="coffeeDeleteBom${status.index }" method="post">
-										<input type="hidden" name="coffeeBoardBcode" value="${board.bcode }">
-										<input type="hidden" name="coffeeBoardUatid" value="${board.uatid }">
+								<div class="card-body"
+									onclick=" goSingleBoard(${board.bcode},${status.index });">
+									<form action="/coffee/deleteBom_Profile"
+										class="coffeeDeleteBom3_${status.index }"
+										name="coffeeDeleteBom${status.index }" method="post">
+										<input type="hidden" name="coffeeBoardBcode"
+											value="${board.bcode }"> <input type="hidden"
+											name="coffeeBoardUatid" value="${board.uatid }">
 										<%-- <input type="hidden" class="coffeeStatusIndex" value="${status.index }"> --%>
 										<%-- <input type="hidden" name="coffeeLoginUcode" value="${user.ucode }"> --%>
-										<button type="button" class="btn btn-light float-right" onclick="deleteBom(${user.ucode }, ${board.ucode }, ${status.index },3);"><img src="/img/coffee/trash.svg" width = "15" height = "15"></button>
+										<button type="button" class="btn btn-light float-right"
+											onclick="deleteBom(${user.ucode }, ${board.ucode }, ${status.index },3);">
+											<img src="/img/coffee/trash.svg" width="15" height="15">
+										</button>
 									</form>
 									<!-- 경빈 part 끝 -->
 									<img src="<%=context %>/profile_image/${board.uimage}"
@@ -744,30 +856,47 @@ label {
 											<button type="button"
 												class="replySetting btn btn-secondary mr-3 btn-light"
 												data-toggle="modal" data-target="#writeForm"
-												onclick="reply_click('${tl_element.bcode}','${tl_element.uatid }');">
+												onclick="reply_click('${board.bcode}','${board.uatid }');">
 												<img src="/img/speech-bubble.svg" width="20" height="20">
-												<c:if test="${tl_element.breplyCount ne 0}">
-												${tl_element.breplyCount }
+												<c:if test="${board.breplyCount ne 0}">
+												${board.breplyCount }
 											</c:if>
 											</button>
 
 											<!-- 인용 -->
 											<button type="button"
-												onclick="scrap_click('${tl_element.bcode}',${status.index },'${tl_element.unickName }','${tl_element.uatid }','<%=context %>/profile_image/${tl_element.uimage }','${tl_element.battachType}','${tl_element.battachSrc}','<%=context %>');"
+												onclick="scrap_click('${board.bcode}',${status.index },'${board.unickName }','${board.uatid }','<%=context %>/profile_image/${board.uimage }','${board.battachType}','${board.battachSrc}','<%=context %>');"
 												class="scrapSetting btn btn-secondary mr-3 btn-light"
 												data-toggle="modal" data-target="#writeForm">
-												<input type="hidden" value="${tl_element.bcontent}"
+												<input type="hidden" value="${board.bcontent}"
 													id="tagContent${status.index}"> <img
 													src="/img/bring.svg" width="20" height="20">
-												<c:if test="${tl_element.bquoteCount ne 0}">
-												${tl_element.bquoteCount }
+												<c:if test="${board.bquoteCount ne 0}">
+												${board.bquoteCount }
 											</c:if>
 											</button>
-											<button type="button"
-												class="btn btn-secondary btn-light mr-3"
-												data-toggle="tooltip" data-placement="top" title="좋아요">
-												<img src="/img/heart.svg" width="20" height="20">
-												${board.blikeCount}
+											<button id="likeBtn3th${status.index }" type="button"
+											class="btn btn-secondary btn-light mr-3"
+											data-toggle="tooltip" data-placement="top" title="좋아요"
+											onclick="clickLikeBtn3(${board.bcode},${status.index }, ${user.ucode});">
+											<div class="form-row justify-content-center text-center">
+											<img src="/img/heart.svg" width="20" height="20" id="noheart3th${status.index }" style="display:none;"> 
+											<img src="/img/red_heart.svg" width="20" height="20" id="doheart3th${status.index }" style="display:none;"> 
+											<span id="likecount3th${status.index }" class="ml-1">${board.blikeCount }</span>
+											<c:if test="${board.ltype == 0 || board.ltype == null }">
+												<script type="text/javascript">
+													$("#noheart3th"+${status.index }).css("display","block");
+													$("#doheart3th"+${status.index }).css("display","none");
+												</script>
+											</c:if>
+											<c:if test="${board.ltype == 1 }">
+												<script type="text/javascript">
+													$("#noheart3th"+${status.index }).css("display","none");
+													$("#doheart3th"+${status.index }).css("display","block"); 
+												</script>
+											</c:if>
+											</div>
+
 											</button>
 											<button type="button"
 												class="btn btn-secondary btn-light mr-3 dropdown-toggle caret-off"
@@ -794,15 +923,23 @@ label {
 							좋아요한 글이 없습니다
 						</c:if>
 						<!-- 경빈 -->
-						<c:forEach var="board" items="${myLikeBoardList }" varStatus="status">
+						<c:forEach var="board" items="${myLikeBoardList }"
+							varStatus="status">
 							<div class="card">
-								<div class="card-body" onclick=" goSingleBoard(${board.bcode},${status.index });">
-									<form action="/coffee/deleteBom_Profile" class="coffeeDeleteBom4_${status.index }" name="coffeeDeleteBom${status.index }" method="post">
-										<input type="hidden" name="coffeeBoardBcode" value="${board.bcode }">
-										<input type="hidden" name="coffeeBoardUatid" value="${board.uatid }">
+								<div class="card-body"
+									onclick=" goSingleBoard(${board.bcode},${status.index });">
+									<form action="/coffee/deleteBom_Profile"
+										class="coffeeDeleteBom4_${status.index }"
+										name="coffeeDeleteBom${status.index }" method="post">
+										<input type="hidden" name="coffeeBoardBcode"
+											value="${board.bcode }"> <input type="hidden"
+											name="coffeeBoardUatid" value="${board.uatid }">
 										<%-- <input type="hidden" class="coffeeStatusIndex" value="${status.index }"> --%>
 										<%-- <input type="hidden" name="coffeeLoginUcode" value="${user.ucode }"> --%>
-										<button type="button" class="btn btn-light float-right" onclick="deleteBom(${user.ucode }, ${board.ucode }, ${status.index },4);"><img src="/img/coffee/trash.svg" width = "15" height = "15"></button>
+										<button type="button" class="btn btn-light float-right"
+											onclick="deleteBom(${user.ucode }, ${board.ucode }, ${status.index },4);">
+											<img src="/img/coffee/trash.svg" width="15" height="15">
+										</button>
 									</form>
 									<!-- 경빈 part 끝 -->
 									<img src="<%=context %>/profile_image/${board.uimage}"
@@ -874,7 +1011,7 @@ label {
 											<button type="button"
 												class="replySetting btn btn-secondary mr-3 btn-light"
 												data-toggle="modal" data-target="#writeForm"
-												onclick="reply_click('${tl_element.bcode}','${board.uatid }');">
+												onclick="reply_click('${board.bcode}','${board.uatid }');">
 												<img src="/img/speech-bubble.svg" width="20" height="20">
 												<c:if test="${board.breplyCount ne 0}">
 												${board.breplyCount }
@@ -886,29 +1023,49 @@ label {
 												onclick="scrap_click('${board.bcode}',${status.index },'${board.unickName }','${board.uatid }','<%=context %>/profile_image/${board.uimage }','${board.battachType}','${board.battachSrc}','<%=context %>');"
 												class="scrapSetting btn btn-secondary mr-3 btn-light"
 												data-toggle="modal" data-target="#writeForm">
-												<input type="hidden" value="${tl_element.bcontent}"
+												<input type="hidden" value="${board.bcontent}"
 													id="tagContent${status.index}"> <img
 													src="/img/bring.svg" width="20" height="20">
 												<c:if test="${board.bquoteCount ne 0}">
 												${board.bquoteCount }
 											</c:if>
 											</button>
-											<button type="button"
+											<button id="likeBtn4th${status.index }" type="button"
 												class="btn btn-secondary btn-light mr-3"
-												data-toggle="tooltip" data-placement="top" title="좋아요">
-												<img src="/img/heart.svg" width="20" height="20">
-												${board.blikeCount}
-											</button>
-											<button type="button"
-												class="btn btn-secondary btn-light mr-3 dropdown-toggle caret-off"
-												data-toggle="dropdown" aria-haspopup="true"
-												aria-expanded="false">
-												<img src="/img/share.svg" width="20" height="20">
-											</button>
-											<div class="dropdown-menu">
-												<a class="dropdown-item" href="#">북마크 추가/삭제</a> <a
-													class="dropdown-item" href="#">URL담아가기</a>
-											</div>
+												data-toggle="tooltip" data-placement="top" title="좋아요"
+												onclick="clickLikeBtn4(${board.bcode},${status.index }, ${user.ucode});">
+												<div class="form-row justify-content-center text-center">
+													<img src="/img/heart.svg" width="20" height="20"
+														id="noheart4th${status.index }" style="display: none;">
+													<img src="/img/red_heart.svg" width="20" height="20"
+														id="doheart4th${status.index }" style="display: none;">
+													<span id="likecount4th${status.index }" class="ml-1">${board.blikeCount }</span>
+													<c:if
+														test="${board.ltype == 0 || board.ltype == null }">
+														<script type="text/javascript">
+													$("#noheart4th"+${status.index }).css("display","block");
+													$("#doheart4th"+${status.index }).css("display","none");
+												</script>
+													</c:if>
+													<c:if test="${board.ltype == 1 }">
+														<script type="text/javascript">
+													$("#noheart4th"+${status.index }).css("display","none");
+													$("#doheart4th"+${status.index }).css("display","block"); 
+												</script>
+													</c:if>
+												</div>
+												</button>
+
+												<button type="button"
+													class="btn btn-secondary btn-light mr-3 dropdown-toggle caret-off"
+													data-toggle="dropdown" aria-haspopup="true"
+													aria-expanded="false">
+													<img src="/img/share.svg" width="20" height="20">
+												</button>
+												<div class="dropdown-menu">
+													<a class="dropdown-item" href="#">북마크 추가/삭제</a> <a
+														class="dropdown-item" href="#">URL담아가기</a>
+												</div>
 										</div>
 									</div>
 								</div>
@@ -1079,7 +1236,7 @@ label {
 								data-toggle="modal" data-target="#towhom">받는 사람</button>
 							<button type="button" id="realCloseWrite" class="close"
 								data-dismiss="modal" style="display: none;"></button>
-							<button type="button" id="closeWrite" class="close"
+							<button type="button" id="closeWrite" class="close" onclick="closeWriteModal('${someone.uatid}');"
 								style="float: right;" data-toggle="modal"
 								data-target="#saveModal" aria-label="Close">
 								<span aria-hidden="true">&times;</span>
@@ -1092,21 +1249,21 @@ label {
 					</div>
 					<div class="modal-body col-12">
 						<!-- 인용부분 -->
-						<div class="col-12 float-left" id="QuoteArea"
+						<div class="col-12 float-left" id="QuoteArea2"
 							style="display: none; font-size: 0.8em;">
 							<div class='card'>
 								<div class='card-body'>
-									<img id="quote_profile" src="" alt='no_image'
+									<img id="quote_profile2" src="" alt='no_image'
 										class='rounded-circle' width='30'> <a
-										class='card-title text-dark' id="quote_nickname"></a> <a
-										class='card-subtitle mb-2 text-muted' id="quote_atid"></a>
+										class='card-title text-dark' id="quote_nickname2"></a> <a
+										class='card-subtitle mb-2 text-muted' id="quote_atid2"></a>
 									<div class='card-text mt-2 mb-0' style="height: 100%;"
-										id="quote_content"></div>
-									<div class="quote_file mt-2" style="display: none;">
-										<img id="quote_img" src="<%=context %>" class="img-fluid" />
-										<div id="show_quote_video"
+										id="quote_content2"></div>
+									<div class="quote_file2 mt-2" style="display: none;">
+										<img id="quote_img2" src="<%=context %>" class="img-fluid" />
+										<div id="show_quote_video2"
 											class="embed-responsive embed-responsive-16by9">
-											<video controls id="quote_video" src="<%=context %>">
+											<video controls id="quote_video2" src="<%=context %>">
 											</video>
 										</div>
 									</div>
@@ -1495,7 +1652,7 @@ label {
 						이 내용을 저장하시면 <br> 다음에 이어서 작성하실 수 있습니다.
 					</div>
 					<div class="modal-footer">
-						<button type="button" id="notsaveBtn" class="btn btn-secondary">
+						<button type="button" id="notsaveBtn" class="btn btn-secondary" onclick="saveModalClose('${someone.uatid}');">
 							아뇨 괜찮습니다</button>
 						<button type="submit" id="saveBtn" class="btn btn-success">저장</button>
 					</div>
@@ -1730,22 +1887,22 @@ label {
 		function scrap_click(code, index,nickname, atid, profile, type, src, context){
 			var str="";
 			$("input[name=bbcode]").attr("value", code);
-			$("#QuoteArea").css("display","block");
-			$("#quote_nickname").text(nickname); 
+			$("#QuoteArea2").css("display","block");
+			$("#quote_nickname2").text(nickname); 
 			var content = $("input#tagContent"+index).attr('value');
-			$("#quote_content").html(content);
-			$("#quote_atid").text("@"+atid); 
-			$("#quote_profile").attr("src", profile);
+			$("#quote_content2").html(content);
+			$("#quote_atid2").text("@"+atid); 
+			$("#quote_profile2").attr("src", profile);
 			if(type=='image'){
-				$(".quote_file").css("display","block");
-				$("#show_quote_video").css("display","none");
+				$(".quote_file2").css("display","block");
+				$("#show_quote_video2").css("display","none");
 				var img=context+"/image/"+src;
-				$("#quote_img").attr("src", img);
+				$("#quote_img2").attr("src", img);
 			}
 			else if(type=='video'){
-				$(".quote_file").css("display","block");
+				$(".quote_file2").css("display","block");
 				var video=context+"/video/"+src;
-				$("#quote_video").attr("src", video);
+				$("#quote_video2").attr("src", video);
 			}
 			//투표버튼은 비활성화
 			$("#displayVote").attr("disabled","disabled");
@@ -1928,20 +2085,20 @@ label {
 					if(data.btype == "quote"){
 						btype=2;
 						$("input[name=bbcode]").attr("value",data.bbcode);
-						$("#QuoteArea").css("display","block");
-						$("#quote_nickname").text(data.qnickname); 
-						$("#quote_content").html(data.qcontent);
-						$("#quote_atid").text("@"+data.qatid); 
-						$("#quote_profile").attr("src", data.qprofileimage);
+						$("#QuoteArea2").css("display","block");
+						$("#quote_nickname2").text(data.qnickname); 
+						$("#quote_content2").html(data.qcontent);
+						$("#quote_atid2").text("@"+data.qatid); 
+						$("#quote_profile2").attr("src", data.qprofileimage);
 						if((data.qattach).substring(0,5) == "image"){
-							$(".quote_file").css("display","block");
-							$("#show_quote_video").css("display","none");
-							$("img#quote_img").attr("src", $("img#quote_img").attr('src')+"/"+data.qattach);
+							$(".quote_file2").css("display","block");
+							$("#show_quote_video2").css("display","none");
+							$("img#quote_img2").attr("src", $("img#quote_img2").attr('src')+"/"+data.qattach);
 						}
 						else if((data.qattach).substring(0,5) == 'video'){
-							$(".quote_file").css("display","block");
-							$("#show_quote_video").css("display","block");
-							$("video#quote_video").attr("src", $("video#quote_video").attr('src')+"/"+data.qattach);
+							$(".quote_file2").css("display","block");
+							$("#show_quote_video2").css("display","block");
+							$("video#quote_video2").attr("src", $("video#quote_video").attr('src')+"/"+data.qattach);
 						}
 						
 						//투표버튼은 비활성화
@@ -2000,9 +2157,9 @@ label {
 		}
 		
 		/*글쓰기에서 닫기눌렀을때 글이없으면 저장창 안띄우고 닫기*/
-		jQuery("#closeWrite").click(function(){
+		function closeWriteModal(uatid){
 			if(bvote==1){
-				location.href="../iron/timeline";
+				location.href="../iron/profile?uatid="+uatid;
 			}
 			else{
 				var write=$("#writeTextarea").html();
@@ -2010,19 +2167,18 @@ label {
 					$("#saveModal .close").click();
 					$("#realCloseWrite").click();
 					//그리고 메인글로 돌아가
-					location.href="/iron/timeline";
+					location.href="../iron/profile?uatid="+uatid;
 				}
 			}
-		});
+		}
 		
 		/*마지막 저장창에서 저장안해 클릭*/
-		jQuery("#notsaveBtn").click(function(){
-			//$("#writeForm .close").click();
+		function saveModalClose(uatid){
 			$("#saveModal .close").click();
 			$("#realCloseWrite").click();
-			//그리고 메인글로 돌아가
-			location.href="/iron/timeline";
-		});
+			location.href="../iron/profile?uatid="+uatid;
+		}
+
 		
 		/*마지막 저장창에서 저장해 클릭*/
 		jQuery("#saveBtn").click(function(){
@@ -2194,6 +2350,7 @@ label {
 		});
 		</script>
 	<!--GOD 글쓰기 기능 끝-->
+
 
 	<!--BEAR 더보기 창  -->
 	<div class="modal fade" id="morebtn" data-backdrop="static"

@@ -152,4 +152,18 @@
 		where bcode=#{bbcode} and 
 		b.ucode=u.ucode 
 	</select>
+	<update id="GODUpLikeCount" parameterType="int">
+		update Board
+			set blikecount=blikecount+1
+		where bcode=#{bcode, jdbcType=INTEGER}
+	</update>
+	<update id="JHDownLikeCount" parameterType="int">
+		update Board
+			set blikecount=blikecount-1
+		where bcode=#{bcode, jdbcType=INTEGER}
+	</update>
+	<select id="JHgetLikeCount" parameterType="int" resultType="int">
+		select blikecount from board
+		where bcode=#{bcode, jdbcType=INTEGER}
+	</select>
 </mapper>

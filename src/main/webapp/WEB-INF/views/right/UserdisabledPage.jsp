@@ -64,8 +64,8 @@
 			        <p>
 				  </form>
 				  <div id="formFooter">
-			        <input type="hidden" value="${ui.uCode }">
-			        <button type="button" class="btn btn-outline-success" onclick="location.href='/right/userAble?ucode=${ui.uCode }'" id="ok" style="margin-right:0.5%">복구</button> 
+			        <input type="hidden" value="${ui.ucode }">
+			        <button type="button" class="btn btn-outline-success" onclick="location.href='/right/userAble?ucode=${ui.ucode }'" id="ok" style="margin-right:0.5%">복구</button> 
 			        <button type="button" class="btn btn-outline-secondary" onclick="location.href='../bro/index'">취소</button>
 			   </div>
 			</div>

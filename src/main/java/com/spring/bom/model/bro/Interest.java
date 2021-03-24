@@ -1,6 +1,5 @@
 package com.spring.bom.model.bro;
 
-import java.util.List;
 
 public class Interest {
 	int uCode;  // 사용자

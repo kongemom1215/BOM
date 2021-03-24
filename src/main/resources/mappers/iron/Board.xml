@@ -7,7 +7,7 @@
 		resultType="com.spring.bom.model.iron.Board">
 
 		select loginUcode, uimage, ucode, uatid, unickName, bcode, bcontent,
-		breplyCount, bquoteCount, blikeCount, battach,
+		breplyCount, bquoteCount, blikeCount, battach, bbcode,
 		case when trunc((sysdate
 		- to_date(bregdate,'yy/mm/dd hh24:mi:ss'))/365)
 		>=1 then trunc((sysdate
@@ -39,7 +39,7 @@
 		FROM
 		(
 		select
-		ui.ucode loginUcode, ui.uimage uimage, b.ucode ucode,
+		ui.ucode loginUcode, ui.uimage uimage, b.ucode ucode, b.bbcode bbcode,
 		ui.uatid uatid, ui.unickname unickName, b.bcode bcode, b.bcontent bcontent,
 		b.bregDate bregDate, b.breplyCount breplyCount, b.bquoteCount
 		bquoteCount, b.blikeCount blikeCount, b.battach battach,
@@ -57,7 +57,7 @@
             	 ]]>
 		UNION
 		select
-		ui.ucode loginUcode, ui.uimage uimage, b.ucode ucode,
+		ui.ucode loginUcode, ui.uimage uimage, b.ucode ucode, b.bbcode bbcode,
 		ui.uatid uatid, ui.unickname unickName, b.bcode bcode, b.bcontent bcontent,
 		b.bregDate bregDate, b.breplyCount breplyCount, b.bquoteCount
 		bquoteCount, b.blikeCount blikeCount, b.battach battach,
@@ -242,7 +242,7 @@
 		and b.bcode = lb.bcode(+)
 		order by bregdate desc
 	</select>
-	<select id="QuoteBoard" parameterType="java.lang.String"
+	<select id="Iron_QuoteBoard" parameterType="java.lang.String"
 		resultType="Iron_Board">
 		select b.bcode, b.bcontent, b.battach, u.unickname, u.uatid,
 		u.uimage,b.bregdate

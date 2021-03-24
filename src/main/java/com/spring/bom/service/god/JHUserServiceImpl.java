@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.spring.bom.dao.god.JHUserDao;
 import com.spring.bom.model.god.JHBoard;
+import com.spring.bom.model.god.JHLike;
 import com.spring.bom.model.god.JHUser_info;
 
 @Service
@@ -48,6 +49,12 @@ public class JHUserServiceImpl implements JHUserService{
 	public List<JHUser_info> getSearchList(String search_value) {
 		// TODO Auto-generated method stub
 		return ud.getSearchList(search_value);
+	}
+
+	@Override
+	public JHLike getUserLike(int bcode, int ucode) {
+		// TODO Auto-generated method stub
+		return ud.getUserLike(bcode, ucode);
 	}
 
 }

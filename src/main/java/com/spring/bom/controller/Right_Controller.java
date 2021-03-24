@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.spring.bom.model.bro.User_info;
 import com.spring.bom.model.iron.Follow;
 import com.spring.bom.model.iron.HashTag;
 import com.spring.bom.model.iron.User_Info;
@@ -69,12 +70,14 @@ public class Right_Controller {
 	// 탈퇴회원 로그인시
 	@RequestMapping(value = "/right/UserdisabledPage")
 	public String UserdisabledPage(HttpSession session, Model model) {
-		User_Info user = (User_Info) session.getAttribute("user");
+		User_info user = (User_info) session.getAttribute("user");
 		model.addAttribute("user", user);
-
-		int ucode = Integer.parseInt(session.getAttribute("ucode").toString());
-		model.addAttribute("ucode", ucode);
-		RUser_Info ui = us.detail(ucode);
+		System.out.println("User_info user ucode -> " + user.getuCode());
+		System.out.println("User_info user uEmail -> " + user.getuEmail());
+		System.out.println("User_info user uPassword -> " + user.getuPassword());
+		
+		model.addAttribute("ucode", user.getuCode());
+		RUser_Info ui = us.detail(user.getuCode());
 		model.addAttribute("ui", ui);
 
 		return "/right/UserdisabledPage";
@@ -83,15 +86,14 @@ public class Right_Controller {
 	// 복구버튼 클릭시
 	@RequestMapping(value = "/right/userAble")
 	public String userAble(HttpSession session, Model model) {
-		User_Info user = (User_Info) session.getAttribute("user");
+		User_info user = (User_info) session.getAttribute("user");
 		model.addAttribute("user", user);
-
-		int ucode = Integer.parseInt(session.getAttribute("ucode").toString());
-		model.addAttribute("ucode", ucode);
-		RUser_Info ui = us.detail(ucode);
+				
+		model.addAttribute("ucode", user.getuCode());
+		RUser_Info ui = us.detail( user.getuCode());
 		model.addAttribute("ui", ui);
-		int result1 = us.updateUstate1(ucode);
-		int result2 = us.updateUstate2(ucode);
+		int result1 = us.updateUstate1( user.getuCode());
+		int result2 = us.updateUstate2( user.getuCode());
 		model.addAttribute("result1", result1);
 		model.addAttribute("result2", result2);
 

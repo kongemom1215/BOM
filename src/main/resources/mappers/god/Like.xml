@@ -1,0 +1,36 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd"> 
+<mapper namespace="JHLike">
+	<select id="JHgetLike" parameterType="JHLike" resultType="JHLike">
+		select *
+		from like_bookmark 
+		where bcode=#{bcode} 
+		and ucode=#{ucode}
+	</select>
+	<select id="JHgetUserLike" parameterType="JHLike" resultType="int">
+		select count(*)
+		from like_bookmark 
+		where bcode=#{bcode} 
+		and ucode=#{ucode}
+	</select>
+	<update id="JHdoLike" parameterType="JHLike">
+		update like_bookmark
+		set ltype=1, ldate=to_char(sysdate, 'yy/mm/dd hh24:mi:ss')
+		where bcode=#{bcode, jdbcType=INTEGER} and ucode=#{ucode, jdbcType=INTEGER}
+	</update>
+	<update id="JHnoLike" parameterType="JHLike">
+		update like_bookmark
+		set ltype=0, ldate=null
+		where bcode=#{bcode, jdbcType=INTEGER} and ucode=#{ucode, jdbcType=INTEGER}
+	</update>
+	<insert id="JHInsertLike" parameterType="JHLike">
+		insert into like_bookmark
+		(ucode, bcode, ltype, ldate)
+		values (
+			#{ucode}, #{bcode}, 1, to_char(sysdate, 'yy/mm/dd hh24:mi:ss')
+		)
+	</insert>
+	<delete id="JHDeleteLike" parameterType="JHLike">
+		delete from like_bookmark
+		where bcode=#{bcode} and ucode=#{ucode}
+	</delete>
+</mapper>

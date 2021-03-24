@@ -136,25 +136,22 @@ label {
 		location.href = 'singleBoard?bcode='+bbcode;
 	}
 	
-	function clickLikeBtn(bbcode,btnIndex){
+	function clickLikeBtn(bcode,index, user){
 		event.stopPropagation();
-		var index = btnIndex;
-		var bcode = bbcode;
-		var msg = '게시글['+bcode+']에 좋아요를 눌렀습니다!';
-		alert(msg);
 		$.ajax({
-			url : "<%=context%>/iron/AjaxLikeAction",
-			data:{ bcode: bcode }, 
+			url : "<%=context%>/god/AjaxLikeAction",
+			data:{ bcode: bcode, ucode:user}, 
 			dataType:'json',
 			success : function(data){
-				var str='';
-				$('#likeBtn'+index).empty();
-				if(data.ltype==0||data.ltype==null)
-					str += "<img src='/img/heart.svg' width='20' height='20'> " + data.likeCount
-				if(data.ltype==1)
-					str+= "<img src='/img/red_heart.svg' width='20' height='20'> "+ data.likeCount
-				$('#likeBtn'+index).append(str);
-				alert(".ajax clickLikeBtn str->"+str);
+				if(data.ltype==0){
+					$("#noheart"+index).css("display","none");
+					$("#doheart"+index).css("display","block");
+				}
+				else if(data.ltype==1){
+					$("#noheart"+index).css("display","block");
+					$("#doheart"+index).css("display","none");
+				}
+				$("#likecount"+index).text(data.likeCount);
 			}
 		});
 	}
@@ -461,20 +458,28 @@ label {
 											</c:if>
 										</button>
 
-
+										<!--좋아요 버튼 -->
 										<button id="likeBtn${status.index }" type="button"
 											class="btn btn-secondary btn-light mr-3"
 											data-toggle="tooltip" data-placement="top" title="좋아요"
-											onclick="clickLikeBtn(${tl_element.bcode},${status.index }); return false;">
-
-											<c:if
-												test="${tl_element.ltype == 0 || tl_element.ltype == null }">
-												<img src="/img/heart.svg" width="20" height="20"> ${tl_element.blikeCount }
-										</c:if>
+											onclick="clickLikeBtn(${tl_element.bcode},${status.index }, ${user.ucode});">
+											<div class="form-row justify-content-center text-center">
+											<img src="/img/heart.svg" width="20" height="20" id="noheart${status.index }" style="display:none;"> 
+											<img src="/img/red_heart.svg" width="20" height="20" id="doheart${status.index }" style="display:none;"> 
+											<span id="likecount${status.index }" class="ml-1">${tl_element.blikeCount }</span>
+											<c:if test="${tl_element.ltype == 0 || tl_element.ltype == null }">
+												<script type="text/javascript">
+													$("#noheart"+${status.index }).css("display","block");
+													$("#doheart"+${status.index }).css("display","none");
+												</script>
+											</c:if>
 											<c:if test="${tl_element.ltype == 1 }">
-												<img src="/img/red_heart.svg" width="20" height="20"> ${tl_element.blikeCount }
-										</c:if>
-
+												<script type="text/javascript">
+													$("#noheart"+${status.index }).css("display","none");
+													$("#doheart"+${status.index }).css("display","block"); 
+												</script>
+											</c:if>
+											</div>
 										</button>
 
 										<button type="button"
@@ -568,7 +573,7 @@ label {
 						</div>
 						<c:if test="${suggestFlist2_size>0 }">
 							<button type="button" class="btn btn-outline-success"
-								id="writeBtn" data-toggle="modal" data-target="#morebtn">더보기
+								 data-toggle="modal" data-target="#morebtn">더보기
 							</button>
 						</c:if>
 					</div>
@@ -650,21 +655,21 @@ label {
 					</div>
 					<div class="modal-body col-12">
 						<!-- 인용부분 -->
-						<div class="col-12 float-left" id="QuoteArea"
+						<div class="col-12 float-left" id="QuoteArea2"
 							style="display: none; font-size: 0.8em;">
 							<div class='card'>
 								<div class='card-body'>
-									<img id="quote_profile" src="" alt='no_image'
+									<img id="quote_profile2" src="" alt='no_image'
 										class='rounded-circle' width='30'> <a
-										class='card-title text-dark' id="quote_nickname"></a> <a
-										class='card-subtitle mb-2 text-muted' id="quote_atid"></a>
+										class='card-title text-dark' id="quote_nickname2"></a> <a
+										class='card-subtitle mb-2 text-muted' id="quote_atid2"></a>
 									<div class='card-text mt-2 mb-0' style="height: 100%;"
-										id="quote_content"></div>
-									<div class="quote_file mt-2" style="display: none;">
-										<img id="quote_img" src="<%=context %>" class="img-fluid" />
-										<div id="show_quote_video"
+										id="quote_content2"></div>
+									<div class="quote_file2 mt-2" style="display: none;">
+										<img id="quote_img2" src="<%=context %>" class="img-fluid" />
+										<div id="show_quote_video2"
 											class="embed-responsive embed-responsive-16by9">
-											<video controls id="quote_video" src="<%=context %>">
+											<video controls id="quote_video2" src="<%=context %>">
 											</video>
 										</div>
 									</div>
@@ -1288,22 +1293,22 @@ label {
 		function scrap_click(code, index,nickname, atid, profile, type, src, context){
 			var str="";
 			$("input[name=bbcode]").attr("value", code);
-			$("#QuoteArea").css("display","block");
-			$("#quote_nickname").text(nickname); 
+			$("#QuoteArea2").css("display","block");
+			$("#quote_nickname2").text(nickname); 
 			var content = $("input#tagContent"+index).attr('value');
-			$("#quote_content").html(content);
-			$("#quote_atid").text("@"+atid); 
-			$("#quote_profile").attr("src", profile);
+			$("#quote_content2").html(content);
+			$("#quote_atid2").text("@"+atid); 
+			$("#quote_profile2").attr("src", profile);
 			if(type=='image'){
-				$(".quote_file").css("display","block");
-				$("#show_quote_video").css("display","none");
+				$(".quote_file2").css("display","block");
+				$("#show_quote_video2").css("display","none");
 				var img=context+"/image/"+src;
-				$("#quote_img").attr("src", img);
+				$("#quote_img2").attr("src", img);
 			}
 			else if(type=='video'){
-				$(".quote_file").css("display","block");
+				$(".quote_file2").css("display","block");
 				var video=context+"/video/"+src;
-				$("#quote_video").attr("src", video);
+				$("#quote_video2").attr("src", video);
 			}
 			//투표버튼은 비활성화
 			$("#displayVote").attr("disabled","disabled");
@@ -1486,20 +1491,20 @@ label {
 					if(data.btype == "quote"){
 						btype=2;
 						$("input[name=bbcode]").attr("value",data.bbcode);
-						$("#QuoteArea").css("display","block");
-						$("#quote_nickname").text(data.qnickname); 
-						$("#quote_content").html(data.qcontent);
-						$("#quote_atid").text("@"+data.qatid); 
-						$("#quote_profile").attr("src", data.qprofileimage);
+						$("#QuoteArea2").css("display","block");
+						$("#quote_nickname2").text(data.qnickname); 
+						$("#quote_content2").html(data.qcontent);
+						$("#quote_atid2").text("@"+data.qatid); 
+						$("#quote_profile2").attr("src", data.qprofileimage);
 						if((data.qattach).substring(0,5) == "image"){
-							$(".quote_file").css("display","block");
-							$("#show_quote_video").css("display","none");
-							$("img#quote_img").attr("src", $("img#quote_img").attr('src')+"/"+data.qattach);
+							$(".quote_file2").css("display","block");
+							$("#show_quote_video2").css("display","none");
+							$("img#quote_img2").attr("src", $("img#quote_img2").attr('src')+"/"+data.qattach);
 						}
 						else if((data.qattach).substring(0,5) == 'video'){
-							$(".quote_file").css("display","block");
-							$("#show_quote_video").css("display","block");
-							$("video#quote_video").attr("src", $("video#quote_video").attr('src')+"/"+data.qattach);
+							$(".quote_file2").css("display","block");
+							$("#show_quote_video2").css("display","block");
+							$("video#quote_video2").attr("src", $("video#quote_video").attr('src')+"/"+data.qattach);
 						}
 						
 						//투표버튼은 비활성화

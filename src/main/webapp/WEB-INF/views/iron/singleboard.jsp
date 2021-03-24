@@ -132,47 +132,43 @@ function goSingleBoard(bbcode,bindex){
 	alert(bbcode+'로 이동합니다.');
 	location.href = 'singleBoard?bcode='+bbcode;
 }
-function clickLikeBtn1(bbcode){
+
+function clickLikeBtn(bcode, user){
 	event.stopPropagation();
-	var bcode = bbcode;
-	var msg = '게시글['+bcode+']에 좋아요를 눌렀습니다!';
-	alert(msg);
 	$.ajax({
-		url : "<%=context%>/iron/AjaxLikeAction",
-		data:{ bcode: bcode }, 
+		url : "<%=context%>/god/AjaxLikeAction",
+		data:{ bcode: bcode, ucode:user}, 
 		dataType:'json',
 		success : function(data){
-			var str='';
-			$('#likeBtn').empty();
-			if(data.ltype==0||data.ltype==null)
-				str += "<img src='/img/heart.svg' width='20' height='20'> " + data.likeCount
-			if(data.ltype==1)
-				str+= "<img src='/img/red_heart.svg' width='20' height='20'> "+ data.likeCount
-			$('#likeBtn').append(str);
-			alert(".ajax clickLikeBtn str->"+str);
+			if(data.ltype==0){
+				$("#noheart").css("display","none");
+				$("#doheart").css("display","block");
+			}
+			else if(data.ltype==1){
+				$("#noheart").css("display","block");
+				$("#doheart").css("display","none");
+			}
+			$("#likecount").text(data.likeCount);
 		}
 	});
 }
 
-function clickLikeBtn2(bbcode, bindex){
+function clickLikeBtn2(bcode,index, user){
 	event.stopPropagation();
-	var index = bindex;
-	var bcode = bbcode;
-	var msg = '게시글['+bcode+']에 좋아요를 눌렀습니다!';
-	alert(msg);
 	$.ajax({
-		url : "<%=context%>/iron/AjaxLikeAction",
-		data:{ bcode: bcode }, 
+		url : "<%=context%>/god/AjaxLikeAction",
+		data:{ bcode: bcode, ucode:user}, 
 		dataType:'json',
 		success : function(data){
-			var str='';
-			$('#likeBtn2'+index).empty();
-			if(data.ltype==0||data.ltype==null)
-				str += "<img src='/img/heart.svg' width='20' height='20'> " + data.likeCount
-			if(data.ltype==1)
-				str+= "<img src='/img/red_heart.svg' width='20' height='20'> "+ data.likeCount
-			$('#likeBtn2'+index).append(str);
-			alert(".ajax clickLikeBtn2 str->"+str);
+			if(data.ltype==0){
+				$("#noheart"+index).css("display","none");
+				$("#doheart"+index).css("display","block");
+			}
+			else if(data.ltype==1){
+				$("#noheart"+index).css("display","block");
+				$("#doheart"+index).css("display","none");
+			}
+			$("#likecount"+index).text(data.likeCount);
 		}
 	});
 }
@@ -459,16 +455,30 @@ function deleteBom(loginUcode, bUcode, sIndex){
 											</c:if>
 								</button>
 
+								<!-- 좋아요 -->
 								<button id="likeBtn" type="button"
 									class="btn btn-secondary btn-light mr-3" data-toggle="tooltip"
 									data-placement="top" title="좋아요"
-									onclick="clickLikeBtn1(${board.bcode});">
-									<c:if test="${board.ltype == 0 || board.ltype == null }">
-										<img src="/img/heart.svg" width="20" height="20"> ${board.blikeCount }
-									</c:if>
-									<c:if test="${board.ltype == 1 }">
-										<img src="/img/red_heart.svg" width="20" height="20"> ${board.blikeCount }
-									</c:if>
+									onclick="clickLikeBtn(${board.bcode}, ${user.ucode});">
+									<div class="form-row justify-content-center text-center">
+										<img src="/img/heart.svg" width="20" height="20" id="noheart"
+											style="display: none;"> <img src="/img/red_heart.svg"
+											width="20" height="20" id="doheart" style="display: none;">
+										<span id="likecount" class="ml-1">${board.blikeCount }</span>
+										<c:if
+											test="${tl_element.ltype == 0 || tl_element.ltype == null }">
+											<script type="text/javascript">
+													$("#noheart").css("display","block");
+													$("#doheart").css("display","none");
+												</script>
+										</c:if>
+										<c:if test="${tl_element.ltype == 1 }">
+											<script type="text/javascript">
+													$("#noheart").css("display","none");
+													$("#doheart").css("display","block"); 
+												</script>
+										</c:if>
+									</div>
 								</button>
 								<button type="button"
 									class="btn btn-secondary btn-light mr-3 dropdown-toggle caret-off"
@@ -490,12 +500,18 @@ function deleteBom(loginUcode, bUcode, sIndex){
 				<c:forEach var="reply" items="${replylist }" varStatus="status">
 					<div class="card">
 						<!-- 경빈 part2 -->
-						<div class="card-body" id="singleBoard" onclick="goSingleBoard(${reply.bcode},${status.index });">
-							 <form action="/coffee/deleteBom_singleBoard" class="coffeeDeleteBom${status.index }" method="post"> 
-								<input type="hidden" name="coffeeBoardBcode" value="${reply.bcode }">
-								<input type="hidden" name="coffeeBoardUatid" value="${reply.uatid }">
-								<input type="hidden" name="coffeeBoardOrigin" value="0">
-								<button type="button" class="btn btn-light float-right" onclick="deleteBom(${user.ucode}, ${board.ucode }, ${status.index })"><img src="/img/coffee/trash.svg" width = "15" height = "15"></button>
+						<div class="card-body" id="singleBoard"
+							onclick="goSingleBoard(${reply.bcode},${status.index });">
+							<form action="/coffee/deleteBom_singleBoard"
+								class="coffeeDeleteBom${status.index }" method="post">
+								<input type="hidden" name="coffeeBoardBcode"
+									value="${reply.bcode }"> <input type="hidden"
+									name="coffeeBoardUatid" value="${reply.uatid }"> <input
+									type="hidden" name="coffeeBoardOrigin" value="0">
+								<button type="button" class="btn btn-light float-right"
+									onclick="deleteBom(${user.ucode}, ${board.ucode }, ${status.index })">
+									<img src="/img/coffee/trash.svg" width="15" height="15">
+								</button>
 							</form>
 							<!-- 경빈 part2 끝 -->
 							<div class="dropdown-menu">
@@ -594,32 +610,44 @@ function deleteBom(loginUcode, bUcode, sIndex){
 											</c:if>
 									</button>
 
-
+									<!-- 좋아요 -->
 									<button id="likeBtn2${status.index }" type="button"
 										class="btn btn-secondary btn-light mr-3" data-toggle="tooltip"
 										data-placement="top" title="좋아요"
-										onclick="clickLikeBtn2(${reply.bcode},${status.index }); return false;">
-
-										<c:if test="${reply.ltype == 0 || reply.ltype == null }">
-											<img src="/img/heart.svg" width="20" height="20"> ${reply.blikeCount }
-										</c:if>
-										<c:if test="${reply.ltype == 1 }">
-											<img src="/img/red_heart.svg" width="20" height="20"> ${reply.blikeCount }
-										</c:if>
-
+										onclick="clickLikeBtn2(${reply.bcode},${status.index }, ${user.ucode});">
+										<div class="form-row justify-content-center text-center">
+											<img src="/img/heart.svg" width="20" height="20"
+												id="noheart${status.index }" style="display: none;"> <img
+												src="/img/red_heart.svg" width="20" height="20"
+												id="doheart${status.index }" style="display: none;"> <span
+												id="likecount${status.index }" class="ml-1">${reply.blikeCount }</span>
+											<c:if
+												test="${tl_element.ltype == 0 || tl_element.ltype == null }">
+												<script type="text/javascript">
+													$("#noheart"+${status.index }).css("display","block");
+													$("#doheart"+${status.index }).css("display","none");
+												</script>
+											</c:if>
+											<c:if test="${tl_element.ltype == 1 }">
+												<script type="text/javascript">
+													$("#noheart"+${status.index }).css("display","none");
+													$("#doheart"+${status.index }).css("display","block"); 
+												</script>
+											</c:if>
+										</div>
 									</button>
 
-									<button type="button"
-										class="btn btn-secondary btn-light mr-3 dropdown-toggle caret-off"
-										data-toggle="dropdown" aria-haspopup="true"
-										aria-expanded="false" id="boardOption${status.index }"
-										onclick="viewBoardOptions(${bcode},${status.index }); return false;">
-										<img src="/img/share.svg" width="20" height="20">
-									</button>
-									<!-- ajax -->
-									<div class="dropdown-menu"
-										id="boardDropdownOption${status.index }">
-										<%-- 
+										<button type="button"
+											class="btn btn-secondary btn-light mr-3 dropdown-toggle caret-off"
+											data-toggle="dropdown" aria-haspopup="true"
+											aria-expanded="false" id="boardOption${status.index }"
+											onclick="viewBoardOptions(${bcode},${status.index }); return false;">
+											<img src="/img/share.svg" width="20" height="20">
+										</button>
+										<!-- ajax -->
+										<div class="dropdown-menu"
+											id="boardDropdownOption${status.index }">
+											<%-- 
 										<c:if test="${reply.bbtype==1 }">
 											<a class="dropdown-item" href="#">북마크 삭제</a>
 										</c:if>
@@ -628,7 +656,7 @@ function deleteBom(loginUcode, bUcode, sIndex){
 										</c:if>
 											<a class="dropdown-item" href="#">URL담아가기</a>
 										 --%>
-									</div>
+										</div>
 								</div>
 							</div>
 						</div>
@@ -765,7 +793,7 @@ function deleteBom(loginUcode, bUcode, sIndex){
 								data-toggle="modal" data-target="#towhom">받는 사람</button>
 							<button type="button" id="realCloseWrite" class="close"
 								data-dismiss="modal" style="display: none;"></button>
-							<button type="button" id="closeWrite" class="close"
+							<button type="button" id="closeWrite" class="close" onclick="closeWriteModal(${board.bcode});"
 								style="float: right;" data-toggle="modal"
 								data-target="#saveModal" aria-label="Close">
 								<span aria-hidden="true">&times;</span>
@@ -1180,7 +1208,7 @@ function deleteBom(loginUcode, bUcode, sIndex){
 						이 내용을 저장하시면 <br> 다음에 이어서 작성하실 수 있습니다.
 					</div>
 					<div class="modal-footer">
-						<button type="button" id="notsaveBtn" class="btn btn-secondary">
+						<button type="button" id="notsaveBtn" class="btn btn-secondary" onclick="saveModalClose(${board.bcode});">
 							아뇨 괜찮습니다</button>
 						<button type="submit" id="saveBtn" class="btn btn-success">저장</button>
 					</div>
@@ -1685,9 +1713,9 @@ function deleteBom(loginUcode, bUcode, sIndex){
 		}
 		
 		/*글쓰기에서 닫기눌렀을때 글이없으면 저장창 안띄우고 닫기*/
-		jQuery("#closeWrite").click(function(){
+		function closeWriteModal(bcode){
 			if(bvote==1){
-				location.href="../iron/timeline";
+				location.href="../iron/singleBoard?bcode="+bcode;
 			}
 			else{
 				var write=$("#writeTextarea").html();
@@ -1695,19 +1723,17 @@ function deleteBom(loginUcode, bUcode, sIndex){
 					$("#saveModal .close").click();
 					$("#realCloseWrite").click();
 					//그리고 메인글로 돌아가
-					location.href="/iron/timeline";
+					location.href="../iron/singleBoard?bcode="+bcode;
 				}
 			}
-		});
+		}
 		
 		/*마지막 저장창에서 저장안해 클릭*/
-		jQuery("#notsaveBtn").click(function(){
-			//$("#writeForm .close").click();
+		function saveModalClose(bcode){
 			$("#saveModal .close").click();
 			$("#realCloseWrite").click();
-			//그리고 메인글로 돌아가
-			location.href="/iron/timeline";
-		});
+			location.href="../iron/singleBoard?bcode="+bcode;
+		}	
 		
 		/*마지막 저장창에서 저장해 클릭*/
 		jQuery("#saveBtn").click(function(){

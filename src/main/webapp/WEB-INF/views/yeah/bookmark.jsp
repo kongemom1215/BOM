@@ -116,7 +116,11 @@ label {
 .nav-tabs .nav-link:not(.active) {
 	border-color: transparent !important;
 	color: #28a745;
-}
+} /* 
+
+.modal-backdrop {
+	z-index: -1;
+}  */
 </style>
 <script type="text/javascript">
 function goProfile(){
@@ -280,6 +284,7 @@ function unfollow(number){
 					</button>
 				</div>
 
+
 				<div class="card">
 					<div class="card-body">
 						<div class="form-row">
@@ -386,33 +391,51 @@ function unfollow(number){
 									</c:if>
 
 									<p class="card-text" style="margin-top: 10px;">${bookmark.bcontent }</p>
-
-									<c:if test="${bookmark.battachType == 'image' }">
-										<img src="<%=context %>/image/${bookmark.battachSrc }"
-											width="200">
-									</c:if>
-
-									<c:if test="${bookmark.battachType == 'video' }">
-										<video controls width="300">
-											<source src="<%=context %>/video/${bookmark.battachSrc }"
-												type="video/mp4" />
-											<source src="<%=context %>/video/${bookmark.battachSrc }"
-												type="video/webm">
-										</video>
+									<c:if test="${bookmark.battach!=null }">
+										<c:if test="${bookmark.battachType=='image'}">
+											<img class="img-fluid"
+												src="<%=context %>/image/${bookmark.battachSrc}" />
+										</c:if>
+										<c:if test="${bookmark.battachType=='video'}">
+											<div class="embed-responsive embed-responsive-16by9">
+												<video controls>
+													<source src="<%=context %>/video/${bookmark.battachSrc}"
+														type="video/mp4">
+													<source src="<%=context %>/video/${bookmark.battachSrc}"
+														type="video/webm">
+													해당 브라우저에는 지원하지 않는 비디오입니다.
+												</video>
+											</div>
+										</c:if>
 									</c:if>
 								</div>
 
 								<div align="center">
 									<div class="btn-group col-md-12" role="group"
 										aria-label="Button group with nested dropdown">
-										<button type="button" class="btn btn-secondary mr-3 btn-light"
-											data-toggle="tooltip" data-placement="top" title="답글 ">
+										<!--답글 -->
+										<button type="button"
+											class="replySetting btn btn-secondary mr-3 btn-light"
+											data-toggle="modal" data-target="#writeForm"
+											onclick="reply_click('${bookmark.bcode}','${bookmark.uatid }');">
 											<img src="/img/speech-bubble.svg" width="20" height="20">
+											<c:if test="${bookmark.breplycount ne 0}">
+												${bookmark.breplycount }
+											</c:if>
 										</button>
-										<button type="button" class="btn btn-secondary btn-light mr-3"
-											data-toggle="tooltip" data-placement="top" title="스크랩 or 인용">
+										<!--인용 -->
+										<input type="hidden" value="${bookmark.bcontent}" id="tagContent${status.index}"> 
+										<button type="button"
+											onclick="scrap_click('${bookmark.bcode}','${status.index }','${bookmark.unickname }','${bookmark.uatid }','<%=context %>/profile_image/${tl_element.uimage }','${bookmark.battachType}','${bookmark.battachSrc}','<%=context %>');"
+											class="scrapSetting btn btn-secondary mr-3 btn-light"
+											data-toggle="modal" data-target="#writeForm">
 											<img src="/img/bring.svg" width="20" height="20">
+											<c:if test="${bookmark.bquotecount ne 0}">
+												${bookmark.bquotecount }
+											</c:if>
 										</button>
+					
+
 
 
 
@@ -507,8 +530,7 @@ function unfollow(number){
 						</div>
 						<c:if test="${suggestFlist2_size>0 }">
 							<button type="button" class="btn btn-outline-success"
-								id="writeBtn" data-toggle="modal" data-target="#morebtn">더보기
-							</button>
+								data-toggle="modal" data-target="#morebtn">더보기</button>
 						</c:if>
 					</div>
 				</div>
@@ -552,7 +574,8 @@ function unfollow(number){
 					<input type="hidden" name="bbcode"> <input type="hidden"
 						name="hashtags">
 					<!--실제 값을 보내는곳 끝 -->
-					<div class="modal fade" id="writeForm" data-backdrop="static"
+					<div class="modal fade" id="writeForm" data-backdrop="false"
+						style="background-color: rgba(0, 0, 0, 0.5); z-index: 1050;"
 						data-keyboard="false" tabindex="-1"
 						aria-labelledby="exampleModalLabel" aria-hidden="true">
 						<div class="modal-dialog modal-dialog-scrollable">
@@ -576,21 +599,21 @@ function unfollow(number){
 								</div>
 								<div class="modal-body col-12">
 									<!-- 인용부분 -->
-									<div class="col-12 float-left" id="QuoteArea"
+									<div class="col-12 float-left" id="QuoteArea2"
 										style="display: none; font-size: 0.8em;">
 										<div class='card'>
 											<div class='card-body'>
-												<img id="quote_profile" src="" alt='no_image'
+												<img id="quote_profile2" src="" alt='no_image'
 													class='rounded-circle' width='30'> <a
-													class='card-title text-dark' id="quote_nickname"></a> <a
-													class='card-subtitle mb-2 text-muted' id="quote_atid"></a>
+													class='card-title text-dark' id="quote_nickname2"></a> <a
+													class='card-subtitle mb-2 text-muted' id="quote_atid2"></a>
 												<div class='card-text mt-2 mb-0' style="height: 100%;"
-													id="quote_content"></div>
-												<div class="quote_file mt-2" style="display: none;">
-													<img id="quote_img" src="<%=context %>" class="img-fluid" />
-													<div id="show_quote_video"
+													id="quote_content2"></div>
+												<div class="quote_file2 mt-2" style="display: none;">
+													<img id="quote_img2" src="<%=context %>" class="img-fluid" />
+													<div id="show_quote_video2"
 														class="embed-responsive embed-responsive-16by9">
-														<video controls id="quote_video" src="<%=context %>">
+														<video controls id="quote_video2" src="<%=context %>">
 														</video>
 													</div>
 												</div>
@@ -723,10 +746,9 @@ function unfollow(number){
 					</div>
 					<!--GOD 글쓰기 팝업 끝-->
 					<!--GOD 예약 창 시작-->
-					<div class="modal" id="reserveForm" data-backdrop="static"
-						data-keyboard="false" tabindex="-1"
-						aria-labelledby="exampleModalLabel2" aria-hidden="true"
-						backdrop="false">
+					<div class="modal" id="reserveForm" data-backdrop="false"
+						style="background-color: rgba(0, 0, 0, 0.5); z-index: 1060;"
+						tabindex="-1">
 						<div class="modal-dialog">
 							<div class="modal-content">
 								<div class="modal-header">
@@ -919,10 +941,8 @@ function unfollow(number){
 					</div>
 					<!--GOD 예약 창 끝-->
 					<!--GOD 임시저장 창 시작-->
-					<div class="modal" id="tempForm" data-backdrop="static"
-						data-keyboard="false" tabindex="-1"
-						aria-labelledby="exampleModalLabel2" aria-hidden="true"
-						backdrop="false">
+					<div class="modal" id="tempForm" data-backdrop="false"
+						style="background-color: rgba(0, 0, 0, 0.5);" tabindex="-1">
 						<div class="modal-dialog">
 							<div class="modal-content">
 								<div class="modal-header">
@@ -971,8 +991,8 @@ function unfollow(number){
 					</div>
 					<!--GOD 임시저장 창 끝-->
 					<!--GOD 종료 전 저장 묻는 팝업 -->
-					<div class="modal fade" id="saveModal" tabindex="-1"
-						aria-labelledby="saveModal" aria-hidden="true">
+					<div class="modal fade" id="saveModal" data-backdrop="false"
+						style="background-color: rgba(0, 0, 0, 0.5);" tabindex="-1">
 						<div class="modal-dialog modal-dialog-centered modal-sm">
 							<div class="modal-content">
 								<div class="modal-header">
@@ -996,7 +1016,8 @@ function unfollow(number){
 					<!--GOD 저장 팝업 끝-->
 				</form>
 				<!--답글보낼 사람 선택하는 MODAL-->
-				<div class="modal fade" id="towhom" tabindex="-1">
+				<div class="modal fade" id="towhom" data-backdrop="false"
+					style="background-color: rgba(0, 0, 0, 0.5);" tabindex="-1">
 					<div class="modal-dialog modal-sm modal-dialog-scrollable">
 						<div class="modal-content">
 							<div class="modal-header">
@@ -1221,22 +1242,22 @@ function unfollow(number){
 		function scrap_click(code, index,nickname, atid, profile, type, src, context){
 			var str="";
 			$("input[name=bbcode]").attr("value", code);
-			$("#QuoteArea").css("display","block");
-			$("#quote_nickname").text(nickname); 
+			$("#QuoteArea2").css("display","block");
+			$("#quote_nickname2").text(nickname); 
 			var content = $("input#tagContent"+index).attr('value');
-			$("#quote_content").html(content);
-			$("#quote_atid").text("@"+atid); 
-			$("#quote_profile").attr("src", profile);
+			$("#quote_content2").html(content);
+			$("#quote_atid2").text("@"+atid); 
+			$("#quote_profile2").attr("src", profile);
 			if(type=='image'){
-				$(".quote_file").css("display","block");
-				$("#show_quote_video").css("display","none");
+				$(".quote_file2").css("display","block");
+				$("#show_quote_video2").css("display","none");
 				var img=context+"/image/"+src;
-				$("#quote_img").attr("src", img);
+				$("#quote_img2").attr("src", img);
 			}
 			else if(type=='video'){
-				$(".quote_file").css("display","block");
+				$(".quote_file2").css("display","block");
 				var video=context+"/video/"+src;
-				$("#quote_video").attr("src", video);
+				$("#quote_video2").attr("src", video);
 			}
 			//투표버튼은 비활성화
 			$("#displayVote").attr("disabled","disabled");
@@ -1419,20 +1440,20 @@ function unfollow(number){
 					if(data.btype == "quote"){
 						btype=2;
 						$("input[name=bbcode]").attr("value",data.bbcode);
-						$("#QuoteArea").css("display","block");
-						$("#quote_nickname").text(data.qnickname); 
-						$("#quote_content").html(data.qcontent);
-						$("#quote_atid").text("@"+data.qatid); 
-						$("#quote_profile").attr("src", data.qprofileimage);
+						$("#QuoteArea2").css("display","block");
+						$("#quote_nickname2").text(data.qnickname); 
+						$("#quote_content2").html(data.qcontent);
+						$("#quote_atid2").text("@"+data.qatid); 
+						$("#quote_profile2").attr("src", data.qprofileimage);
 						if((data.qattach).substring(0,5) == "image"){
-							$(".quote_file").css("display","block");
-							$("#show_quote_video").css("display","none");
-							$("img#quote_img").attr("src", $("img#quote_img").attr('src')+"/"+data.qattach);
+							$(".quote_file2").css("display","block");
+							$("#show_quote_video2").css("display","none");
+							$("img#quote_img2").attr("src", $("img#quote_img2").attr('src')+"/"+data.qattach);
 						}
 						else if((data.qattach).substring(0,5) == 'video'){
-							$(".quote_file").css("display","block");
-							$("#show_quote_video").css("display","block");
-							$("video#quote_video").attr("src", $("video#quote_video").attr('src')+"/"+data.qattach);
+							$(".quote_file2").css("display","block");
+							$("#show_quote_video2").css("display","block");
+							$("video#quote_video2").attr("src", $("video#quote_video").attr('src')+"/"+data.qattach);
 						}
 						
 						//투표버튼은 비활성화
@@ -1493,7 +1514,7 @@ function unfollow(number){
 		/*글쓰기에서 닫기눌렀을때 글이없으면 저장창 안띄우고 닫기*/
 		jQuery("#closeWrite").click(function(){
 			if(bvote==1){
-				location.href="../iron/timeline";
+				location.href="../yeah/bookmark";
 			}
 			else{
 				var write=$("#writeTextarea").html();
@@ -1501,7 +1522,7 @@ function unfollow(number){
 					$("#saveModal .close").click();
 					$("#realCloseWrite").click();
 					//그리고 메인글로 돌아가
-					location.href="/iron/timeline";
+					location.href="/yeah/bookmark";
 				}
 			}
 		});
@@ -1512,7 +1533,7 @@ function unfollow(number){
 			$("#saveModal .close").click();
 			$("#realCloseWrite").click();
 			//그리고 메인글로 돌아가
-			location.href="/iron/timeline";
+			location.href="/yeah/bookmark";
 		});
 		
 		/*마지막 저장창에서 저장해 클릭*/
@@ -1687,9 +1708,8 @@ function unfollow(number){
 				<!--GOD 글쓰기 기능 끝-->
 
 				<!--BEAR 더보기 창  -->
-				<div class="modal fade" id="morebtn" data-backdrop="static"
-					data-keyboard="false" tabindex="-1"
-					aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div class="modal fade" id="morebtn" data-backdrop="false"
+					style="background-color: rgba(0, 0, 0, 0.5);" tabindex="-1">
 					<div class="modal-dialog modal-lg">
 						<div class="modal-content">
 							<div class="modal-header">

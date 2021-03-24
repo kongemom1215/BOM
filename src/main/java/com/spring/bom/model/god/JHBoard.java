@@ -37,6 +37,7 @@ public class JHBoard {
 	private String qcontent;
 	private String qattach;
 	
+
 	public String getCtx() {
 		return ctx;
 	}
