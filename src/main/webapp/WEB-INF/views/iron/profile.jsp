@@ -425,36 +425,49 @@ label {
 				<a href="../right/follower?uatid=${someone.uatid}">${someone.followCount}팔로우중</a>/<a href="../right/following?uatid=${someone.uatid}">${someone.followerCount}팔로워중</a>
 				
 				 -->
-				<div class="profile_head">
-					<div class="col-md-12">
-						<div
-							class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
-							<div class="col p-4 d-flex flex-column position-static">
-								<h3 class="mb-0">${someone.unickName }
-									<strong style="color: #33CC00;">@${someone.uatid }</strong>
-								</h3>
-								<div class="mb-1 text-muted">가입일 : ${user.uregDate }</div>
+				<div class="card text-center">
+					<div class="card-header">
+						<ul class="nav nav-tabs card-header-tabs" role="tablist"
+							id="profile">
+							<li class="nav-item" role="presentation"><a
+								class="nav-link active" id="home-tab" data-toggle="tab"
+								href="#myprofile" role="tab">정보</a></li>
+							<li class="nav-item" role="presentation"><a
+								href="../right/follower?uatid=${someone.uatid}" class="nav-link"
+								id="profile-tab"> 팔로워 <span
+									class="badge badge-pill badge-success">${someone.followerCount}</span>
+							</a></li>
+							<li class="nav-item" role="presentation"><a
+								href="../right/following?uatid=${someone.uatid}"
+								class="nav-link" id="contact-tab"> 팔로잉 <span
+									class="badge badge-pill badge-success">${someone.followCount}</span>
+							</a></li>
+						</ul>
+					</div>
+					<div class="card-body tab-content" id="profileContent">
+						<!--프로필 -->
+						<div class="tab-pane fade show active" id="myprofile"
+							role="tabpanel">
+							<img src="<%=context %>/profile_image/${someone.uimage}"
+								alt="no_image" class="rounded-circle mb-2" width="150">
+							<div class="align-self-center mb-3">
+								<h5 class="card-title mb-1">${someone.unickName }</h5>
+								<div class="text-muted">@${someone.uatid }</div>
+							</div>
+							<div class="mb-2">
 								<c:if test="${someone.uintro!=null }">${someone.uintro}</c:if>
 								<c:if test="${someone.uintro==null }">Introduce - 소개글이 없습니다.</c:if>
-								<a href="../right/follower?uatid=${someone.uatid}">${someone.followCount}
-									팔로우중</a> / <a href="../right/following?uatid=${someone.uatid}">
-									${someone.followerCount}팔로워중</a>
-								<c:if test="${someone.ucode == user.ucode}">
-									<button type="button" class="btn btn-outline-success"
-										id="beditProfile" data-toggle="modal"
-										data-target="#editProfile">프로필수정</button>
-								</c:if>
-								<c:if test="${someone.ucode != user.ucode }">
-										팔로우 or 언팔 버튼 띄우기
-								</c:if>
+								<div class="mt-1 mb-1 text-muted">가입일 : ${user.uregDate }</div>
 							</div>
-							<div class="col-auto d-none d-lg-block">
-								<img class="bd-placeholder-img rounded-circle" width="150"
-									height="150"
-									src="<%=context %>/profile_image/${someone.uimage}"
-									preserveAspectRatio="xMidYMid slice" focusable="false"
-									role="img" aria-label="Placeholder: Thumbnail">
-							</div>
+							<c:if test="${someone.ucode == user.ucode}">
+								<button type="button" class="btn btn-success" id="beditProfile"
+									data-toggle="modal" data-target="#editProfile">프로필 수정</button>
+							</c:if>
+						</div>
+						<!--팔로워-->
+						<div class="tab-pane fade" id="follower" role="tabpanel">2</div>
+						<!--팔로잉 -->
+						<div class="tab-pane fade" id="following" role="tabpanel">3
 						</div>
 					</div>
 				</div>
@@ -603,26 +616,28 @@ label {
 											</button>
 											<!-- 좋아요 -->
 											<button id="likeBtn${status.index }" type="button"
-											class="btn btn-secondary btn-light mr-3"
-											data-toggle="tooltip" data-placement="top" title="좋아요"
-											onclick="clickLikeBtn(${board.bcode},${status.index }, ${user.ucode});">
-											<div class="form-row justify-content-center text-center">
-											<img src="/img/heart.svg" width="20" height="20" id="noheart${status.index }" style="display:none;"> 
-											<img src="/img/red_heart.svg" width="20" height="20" id="doheart${status.index }" style="display:none;"> 
-											<span id="likecount${status.index }" class="ml-1">${board.blikeCount }</span>
-											<c:if test="${board.ltype == 0 || board.ltype == null }">
-												<script type="text/javascript">
+												class="btn btn-secondary btn-light mr-3"
+												data-toggle="tooltip" data-placement="top" title="좋아요"
+												onclick="clickLikeBtn(${board.bcode},${status.index }, ${user.ucode});">
+												<div class="form-row justify-content-center text-center">
+													<img src="/img/heart.svg" width="20" height="20"
+														id="noheart${status.index }" style="display: none;">
+													<img src="/img/red_heart.svg" width="20" height="20"
+														id="doheart${status.index }" style="display: none;">
+													<span id="likecount${status.index }" class="ml-1">${board.blikeCount }</span>
+													<c:if test="${board.ltype == 0 || board.ltype == null }">
+														<script type="text/javascript">
 													$("#noheart"+${status.index }).css("display","block");
 													$("#doheart"+${status.index }).css("display","none");
 												</script>
-											</c:if>
-											<c:if test="${board.ltype == 1 }">
-												<script type="text/javascript">
+													</c:if>
+													<c:if test="${board.ltype == 1 }">
+														<script type="text/javascript">
 													$("#noheart"+${status.index }).css("display","none");
 													$("#doheart"+${status.index }).css("display","block"); 
 												</script>
-											</c:if>
-											</div>
+													</c:if>
+												</div>
 											</button>
 
 											<button type="button"
@@ -758,26 +773,28 @@ label {
 											</button>
 											<!-- 좋아요 -->
 											<button id="likeBtn2th${status.index }" type="button"
-											class="btn btn-secondary btn-light mr-3"
-											data-toggle="tooltip" data-placement="top" title="좋아요"
-											onclick="clickLikeBtn2(${board.bcode},${status.index }, ${user.ucode});">
-											<div class="form-row justify-content-center text-center">
-											<img src="/img/heart.svg" width="20" height="20" id="noheart2th${status.index }" style="display:none;"> 
-											<img src="/img/red_heart.svg" width="20" height="20" id="doheart2th${status.index }" style="display:none;"> 
-											<span id="likecount2th${status.index }" class="ml-1">${board.blikeCount }</span>
-											<c:if test="${board.ltype == 0 || board.ltype == null }">
-												<script type="text/javascript">
+												class="btn btn-secondary btn-light mr-3"
+												data-toggle="tooltip" data-placement="top" title="좋아요"
+												onclick="clickLikeBtn2(${board.bcode},${status.index }, ${user.ucode});">
+												<div class="form-row justify-content-center text-center">
+													<img src="/img/heart.svg" width="20" height="20"
+														id="noheart2th${status.index }" style="display: none;">
+													<img src="/img/red_heart.svg" width="20" height="20"
+														id="doheart2th${status.index }" style="display: none;">
+													<span id="likecount2th${status.index }" class="ml-1">${board.blikeCount }</span>
+													<c:if test="${board.ltype == 0 || board.ltype == null }">
+														<script type="text/javascript">
 													$("#noheart2th"+${status.index }).css("display","block");
 													$("#doheart2th"+${status.index }).css("display","none");
 												</script>
-											</c:if>
-											<c:if test="${board.ltype == 1 }">
-												<script type="text/javascript">
+													</c:if>
+													<c:if test="${board.ltype == 1 }">
+														<script type="text/javascript">
 													$("#noheart2th"+${status.index }).css("display","none");
 													$("#doheart2th"+${status.index }).css("display","block"); 
 												</script>
-											</c:if>
-											</div>
+													</c:if>
+												</div>
 											</button>
 
 											<button type="button"
@@ -876,26 +893,28 @@ label {
 											</c:if>
 											</button>
 											<button id="likeBtn3th${status.index }" type="button"
-											class="btn btn-secondary btn-light mr-3"
-											data-toggle="tooltip" data-placement="top" title="좋아요"
-											onclick="clickLikeBtn3(${board.bcode},${status.index }, ${user.ucode});">
-											<div class="form-row justify-content-center text-center">
-											<img src="/img/heart.svg" width="20" height="20" id="noheart3th${status.index }" style="display:none;"> 
-											<img src="/img/red_heart.svg" width="20" height="20" id="doheart3th${status.index }" style="display:none;"> 
-											<span id="likecount3th${status.index }" class="ml-1">${board.blikeCount }</span>
-											<c:if test="${board.ltype == 0 || board.ltype == null }">
-												<script type="text/javascript">
+												class="btn btn-secondary btn-light mr-3"
+												data-toggle="tooltip" data-placement="top" title="좋아요"
+												onclick="clickLikeBtn3(${board.bcode},${status.index }, ${user.ucode});">
+												<div class="form-row justify-content-center text-center">
+													<img src="/img/heart.svg" width="20" height="20"
+														id="noheart3th${status.index }" style="display: none;">
+													<img src="/img/red_heart.svg" width="20" height="20"
+														id="doheart3th${status.index }" style="display: none;">
+													<span id="likecount3th${status.index }" class="ml-1">${board.blikeCount }</span>
+													<c:if test="${board.ltype == 0 || board.ltype == null }">
+														<script type="text/javascript">
 													$("#noheart3th"+${status.index }).css("display","block");
 													$("#doheart3th"+${status.index }).css("display","none");
 												</script>
-											</c:if>
-											<c:if test="${board.ltype == 1 }">
-												<script type="text/javascript">
+													</c:if>
+													<c:if test="${board.ltype == 1 }">
+														<script type="text/javascript">
 													$("#noheart3th"+${status.index }).css("display","none");
 													$("#doheart3th"+${status.index }).css("display","block"); 
 												</script>
-											</c:if>
-											</div>
+													</c:if>
+												</div>
 
 											</button>
 											<button type="button"
@@ -1040,8 +1059,7 @@ label {
 													<img src="/img/red_heart.svg" width="20" height="20"
 														id="doheart4th${status.index }" style="display: none;">
 													<span id="likecount4th${status.index }" class="ml-1">${board.blikeCount }</span>
-													<c:if
-														test="${board.ltype == 0 || board.ltype == null }">
+													<c:if test="${board.ltype == 0 || board.ltype == null }">
 														<script type="text/javascript">
 													$("#noheart4th"+${status.index }).css("display","block");
 													$("#doheart4th"+${status.index }).css("display","none");
@@ -1054,18 +1072,18 @@ label {
 												</script>
 													</c:if>
 												</div>
-												</button>
+											</button>
 
-												<button type="button"
-													class="btn btn-secondary btn-light mr-3 dropdown-toggle caret-off"
-													data-toggle="dropdown" aria-haspopup="true"
-													aria-expanded="false">
-													<img src="/img/share.svg" width="20" height="20">
-												</button>
-												<div class="dropdown-menu">
-													<a class="dropdown-item" href="#">북마크 추가/삭제</a> <a
-														class="dropdown-item" href="#">URL담아가기</a>
-												</div>
+											<button type="button"
+												class="btn btn-secondary btn-light mr-3 dropdown-toggle caret-off"
+												data-toggle="dropdown" aria-haspopup="true"
+												aria-expanded="false">
+												<img src="/img/share.svg" width="20" height="20">
+											</button>
+											<div class="dropdown-menu">
+												<a class="dropdown-item" href="#">북마크 추가/삭제</a> <a
+													class="dropdown-item" href="#">URL담아가기</a>
+											</div>
 										</div>
 									</div>
 								</div>
@@ -1152,7 +1170,7 @@ label {
 				<div class="list-group-item list-group-item-action bg-light"
 					style="padding: 5px;">
 					<div class="card bg-light mb-3">
-						<div class="card-header">해시태그</div>
+						<div class="card-header">해시태그 순위</div>
 						<div class="card-body" style="padding: 5px;">
 							<c:forEach var="tag" items="${tag_list}" varStatus="status">
 								<c:if test="${status.count <=3 }">
@@ -1161,8 +1179,8 @@ label {
 											style="font-size: 0.8rem; padding: 10px;">
 											${tag.hrank}위
 											<div>
-												<a href="#">#${tag.hname}</a> <span class="float-right">${tag.hcount }
-													봄</span>
+												<a href="/hoon/searchView?search=%23${tag.hname}">#${tag.hname}</a>
+												<span class="float-right">${tag.hcount } 봄</span>
 											</div>
 										</div>
 									</div>
@@ -1236,7 +1254,8 @@ label {
 								data-toggle="modal" data-target="#towhom">받는 사람</button>
 							<button type="button" id="realCloseWrite" class="close"
 								data-dismiss="modal" style="display: none;"></button>
-							<button type="button" id="closeWrite" class="close" onclick="closeWriteModal('${someone.uatid}');"
+							<button type="button" id="closeWrite" class="close"
+								onclick="closeWriteModal('${someone.uatid}');"
 								style="float: right;" data-toggle="modal"
 								data-target="#saveModal" aria-label="Close">
 								<span aria-hidden="true">&times;</span>
@@ -1652,8 +1671,8 @@ label {
 						이 내용을 저장하시면 <br> 다음에 이어서 작성하실 수 있습니다.
 					</div>
 					<div class="modal-footer">
-						<button type="button" id="notsaveBtn" class="btn btn-secondary" onclick="saveModalClose('${someone.uatid}');">
-							아뇨 괜찮습니다</button>
+						<button type="button" id="notsaveBtn" class="btn btn-secondary"
+							onclick="saveModalClose('${someone.uatid}');">아뇨 괜찮습니다</button>
 						<button type="submit" id="saveBtn" class="btn btn-success">저장</button>
 					</div>
 				</div>

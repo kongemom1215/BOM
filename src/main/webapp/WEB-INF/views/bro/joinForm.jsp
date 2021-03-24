@@ -351,8 +351,8 @@
 					<label for="inputPhoneNumber" class="col-lg-2 control-label">성별</label>
 					<div class="col-lg-12">
 						<select class="form-control" id="gender" name="uGender">
-							<option value="mail">남</option>
-							<option value="femail">여</option>
+							<option value="m">남</option>
+							<option value="w">여</option>
 						</select>
 					</div>
 				</div>

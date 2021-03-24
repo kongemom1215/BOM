@@ -277,7 +277,7 @@ public class JungChurlController {
 		System.out.println("check someone.ucode -> " + someone.getUcode());
 
 		// someone에 팔로우 수 저장
-		someone.setFollowerCount(us.getUserfollowCount(someone));
+		someone.setFollowCount(us.getUserfollowCount(someone));
 		System.out.println("Set someone.followCount -> " + (someone.getFollowCount()));
 
 		// someone에 팔로워 수 저장

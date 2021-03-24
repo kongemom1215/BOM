@@ -12,7 +12,7 @@
 	
 	<insert id="join" parameterType="User_info">
 	    INSERT INTO user_info(   uCode, uEmail, uPassword, uNickname,uAtid, uBirth, uGender, uNation, uRegDate )
-	                 values (uCode_SEQ.NEXTVAL, #{uEmail}, #{uPassword}, #{uNickname},#{uAtid} , TO_CHAR(#{uBirth},'yyyymmdd'), #{uGender}, #{uNation}, TO_CHAR(sysdate,'yyyy-mm-dd') )
+	                 values (uCode_SEQ.NEXTVAL, #{uEmail}, #{uPassword}, #{uNickname},#{uAtid} , TO_CHAR(#{uBirth},'yyyy-mm-dd'), #{uGender}, #{uNation}, TO_CHAR(sysdate,'yyyy-mm-dd') )
    
     </insert>
     

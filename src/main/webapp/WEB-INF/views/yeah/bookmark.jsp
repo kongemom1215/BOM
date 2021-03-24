@@ -276,14 +276,14 @@ function unfollow(number){
 					src="/img/more.svg" width="15" height="15"> 더보기
 				</a>
 
-				<div class="list-group-item list-group-item-action">
-					<!--주혜 -->
+				<!-- <div class="list-group-item list-group-item-action">
+					주혜
 					<button type="button" class="btn btn-outline-success" id="writeBtn"
 						data-toggle="modal" data-target="#writeForm">
 						<img src="/img/write.svg" width="15" height="15"> 글 쓰기
 					</button>
 				</div>
-
+ -->
 
 				<div class="card">
 					<div class="card-body">
@@ -539,7 +539,7 @@ function unfollow(number){
 				<div class="list-group-item list-group-item-action bg-light"
 					style="padding: 5px;">
 					<div class="card bg-light mb-3">
-						<div class="card-header">해시태그</div>
+						<div class="card-header">해시태그 순위</div>
 						<div class="card-body" style="padding: 5px;">
 							<c:forEach var="tag" items="${tag_list}" varStatus="status">
 								<c:if test="${status.count <=3 }">
@@ -548,7 +548,7 @@ function unfollow(number){
 											style="font-size: 0.8rem; padding: 10px;">
 											${tag.hrank}위
 											<div>
-												<a href="#">#${tag.hname}</a> <span class="float-right">${tag.hcount }
+												<a href="/hoon/searchView?search=%23${tag.hname}">#${tag.hname}</a> <span class="float-right">${tag.hcount }
 													봄</span>
 											</div>
 										</div>

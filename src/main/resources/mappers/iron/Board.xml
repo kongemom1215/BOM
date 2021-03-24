@@ -163,7 +163,7 @@
 		where
 		ui.ucode = #{ucode}
 		and b.bstate = 1
-		and b.btype = 'normal'
+		and (b.btype = 'normal' or b.btype='quote')
 		and b.ucode =
 		ui.ucode
 		and b.bcode = lb.bcode(+)
