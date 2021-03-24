@@ -12,4 +12,6 @@ public interface Like_BookmarkDao {
 
 	Like_Bookmark checkBoardBookmark(Like_Bookmark lb);
 
+	int doBookmark(Like_Bookmark lb);
+
 }

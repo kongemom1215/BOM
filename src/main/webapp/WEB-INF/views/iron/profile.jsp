@@ -42,17 +42,18 @@
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <style>
 @font-face {
-   font-family: 'GmarketSansLight';
-   src:
-      url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansLight.woff')
-      format('woff');
-   font-weight: normal;
-   font-style: normal;
+	font-family: 'GmarketSansLight';
+	src:
+		url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansLight.woff')
+		format('woff');
+	font-weight: normal;
+	font-style: normal;
 }
 
 body {
-   font-family: GmarketSansLight;
+	font-family: GmarketSansLight;
 }
+
 #bearsize {
 	width: 550px;
 	overflow: hidden;
@@ -132,47 +133,39 @@ label {
 <!-- Like Ajax Fuction -->
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <script type="text/javascript">
-	$('#upload_uatid').blur(function() {
-			var uAtid = $('#upload_uatid').val();
-			alert("uatid "+uAtid);
-			$.ajax({
-				url : '/checkAtid?uAtid=' + uAtid,
-				type : 'post',
-				success : function(data) {
-					console.log("1 = 중복o / 0 = 중복x : " + data);
-					if (data == 1) {
-						// 1 : 아이디가 중복되는 문구
-						$("#uatid_check").text("사용중인 아이디입니다 :p");
-						$("#uatid_check").css("color", "red");
-						$("#upload_save").attr("disabled", true);
-					}
-					if (data == 0) {
-						$("#uatid_check").text("사용가능한 아이디입니다 :p");
-						$("#uatid_check").css("color", "red");
-						$("#upload_save").attr("disabled", true);
-					}
-					else {
-						if (idJ.test(uAtid)) {
-						// 0 : 아이디 길이 / 문자열 검사
-							$('#uatid_check').text('');
-							$("#upload_save").attr("disabled", false);
-						} else if (uAtid == " ") {
-							$('#uatid_check').text('아이디를 입력해주세요 :)');
-							$('#uatid_check').css('color', 'red');
-							$("#upload_save").attr("disabled", true);
-						} else {
-							$('#uatid_check').text("아이디는 소문자와 숫자 4~12자리만 가능합니다 :) :)");
-							$('#uatid_check').css('color', 'red');
-							$("#upload_save").attr("disabled", true);
-						}
+		 var contextPath='${pageContext.request.contextPath}';
+		 
+			// 아이디 유효성 검사(1 = 중복 / 0 != 중복)
+		$(document).ready(function(){
+			$("#editUatidZone").blur(function(){
+				//function idCh(){
+					var uatid = $('#editUatidZone').val();
+					console.log(uatid);
+					$.ajax({
+						url : "<%=context%>/right/idCheck",
+						data: {uatid : uatid},
+						dataType:'text',
+						success : function(data){						
+							
+							if (data==='1'){
+									// 1 : 아이디가 중복되는 문구
+									$('#id_check').html('사용중인 아이디입니다 :p');
+									$('#id_check').css('color', 'red');
+									$('#reg_submit').attr('disabled', true);
 
-					}
-				},
-				error : function() {
-					console.log("실패");
-				}
-			});
-		});
+							}else{
+								$('#id_check').html('사용가능한 아이디입니다 :p');
+								$('#id_check').css('color', 'green');
+								$("#reg_submit").attr("disabled", false);
+ 									
+								}
+							}
+						});
+					});
+				});
+</script>
+<script type="text/javascript">
+	
 
 	function goProfile(){
 		location.href = "../iron/profile?uatid="+${user.uatid};
@@ -2435,6 +2428,78 @@ label {
 			</div>
 		</div>
 	</div>
+
+	<!-- 프로필 수정 -->
+	<!-- Modal -->
+	<form action="saveEditProfile" method="post"
+		enctype="Multipart/form-data"  target="myBatisFrame">
+		<div class="modal fade" id="editProfile" tabindex="-1"
+			aria-labelledby="exampleModalLabel" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">프로필 수정</h5>
+						<button type="button" class="close" data-dismiss="modal"
+							aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<div class="input-group mb-3">
+							<div class="input-group-prepend">
+								<span class="input-group-text" id="inputGroupFileAddon01">프로필
+									업로드</span>
+							</div>
+							<div class="custom-file">
+								<input type="file" class="custom-file-input" name="imagefile"
+									id="inputGroupFile01" aria-describedby="inputGroupFileAddon01" value="${pageContext.request.contextPath }/resources/image/">
+									<label class="custom-file-label" for="inputGroupFile01">파일선택</label>
+							</div>
+						</div>
+						<div class="input-group flex-nowrap">
+							<div class="input-group-prepend">
+								<span class="input-group-text" id="addon-wrapping">닉네임</span>
+							</div>
+							<input type="text" class="form-control" placeholder="닉네임"
+								required="required" aria-label="Username" name="eunickName"
+								aria-describedby="addon-wrapping" value="${someone.unickName}">
+						</div>
+						<br>
+						<div class="input-group flex-nowrap">
+							<div class="input-group-prepend">
+								<span class="input-group-text">@아이디</span>
+							</div>
+							<input type="text" class="form-control" placeholder="@뺀 영문자 입력" id="editUatidZone" name="euatid"
+								required="required" value="${someone.uatid}">
+						</div>
+						<br>
+						<div id="id_check"></div>
+						<div class="input-group flex-nowrap">
+							<div class="input-group-prepend">
+								<span class="input-group-text" id="addon-wrapping">자기소개</span>
+							</div>
+							<input type="text" class="form-control" name="euintro"
+								placeholder="당신의 개성을 나타내세요" aria-label="Username"
+								aria-describedby="addon-wrapping" value="${someone.uintro}">
+						</div>
+						<br>
+						<div class="input-group flex-nowrap">
+							<div class="input-group-prepend">
+								<span class="input-group-text" id="addon-wrapping">위치</span>
+							</div>
+							<input type="text" class="form-control" name="euloc"
+								placeholder="당신의 개성을 나타내세요" aria-label="Username"
+								aria-describedby="addon-wrapping" value="${someone.uloc}">
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="submit" id="reg_submit" class="btn btn-primary">저장</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+
 	<!-- /#wrapper -->
 </body>
 

@@ -1,7 +1,10 @@
 package com.spring.bom.controller;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -9,10 +12,14 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.spring.bom.model.iron.Board;
 import com.spring.bom.model.iron.Follow;
@@ -33,6 +40,7 @@ import com.spring.bom.service.iron.User_InfoService;
 
 @Controller
 public class JungChurlController {
+	
 	@Autowired
 	private User_InfoService us;
 
@@ -165,11 +173,10 @@ public class JungChurlController {
 		return lb;
 	}
 
-	// 게시글 북마크 추가/삭제 버튼 구현
-	@RequestMapping(value = "iron/AjaxViewBoardOptions", produces = "application/json;charset=UTF-8")
-	@ResponseBody
-	public Like_Bookmark AjaxViewBoardOptions(@RequestParam int bcode, HttpSession session) {
-		System.out.println("[JungChurlController] AjaxViewBoardOptions start...");
+	// 게시글 북마크 추가 버튼 동작
+	@RequestMapping(value = "iron/doBookmark")
+	public String doBookmark(@RequestParam int bcode, HttpSession session) {
+		System.out.println("[JungChurlController] doBookmark start...");
 		User_Info user = (User_Info) session.getAttribute("user");
 		System.out.println("[JunbChurlController] login ucode -> " + user.getUcode());
 		System.out.println("[JunbChurlController] bcode -> " + bcode);
@@ -177,10 +184,10 @@ public class JungChurlController {
 		lb.setUcode(user.getUcode());
 		lb.setBcode(bcode);
 
-		lb = lbs.checkBoardBookmark(lb);
-		System.out.println("lb.getBbtype -> " + lb.getBbtype());
-
-		return lb;
+		int result = lbs.doBookmark(lb); //북마크 하기
+		
+		System.out.println("lb.getBbtype -> " + result);
+		return "redirect:../yeah/bookmark";
 	}
 
 	// 단일 게시물 출력
@@ -258,7 +265,7 @@ public class JungChurlController {
 
 		return "iron/singleboard";
 	}
-
+	
 	@GetMapping(value = "iron/profile")
 	public String goProfile(@RequestParam String uatid, Model model, HttpSession session) {
 		System.out.println("[JungChurlController] goProfile start...");
@@ -393,4 +400,47 @@ public class JungChurlController {
 		model.addAttribute("myLikeBoardList", myLikeBoardList);
 		return "iron/profile";
 	}
+	
+	/*
+	 * @RequestMapping("iron/afterEditPass") private String afterEditPass(HttpSession
+	 * session, Model model) { System.out.println("iron/afterEditPass start...");
+	 * User_Info user = (User_Info)session.getAttribute("user");
+	 * model.addAttribute("user",user); return "iron/afterEditProfile"; }
+	 */
+	@RequestMapping(value = "iron/saveEditProfile",  method = RequestMethod.POST)
+	public String saveEditProfile(HttpSession session, MultipartFile imagefile, HttpServletRequest request,
+			Model model) throws IOException, Exception {
+		String uploadPath = request.getSession().getServletContext().getRealPath("/profile_image/");
+		System.out.println("uploadForm POST Start");
+		User_Info user = (User_Info)session.getAttribute("user");
+		user.setUnickName(request.getParameter("eunickName"));
+		user.setUatid(request.getParameter("euatid"));
+		user.setUintro(request.getParameter("euintro"));
+		user.setUloc(request.getParameter("euloc"));
+		String savedName = uploadFile(user, imagefile.getOriginalFilename(), imagefile.getBytes(), uploadPath);
+		session.setAttribute("user",user);
+		model.addAttribute("user",user);
+		return "redirect:/iron/timeline";
+	}
+	private String uploadFile(User_Info user, String originalName, byte[] fileData, String uploadPath) throws Exception {
+		UUID uid = UUID.randomUUID();
+		// requestPath = requestPath + "/resources/image";
+		System.out.println("uploadPath->" + uploadPath);
+		// Directory 생성
+		File fileDirectory = new File(uploadPath);
+		if (!fileDirectory.exists()) {
+			fileDirectory.mkdirs();
+			System.out.println("업로드용 폴더 생성 : " + uploadPath);
+		}
+		String savedName = uid.toString() + "_" + originalName;
+
+//		     String path1 = "C:\\spring\\springSrc39\\.metadata\\.plugins\\org.eclipse.wst.server.core\\tmp0\\wtpwebapps\\sMybatis\\resources\\image";
+		File target = new File(uploadPath, savedName);
+//		     File target = new File(requestPath, savedName);
+		FileCopyUtils.copy(fileData, target); // org.springframework.util.FileCopyUtils
+		user.setUimage(savedName);
+		us.editProfileData(user);
+		return savedName;
+	}
+	
 }

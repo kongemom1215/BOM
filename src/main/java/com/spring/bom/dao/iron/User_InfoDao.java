@@ -12,4 +12,6 @@ public interface User_InfoDao {
 
 	int getUserfollowerCount(User_Info someone);
 
+	int editProfileData(User_Info ui);
+
 }

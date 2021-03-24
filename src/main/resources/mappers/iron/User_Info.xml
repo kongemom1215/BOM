@@ -11,10 +11,16 @@
 		resultType="Iron_User_Info">
 		select * from user_info where uatid = #{uatid}
 	</select>
-	<select id="UserFollowCount" parameterType="Iron_User_Info" resultType="int">
+	<select id="UserFollowCount" parameterType="Iron_User_Info"
+		resultType="int">
 		select count(*) from follow where ucode=#{ucode}
 	</select>
-	<select id="UserFollowerCount" parameterType="Iron_User_Info" resultType="int">
+	<select id="UserFollowerCount" parameterType="Iron_User_Info"
+		resultType="int">
 		select count(*) from follow where fopcode=#{ucode}
 	</select>
+	<update id="editProfile" parameterType="Iron_User_Info">
+		update user_info set uimage=#{uimage}, uloc=#{uloc}, uatid = #{uatid}, unickname = #{unickName}, uintro = #{uintro}
+		where ucode=#{ucode}
+	</update>
 </mapper>

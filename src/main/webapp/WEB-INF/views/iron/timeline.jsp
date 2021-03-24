@@ -43,17 +43,18 @@
 <script src="/js/bootstrap.bundle.js"></script>
 <style>
 @font-face {
-   font-family: 'GmarketSansLight';
-   src:
-      url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansLight.woff')
-      format('woff');
-   font-weight: normal;
-   font-style: normal;
+	font-family: 'GmarketSansLight';
+	src:
+		url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansLight.woff')
+		format('woff');
+	font-weight: normal;
+	font-style: normal;
 }
 
 body {
-   font-family: GmarketSansLight;
+	font-family: GmarketSansLight;
 }
+
 #bearsize {
 	width: 550px;
 	overflow: hidden;
@@ -169,27 +170,17 @@ label {
 		});
 	}
 	
-	function viewBoardOptions(bbcode,bindex){
+	function doBookmark(bbcode,bindex){
 		event.stopPropagation();
 		var index = bindex;
 		var bcode = bbcode;
-		var msg = '게시글['+bcode+']의 옵션을 눌렀습니다!';
-		alert(msg);
-		$.ajax({
-			url : "<%=context%>/iron/AjaxViewBoardOptions",
-			data:{ bcode: bcode }, 
-			dataType:'json',
-			success : function(data){
-				var str='';
-				$('#boardDropdownOption'+index).empty();
-				if(data.bbtype==0||data.bbtype==null)
-					str += "<a class='dropdown-item' onclick=bookmarkAction();> 북마크추가</a>"
-				if(data.bbtype==1)
-					str += "<a class='dropdown-item' onclick=bookmarkAction();> 북마크 삭제</a>"
-				$('#boardDropdownOption'+index).append(str+"<a class='dropdown-item' href='#'>URL담아가기</a>");
-				alert(".ajax viewBoardOptions str->"+str);
-			}
-		});
+		var msg = '북마크를 추가하시겠습니까?';
+		if (confirm(msg) == true){    //확인
+			location.href="doBookmark?bcode="+bcode;
+		}
+		else{   //취소
+		    return;
+		}
 	}
 	
 	//팔로우 추천 가져가야할 
@@ -366,12 +357,18 @@ label {
 							<!-- 경빈 part -->
 							<%-- <div class="card-body" id="singleBoard"
 								onclick="goSingleBoard(${tl_element.bcode},${status.index });"> --%>
-								<div class="card-body" id="singleBoard" onclick="goSingleBoard(${reply.bcode},${status.index });">
-									<form action="/coffee/deleteBom_timeline" class="coffeeDeleteBom${status.index }" method="post"> 
-										<input type="hidden" name="coffeeBoardBcode" value="${tl_element.bcode }">
-										<input type="hidden" name="coffeeBoardUatid" value="${tl_element.uatid }">
-										<button type="button" class="btn btn-light float-right" onclick="deleteBom(${user.ucode}, ${tl_element.ucode }, ${status.index })"><img src="/img/coffee/trash.svg" width = "15" height = "15"></button>
-										<%-- <button type="button"
+							<div class="card-body" id="singleBoard"
+								onclick="goSingleBoard(${reply.bcode},${status.index });">
+								<form action="/coffee/deleteBom_timeline"
+									class="coffeeDeleteBom${status.index }" method="post">
+									<input type="hidden" name="coffeeBoardBcode"
+										value="${tl_element.bcode }"> <input type="hidden"
+										name="coffeeBoardUatid" value="${tl_element.uatid }">
+									<button type="button" class="btn btn-light float-right"
+										onclick="deleteBom(${user.ucode}, ${tl_element.ucode }, ${status.index })">
+										<img src="/img/coffee/trash.svg" width="15" height="15">
+									</button>
+									<%-- <button type="button"
 											class="btn btn-light dropdown-toggle caret-off float-right">⋯</button>
 										
 										<div class="dropdown-menu">
@@ -379,8 +376,8 @@ label {
 												
 											</c:if>
 										</div> --%>
-									</form>
-									<!-- 경빈 part 끝 -->
+								</form>
+								<!-- 경빈 part 끝 -->
 								<img src="<%=context %>/profile_image/${tl_element.uimage }"
 									alt="no_image" class="rounded-circle" width="50" width="50">
 								<a class="card-title text-dark">${tl_element.unickName }</a> <a
@@ -477,29 +474,30 @@ label {
 											data-toggle="tooltip" data-placement="top" title="좋아요"
 											onclick="clickLikeBtn(${tl_element.bcode},${status.index }, ${user.ucode});">
 											<div class="form-row justify-content-center text-center">
-											<img src="/img/heart.svg" width="20" height="20" id="noheart${status.index }" style="display:none;"> 
-											<img src="/img/red_heart.svg" width="20" height="20" id="doheart${status.index }" style="display:none;"> 
-											<span id="likecount${status.index }" class="ml-1">${tl_element.blikeCount }</span>
-											<c:if test="${tl_element.ltype == 0 || tl_element.ltype == null }">
-												<script type="text/javascript">
+												<img src="/img/heart.svg" width="20" height="20"
+													id="noheart${status.index }" style="display: none;">
+												<img src="/img/red_heart.svg" width="20" height="20"
+													id="doheart${status.index }" style="display: none;">
+												<span id="likecount${status.index }" class="ml-1">${tl_element.blikeCount }</span>
+												<c:if
+													test="${tl_element.ltype == 0 || tl_element.ltype == null }">
+													<script type="text/javascript">
 													$("#noheart"+${status.index }).css("display","block");
 													$("#doheart"+${status.index }).css("display","none");
 												</script>
-											</c:if>
-											<c:if test="${tl_element.ltype == 1 }">
-												<script type="text/javascript">
+												</c:if>
+												<c:if test="${tl_element.ltype == 1 }">
+													<script type="text/javascript">
 													$("#noheart"+${status.index }).css("display","none");
 													$("#doheart"+${status.index }).css("display","block"); 
 												</script>
-											</c:if>
+												</c:if>
 											</div>
 										</button>
 
-										<button type="button"
-											class="btn btn-secondary btn-light mr-3 dropdown-toggle caret-off"
-											data-toggle="dropdown" aria-haspopup="true"
+										<button type="button" class="btn btn-secondary btn-light mr-3"
 											aria-expanded="false" id="boardOption${status.index }"
-											onclick="viewBoardOptions(${bcode},${status.index }); return false;">
+											onclick="doBookmark(${tl_element.bcode},${status.index });">
 											<img src="/img/share.svg" width="20" height="20">
 										</button>
 										<!-- ajax -->
@@ -586,8 +584,7 @@ label {
 						</div>
 						<c:if test="${suggestFlist2_size>0 }">
 							<button type="button" class="btn btn-outline-success"
-								 data-toggle="modal" data-target="#morebtn">더보기
-							</button>
+								data-toggle="modal" data-target="#morebtn">더보기</button>
 						</c:if>
 					</div>
 				</div>
@@ -605,8 +602,8 @@ label {
 											style="font-size: 0.8rem; padding: 10px;">
 											${tag.hrank}위
 											<div>
-												<a href="/hoon/searchView?search=%23${tag.hname}">#${tag.hname}</a> <span class="float-right">${tag.hcount }
-													봄</span>
+												<a href="/hoon/searchView?search=%23${tag.hname}">#${tag.hname}</a>
+												<span class="float-right">${tag.hcount } 봄</span>
 											</div>
 										</div>
 									</div>

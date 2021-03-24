@@ -34,4 +34,10 @@ public class Like_BookmarkServiceImpl implements Like_BookmarkService {
 		return lbd.checkBoardBookmark(lb);
 	}
 
+	@Override
+	public int doBookmark(Like_Bookmark lb) {
+		System.out.println("[iron] Like_BookmarkServiceImpl doBookmark start...");
+		return lbd.doBookmark(lb);
+	}
+
 }

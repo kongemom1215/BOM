@@ -868,14 +868,14 @@ img {
 						<div class="card-header">실시간 들어온 유저</div>
 						<div class="card-body" style="padding: 5px;">
 
-							<c:forEach var="user" items="${useronline}">
+							<c:forEach var="user1" items="${useronline}">
 								<div class="card">
 									<div class="card-body"
 										style="font-size: 0.8rem; padding: 10px;">
-										<img src="/img/teemo.jpg" class="rounded-circle" width="20"
-											height="20"> <a class="card-title text-dark">${user.unickname}</a>
-										<a class="card-subtitle mb-2 text-muted"> ${user.uatid}</a> <img
-											src="/img/online.svg" style="float: right" width="50"
+										<img src="<%=context %>/profile_image/${user1.uimage }" class="rounded-circle" width="20"
+											height="20"> <a class="card-title text-dark">${user1.unickname}</a>
+										<a class="card-subtitle mb-2 text-muted">@${user1.uatid}</a> <img
+											src="/img/online.png" style="float: right" width="20"
 											height="20">
 									</div>
 								</div>

@@ -8,9 +8,11 @@
 
 		select loginUcode, uimage, ucode, uatid, unickName, bcode, bcontent,
 		breplyCount, bquoteCount, blikeCount, battach, bbcode,
-		case when trunc((sysdate
+		case when
+		trunc((sysdate
 		- to_date(bregdate,'yy/mm/dd hh24:mi:ss'))/365)
-		>=1 then trunc((sysdate
+		>=1 then
+		trunc((sysdate
 		- to_date(bregdate,'yy/mm/dd
 		hh24:mi:ss'))/365)||'년 전'
 		when
@@ -39,14 +41,21 @@
 		FROM
 		(
 		select
-		ui.ucode loginUcode, ui.uimage uimage, b.ucode ucode, b.bbcode bbcode,
-		ui.uatid uatid, ui.unickname unickName, b.bcode bcode, b.bcontent bcontent,
-		b.bregDate bregDate, b.breplyCount breplyCount, b.bquoteCount
-		bquoteCount, b.blikeCount blikeCount, b.battach battach,
-		lb.ltype ltype, lb.bbtype bbtype, lb.ldate ldate, lb.bdate bdate, b.btype
-		btype, b.bregDate orderData, b.bstate bstate
+		ui.ucode loginUcode,
+		ui.uimage uimage, b.ucode ucode, b.bbcode bbcode,
+		ui.uatid uatid,
+		ui.unickname unickName, b.bcode bcode, b.bcontent bcontent,
+		b.bregDate
+		bregDate, b.breplyCount breplyCount, b.bquoteCount
+		bquoteCount,
+		b.blikeCount blikeCount, b.battach battach,
+		lb.ltype ltype, lb.bbtype
+		bbtype, lb.ldate ldate, lb.bdate bdate, b.btype
+		btype, b.bregDate
+		orderData, b.bstate bstate
 		from
-		user_info ui, board b, follow f, like_bookmark lb
+		user_info ui, board b, follow f,
+		like_bookmark lb
             	 <![CDATA[
             	 where f.ucode = #{ucode}
             		and f.fopcode = b.ucode
@@ -57,14 +66,19 @@
             	 ]]>
 		UNION
 		select
-		ui.ucode loginUcode, ui.uimage uimage, b.ucode ucode, b.bbcode bbcode,
-		ui.uatid uatid, ui.unickname unickName, b.bcode bcode, b.bcontent bcontent,
-		b.bregDate bregDate, b.breplyCount breplyCount, b.bquoteCount
+		ui.ucode loginUcode, ui.uimage uimage, b.ucode ucode,
+		b.bbcode bbcode,
+		ui.uatid uatid, ui.unickname unickName, b.bcode bcode,
+		b.bcontent bcontent,
+		b.bregDate bregDate, b.breplyCount breplyCount,
+		b.bquoteCount
 		bquoteCount, b.blikeCount blikeCount, b.battach battach,
-		lb.ltype ltype, lb.bbtype bbtype, lb.ldate ldate, lb.bdate bdate, b.btype
+		lb.ltype ltype, lb.bbtype bbtype, lb.ldate ldate, lb.bdate bdate,
+		b.btype
 		btype, b.bregDate orderData, b.bstate bstate
 		from
-		user_info ui, board b, like_bookmark lb
+		user_info ui,
+		board b, like_bookmark lb
             	<![CDATA[
             		where ui.ucode = #{ucode}
         	      		and b.bcode = lb.bcode(+)
@@ -118,7 +132,8 @@
 		board b,
 		user_info ui , like_bookmark lb
 		where b.bcode = #{bcode}
-		and	b.ucode = ui.ucode
+		and
+		b.ucode = ui.ucode
 		and b.bstate = 1
 		and b.bcode = lb.bcode(+)
 	</select>
@@ -141,7 +156,8 @@
 		and btype =
 		'reply'
 		and b.ucode = ui.ucode
-		and	b.bcode = lb.bcode(+)
+		and
+		b.bcode = lb.bcode(+)
 		and b.bstate = 1
 		order by bregdate desc
 	</select>
@@ -163,11 +179,13 @@
 		where
 		ui.ucode = #{ucode}
 		and b.bstate = 1
-		and (b.btype = 'normal' or b.btype='quote')
+		and (b.btype = 'normal' or
+		b.btype='quote')
 		and b.ucode =
 		ui.ucode
 		and b.bcode = lb.bcode(+)
-		order by bregdate desc
+		order by
+		bregdate desc
 	</select>
 	<select id="MyReplyBoardList" parameterType="Iron_Board"
 		resultType="Iron_Board">
@@ -189,10 +207,12 @@
 		and b.bstate =
 		1
 		and b.btype = 'reply'
-		and b.ucode = ui.ucode
+		and b.ucode =
+		ui.ucode
 		and b.bstate = 1
 		and b.bcode = lb.bcode(+)
-		order by bregdate desc
+		order by bregdate
+		desc
 	</select>
 	<select id="MyMediaBoardList" parameterType="Iron_Board"
 		resultType="Iron_Board">
@@ -213,10 +233,12 @@
 		ui.ucode = #{ucode}
 		and b.bstate = 1
 		and b.battach is not null
-		and b.ucode = ui.ucode
+		and
+		b.ucode = ui.ucode
 		and b.bstate = 1
 		and b.bcode = lb.bcode(+)
-		order by bregdate desc
+		order by
+		bregdate desc
 	</select>
 	<select id="MyLikeBoardList" parameterType="Iron_Board"
 		resultType="Iron_Board">
@@ -234,20 +256,21 @@
 		from board b,
 		user_info ui, like_bookmark lb
 		where
-		ui.ucode = #{ucode}
-		and b.bstate = 1
+		lb.ucode = #{ucode}
 		and lb.ltype = 1
-		and b.ucode = ui.ucode
 		and b.bstate = 1
-		and b.bcode = lb.bcode(+)
+		and lb.bcode = b.bcode
+		and b.ucode = ui.ucode
 		order by bregdate desc
 	</select>
 	<select id="Iron_QuoteBoard" parameterType="java.lang.String"
 		resultType="Iron_Board">
-		select b.bcode, b.bcontent, b.battach, u.unickname, u.uatid,
+		select b.bcode, b.bcontent, b.battach, u.unickname,
+		u.uatid,
 		u.uimage,b.bregdate
 		from board b, user_info u
-		where b.bcode = #{bbcode}
+		where b.bcode =
+		#{bbcode}
 		and b.ucode = u.ucode
 		and b.bstate = 1
 	</select>

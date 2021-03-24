@@ -11,5 +11,7 @@ public interface User_InfoService {
 	int getUserfollowCount(User_Info someone);
 
 	int getUserfollowerCount(User_Info someone);
+
+	int editProfileData(User_Info ui);
 	
 }

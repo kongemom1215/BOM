@@ -44,5 +44,13 @@ public class User_InfoDaoImpl implements User_InfoDao {
 		System.out.println("UserfollowerCount -> "+result);
 		return result;
 	}
+
+	@Override
+	public int editProfileData(User_Info ui) {
+		System.out.println("[iron] User_InfoDaoImpl editProfileData start...");
+		int result = session.update("editProfile",ui);
+		System.out.println("####### check result -> " + result);
+		return result;
+	}
 	
 }

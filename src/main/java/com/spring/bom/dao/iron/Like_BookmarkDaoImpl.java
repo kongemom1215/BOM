@@ -83,4 +83,22 @@ public class Like_BookmarkDaoImpl implements Like_BookmarkDao {
 		return lb;
 	}
 
+	@Override
+	public int doBookmark(Like_Bookmark lb) {
+		System.out.println("[iron] LikeBookmarkDaoImpl doBookmark start...");
+		int state = session.selectOne("checkBookmark1",lb);	//0: goto insert or update ... 1: exist
+		if(state==1) {
+			return 0;
+		}
+		else {
+			int state2 = session.selectOne("checkBookmark2",lb);
+			if(state2==0) {
+				session.insert("insertBookmark",lb);
+				return 1;
+			}else {
+				return 2;
+			}
+		}
+	}
+
 }

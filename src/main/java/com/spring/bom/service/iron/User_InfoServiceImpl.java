@@ -43,4 +43,10 @@ public class User_InfoServiceImpl implements User_InfoService {
 		return ud.getUserfollowerCount(someone);
 	}
 
+	@Override
+	public int editProfileData(User_Info ui) {
+		System.out.println("[iron] User_InfoServiceImpl fileName __ For EditProfile start...");
+		return ud.editProfileData(ui);
+	}
+
 }

@@ -57,4 +57,21 @@
 		from like_bookmark
 		where ucode = #{ucode} and bcode=#{bcode}
 	</select>
+	<select id = "checkBookmark1" parameterType="Iron_Like_Bookmark" resultType="int">
+		select count(*)
+		from like_bookmark
+		where ucode=#{ucode} and bbtype = 1 and bcode=#{bcode} 
+	</select>
+	<select id = "checkBookmark2" parameterType="Iron_Like_Bookmark" resultType="int">
+		select count(*)
+		from like_bookmark
+		where ucode=#{ucode} and ltype = 1 and bcode=#{bcode}
+	</select>
+	<insert id="insertBookmark" parameterType="Iron_Like_Bookmark">
+		insert into like_bookmark(ucode, bcode, bbtype, bdate) values(#{ucode}, #{bcode}, 1,  to_char(sysdate, 'yy/mm/dd hh24:mi:ss'))
+	</insert>
+	<update id="updateBookmark" parameterType="Iron_Like_Bookmark">
+		update like_bookmark set bbtype = 1, bdate = to_char(sysdate, 'yy/mm/dd hh24:mi:ss') 
+		where ucode=#{ucode} and bcode={bcode}
+	</update>
 </mapper>
