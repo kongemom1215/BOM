@@ -42,6 +42,18 @@
 <script src="/js/bootstrap.bundle.min.js"></script>
 <script src="/js/bootstrap.bundle.js"></script>
 <style>
+@font-face {
+   font-family: 'GmarketSansLight';
+   src:
+      url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansLight.woff')
+      format('woff');
+   font-weight: normal;
+   font-style: normal;
+}
+
+body {
+   font-family: GmarketSansLight;
+}
 #bearsize {
 	width: 550px;
 	overflow: hidden;
@@ -122,6 +134,7 @@ label {
 <script type="text/javascript">
 	
 	function goProfile(){
+		event.stopPropagation();
 		location.href = "../iron/profile?uatid="+${user.uatid};
 	}
 	

@@ -49,6 +49,19 @@
 <script src="/js/bootstrap.bundle.js"></script>
 
 <style>
+@font-face {
+	font-family: 'GmarketSansLight';
+	src:
+		url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansLight.woff')
+		format('woff');
+	font-weight: normal;
+	font-style: normal;
+}
+
+body {
+	font-family: GmarketSansLight;
+}
+
 #bearsize {
 	width: 550px;
 	overflow: hidden;
@@ -56,34 +69,42 @@
 	white-space: nowrap;
 	text-align: left;
 }
+
 .dropdown-toggle.caret-off::after {
 	display: none;
 }
+
 a:hover {
 	text-decoration: none;
 	cursor: pointer;
 }
+
 .card-text:hover {
 	color: black;
 	text-decoration: none;
 }
+
 .dropdown-toggle.caret-off::after {
 	display: none;
 	resize: none;
 }
+
 div#writeTextarea {
 	min-height: 50px;
 	border: none;
 	resize: none;
 }
+
 div#writeTextarea:focus {
 	outline: none;
 	box-shadow: none;
 	-webkit-box-shadow: none;
 }
+
 select.custom-select {
 	margin-top: 10px;
 }
+
 select.custom-select:focus {
 	outline: none;
 	box-shadow: none;
@@ -94,6 +115,7 @@ select.custom-select:focus {
 	content: attr(placeholder);
 	display: block; /* For Firefox */
 }
+
 input[type="file"] {
 	position: absolute;
 	width: 1px;
@@ -104,9 +126,11 @@ input[type="file"] {
 	clip: rect(0, 0, 0, 0);
 	border: 0;
 }
+
 label {
 	margin: 0px;
 }
+
 .nav-tabs .nav-link:not(.active) {
 	border-color: transparent !important;
 	color: #28a745;
@@ -404,6 +428,7 @@ function deleteBom(loginUcode, bUcode, sIndex, class_index){
 			<p>
 				<!--글 정렬-->
 			<div class="tab-content" id="myTabContent">
+
 				<!-- 인기  -->
 				<div class="tab-pane fade show active" id="fame" role="tabpanel"
 					aria-labelledby="home-tab">
@@ -463,48 +488,65 @@ function deleteBom(loginUcode, bUcode, sIndex, class_index){
 										<a class="card-title text-dark">${junghun.unickName}</a> <a
 											class="card-subtitle mb-2 text-muted">@${junghun.uatid}</a> <a
 											class="card-subtitle mb-2 text-muted"
-											style="font-size: 12px;"> ${junghun.bregdate } </a> <a
-											href="#" class="card-text" style="margin-top: 10px;">${junghun.bcontent }
-										</a>
+											style="font-size: 12px;"> ${junghun.bregdate } </a>
+										<p class='card-text mt-2 mb-0' style="height: 100%;"
+											id="quote_content">${junghun.bcontent}</p>
+										<p>
+											<c:if test="${junghun.battach != ''}">
+												<div class="quote_file mt-2">
+													<c:if test="${junghun.battachType eq 'image'}">
+														<img id="quote_img"
+															src="<%=context %>/image/${junghun.battachSrc }"
+															class="img-fluid" />
+													</c:if>
+													<c:if test="${junghun.battachType eq 'video'}">
+														<div id="show_quote_video"
+															class="embed-responsive embed-responsive-16by9">
+															<video controls id="quote_video"
+																src="<%=context %>/video/${tjunghun.battachSrc }">
+															</video>
+														</div>
+													</c:if>
+												</div>
+											</c:if>
+										<p>
+											<!-- 우선 인용문이 있을 때-->
+											<c:if test="${junghun.btype=='quote' }">
+												<div class="col-12 float-left" id="QuoteArea"
+													style="font-size: 0.8em;">
+													<div class='card'>
+														<div class='card-body'>
+															<img id="quote_profile"
+																src="<%=context %>/profile_image/${junghun.q_uimage}"
+																alt='no_image' class='rounded-circle' width='30'>
+															<a class='card-title text-dark' id="quote_nickname">${junghun.q_nickname}</a>
+															<a class='card-subtitle mb-2 text-muted' id="quote_atid">${junghun.q_atid}</a>
+															<a class='card-subtitle mb-2 text-muted'
+																id="quote_regdate">${junghun.q_regdate}</a>
+															<p class='card-text mt-2 mb-0' style="height: 100%;"
+																id="quote_content">${junghun.q_content}</p>
+															<c:if test="${junghun.q_attach != ''}">
+																<div class="quote_file mt-2">
+																	<c:if test="${junghun.q_attachtype eq 'image'}">
+																		<img id="quote_img"
+																			src="<%=context %>/image/${junghun.q_attachsrc }"
+																			class="img-fluid" />
+																	</c:if>
+																	<c:if test="${junghun.q_attachtype eq 'video'}">
+																		<div id="show_quote_video"
+																			class="embed-responsive embed-responsive-16by9">
+																			<video controls id="quote_video"
+																				src="<%=context %>/video/${junghun.q_attachsrc }">
+																			</video>
+																		</div>
+																	</c:if>
+																</div>
+															</c:if>
 
-										<!-- 우선 인용문이 있을 때-->
-										<c:if test="${junghun.btype=='quote' }">
-											<div class="col-12 float-left" id="QuoteArea"
-												style="font-size: 0.8em;">
-												<div class='card'>
-													<div class='card-body'>
-														<img id="quote_profile"
-															src="<%=context %>/profile_image/${junghun.q_uimage}"
-															alt='no_image' class='rounded-circle' width='30'> <a
-															class='card-title text-dark' id="quote_nickname">${junghun.q_nickname}</a>
-														<a class='card-subtitle mb-2 text-muted' id="quote_atid">${junghun.q_atid}</a>
-														<a class='card-subtitle mb-2 text-muted'
-															id="quote_regdate">${junghun.q_regdate}</a>
-														<p class='card-text mt-2 mb-0' style="height: 100%;"
-															id="quote_content">${junghun.q_content}</p>
-														<c:if test="${junghun.q_attach != ''}">
-															<div class="quote_file mt-2">
-																<c:if test="${junghun.q_attachtype eq 'image'}">
-																	<img id="quote_img"
-																		src="<%=context %>/image/${junghun.q_attachsrc }"
-																		class="img-fluid" />
-																</c:if>
-																<c:if test="${junghun.q_attachtype eq 'video'}">
-																	<div id="show_quote_video"
-																		class="embed-responsive embed-responsive-16by9">
-																		<video controls id="quote_video"
-																			src="<%=context %>/video/${junghun.q_attachsrc }">
-																		</video>
-																	</div>
-																</c:if>
-															</div>
-														</c:if>
-
+														</div>
 													</div>
 												</div>
-											</div>
-										</c:if>
-
+											</c:if>
 										<div align="center">
 											<div class="btn-group col-md-12" role="group"
 												aria-label="Button group with nested dropdown">
@@ -563,6 +605,7 @@ function deleteBom(loginUcode, bUcode, sIndex, class_index){
 								</div>
 							</c:forEach>
 					</c:if>
+					<!-- 인기 -->
 					<c:forEach var="junghun" items="${listSearch }" varStatus="status">
 						<!-- 경빈 part 시작 -->
 						<div class="card">
@@ -588,46 +631,64 @@ function deleteBom(loginUcode, bUcode, sIndex, class_index){
 								<a class="card-title text-dark">${junghun.unickName}</a> <a
 									class="card-subtitle mb-2 text-muted">@${junghun.uatid}</a> <a
 									class="card-subtitle mb-2 text-muted" style="font-size: 12px;">
-									${junghun.bregdate } </a> <a href="#" class="card-text"
-									style="margin-top: 10px;">${junghun.bcontent } </a>
+									${junghun.bregdate } </a>
+								<p class='card-text mt-2 mb-0' style="height: 100%;"
+									id="quote_content">${junghun.bcontent}</p>
+								<p>
+									<c:if test="${junghun.battach != ''}">
+										<div class="quote_file mt-2">
+											<c:if test="${junghun.battachType eq 'image'}">
+												<img id="quote_img"
+													src="<%=context %>/image/${junghun.battachSrc }"
+													class="img-fluid" />
+											</c:if>
+											<c:if test="${junghun.battachType eq 'video'}">
+												<div id="show_quote_video"
+													class="embed-responsive embed-responsive-16by9">
+													<video controls id="quote_video"
+														src="<%=context %>/video/${junghun.battachSrc }">
+													</video>
+												</div>
+											</c:if>
+										</div>
+									</c:if>
+								<p>
+									<!-- 우선 인용문이 있을 때-->
+									<c:if test="${junghun.btype=='quote' }">
+										<div class="col-12 float-left" id="QuoteArea"
+											style="font-size: 0.8em;">
+											<div class='card'>
+												<div class='card-body'>
+													<img id="quote_profile"
+														src="<%=context %>/profile_image/${junghun.q_uimage}"
+														alt='no_image' class='rounded-circle' width='30'> <a
+														class='card-title text-dark' id="quote_nickname">${junghun.q_nickname}</a>
+													<a class='card-subtitle mb-2 text-muted' id="quote_atid">${junghun.q_atid}</a>
+													<a class='card-subtitle mb-2 text-muted' id="quote_regdate">${junghun.q_regdate}</a>
+													<p class='card-text mt-2 mb-0' style="height: 100%;"
+														id="quote_content">${junghun.q_content}</p>
+													<c:if test="${junghun.q_attach != ''}">
+														<div class="quote_file mt-2">
+															<c:if test="${junghun.q_attachtype eq 'image'}">
+																<img id="quote_img"
+																	src="<%=context %>/image/${junghun.q_attachsrc }"
+																	class="img-fluid" />
+															</c:if>
+															<c:if test="${junghun.q_attachtype eq 'video'}">
+																<div id="show_quote_video"
+																	class="embed-responsive embed-responsive-16by9">
+																	<video controls id="quote_video"
+																		src="<%=context %>/video/${junghun.q_attachsrc }">
+																	</video>
+																</div>
+															</c:if>
+														</div>
+													</c:if>
 
-								<!-- 우선 인용문이 있을 때-->
-								<c:if test="${junghun.btype=='quote' }">
-									<div class="col-12 float-left" id="QuoteArea"
-										style="font-size: 0.8em;">
-										<div class='card'>
-											<div class='card-body'>
-												<img id="quote_profile"
-													src="<%=context %>/profile_image/${junghun.q_uimage}"
-													alt='no_image' class='rounded-circle' width='30'> <a
-													class='card-title text-dark' id="quote_nickname">${junghun.q_nickname}</a>
-												<a class='card-subtitle mb-2 text-muted' id="quote_atid">${junghun.q_atid}</a>
-												<a class='card-subtitle mb-2 text-muted' id="quote_regdate">${junghun.q_regdate}</a>
-												<p class='card-text mt-2 mb-0' style="height: 100%;"
-													id="quote_content">${junghun.q_content}</p>
-												<c:if test="${junghun.q_attach != ''}">
-													<div class="quote_file mt-2">
-														<c:if test="${junghun.q_attachtype eq 'image'}">
-															<img id="quote_img"
-																src="<%=context %>/image/${junghun.q_attachsrc }"
-																class="img-fluid" />
-														</c:if>
-														<c:if test="${junghun.q_attachtype eq 'video'}">
-															<div id="show_quote_video"
-																class="embed-responsive embed-responsive-16by9">
-																<video controls id="quote_video"
-																	src="<%=context %>/video/${junghun.q_attachsrc }">
-																</video>
-															</div>
-														</c:if>
-													</div>
-												</c:if>
-
+												</div>
 											</div>
 										</div>
-									</div>
-								</c:if>
-
+									</c:if>
 								<div align="center">
 									<div class="btn-group col-md-12" role="group"
 										aria-label="Button group with nested dropdown">
@@ -745,48 +806,66 @@ function deleteBom(loginUcode, bUcode, sIndex, class_index){
 									<a class="card-title text-dark">${junghun.unickName}</a> <a
 										class="card-subtitle mb-2 text-muted">@${junghun.uatid}</a> <a
 										class="card-subtitle mb-2 text-muted" style="font-size: 12px;">
-										${junghun.bregdate } </a> <a href="#" class="card-text"
-										style="margin-top: 10px;">${junghun.bcontent } </a>
+										${junghun.bregdate } </a>
+									<p class='card-text mt-2 mb-0' style="height: 100%;"
+										id="quote_content">${junghun.bcontent}</p>
+									<p>
+										<c:if test="${junghun.battach != ''}">
+											<div class="quote_file mt-2">
+												<c:if test="${junghun.battachType eq 'image'}">
+													<img id="quote_img"
+														src="<%=context %>/image/${junghun.battachSrc }"
+														class="img-fluid" />
+												</c:if>
+												<c:if test="${junghun.battachType eq 'video'}">
+													<div id="show_quote_video"
+														class="embed-responsive embed-responsive-16by9">
+														<video controls id="quote_video"
+															src="<%=context %>/video/${junghun.battachSrc }">
+														</video>
+													</div>
+												</c:if>
+											</div>
+										</c:if>
+									<p>
 
-									<!-- 우선 인용문이 있을 때-->
-									<c:if test="${junghun.btype=='quote' }">
-										<div class="col-12 float-left" id="QuoteArea"
-											style="font-size: 0.8em;">
-											<div class='card'>
-												<div class='card-body'>
-													<img id="quote_profile"
-														src="<%=context %>/profile_image/${junghun.q_uimage}"
-														alt='no_image' class='rounded-circle' width='30'> <a
-														class='card-title text-dark' id="quote_nickname">${junghun.q_nickname}</a>
-													<a class='card-subtitle mb-2 text-muted' id="quote_atid">${junghun.q_atid}</a>
-													<a class='card-subtitle mb-2 text-muted' id="quote_regdate">${junghun.q_regdate}</a>
-													<p class='card-text mt-2 mb-0' style="height: 100%;"
-														id="quote_content">${junghun.q_content}</p>
-													<c:if test="${junghun.q_attach != ''}">
-														<div class="quote_file mt-2">
-															<c:if test="${junghun.q_attachtype eq 'image'}">
-																<img id="quote_img"
-																	src="<%=context %>/image/${junghun.q_attachsrc }"
-																	class="img-fluid" />
-															</c:if>
-															<c:if test="${junghun.q_attachtype eq 'video'}">
-																<div id="show_quote_video"
-																	class="embed-responsive embed-responsive-16by9">
-																	<video controls id="quote_video"
-																		src="<%=context %>/video/${junghun.q_attachsrc }">
-																	</video>
-																</div>
-															</c:if>
-														</div>
-													</c:if>
+										<!-- 우선 인용문이 있을 때-->
+										<c:if test="${junghun.btype=='quote' }">
+											<div class="col-12 float-left" id="QuoteArea"
+												style="font-size: 0.8em;">
+												<div class='card'>
+													<div class='card-body'>
+														<img id="quote_profile"
+															src="<%=context %>/profile_image/${junghun.q_uimage}"
+															alt='no_image' class='rounded-circle' width='30'> <a
+															class='card-title text-dark' id="quote_nickname">${junghun.q_nickname}</a>
+														<a class='card-subtitle mb-2 text-muted' id="quote_atid">${junghun.q_atid}</a>
+														<a class='card-subtitle mb-2 text-muted'
+															id="quote_regdate">${junghun.q_regdate}</a>
+														<p class='card-text mt-2 mb-0' style="height: 100%;"
+															id="quote_content">${junghun.q_content}</p>
+														<c:if test="${junghun.q_attach != ''}">
+															<div class="quote_file mt-2">
+																<c:if test="${junghun.q_attachtype eq 'image'}">
+																	<img id="quote_img"
+																		src="<%=context %>/image/${junghun.q_attachsrc }"
+																		class="img-fluid" />
+																</c:if>
+																<c:if test="${junghun.q_attachtype eq 'video'}">
+																	<div id="show_quote_video"
+																		class="embed-responsive embed-responsive-16by9">
+																		<video controls id="quote_video"
+																			src="<%=context %>/video/${junghun.q_attachsrc }">
+																		</video>
+																	</div>
+																</c:if>
+															</div>
+														</c:if>
 
+													</div>
 												</div>
 											</div>
-										</div>
-									</c:if>
-
-
-
+										</c:if>
 									<div align="center">
 										<div class="btn-group col-md-12" role="group"
 											aria-label="Button group with nested dropdown">
@@ -844,6 +923,8 @@ function deleteBom(loginUcode, bUcode, sIndex, class_index){
 							</div>
 						</c:forEach>
 					</c:if>
+
+					<!-- 최신  -->
 					<c:forEach var="junghun" items="${listNew }" varStatus="status">
 
 						<!-- 경빈 part 시작 -->
@@ -870,46 +951,64 @@ function deleteBom(loginUcode, bUcode, sIndex, class_index){
 								<a class="card-title text-dark">${junghun.unickName}</a> <a
 									class="card-subtitle mb-2 text-muted">@${junghun.uatid}</a> <a
 									class="card-subtitle mb-2 text-muted" style="font-size: 12px;">
-									${junghun.bregdate } </a> <a href="#" class="card-text"
-									style="margin-top: 10px;">${junghun.bcontent } </a>
+									${junghun.bregdate } </a>
+								<p class='card-text mt-2 mb-0' style="height: 100%;"
+									id="quote_content">${junghun.bcontent}</p>
+								<p>
+									<c:if test="${junghun.battach != ''}">
+										<div class="quote_file mt-2">
+											<c:if test="${junghun.battachType eq 'image'}">
+												<img id="quote_img"
+													src="<%=context %>/image/${junghun.battachSrc }"
+													class="img-fluid" />
+											</c:if>
+											<c:if test="${junghun.battachType eq 'video'}">
+												<div id="show_quote_video"
+													class="embed-responsive embed-responsive-16by9">
+													<video controls id="quote_video"
+														src="<%=context %>/video/${junghun.battachSrc }">
+													</video>
+												</div>
+											</c:if>
+										</div>
+									</c:if>
+								<p>
+									<!-- 우선 인용문이 있을 때-->
+									<c:if test="${junghun.btype=='quote' }">
+										<div class="col-12 float-left" id="QuoteArea"
+											style="font-size: 0.8em;">
+											<div class='card'>
+												<div class='card-body'>
+													<img id="quote_profile"
+														src="<%=context %>/profile_image/${junghun.q_uimage}"
+														alt='no_image' class='rounded-circle' width='30'> <a
+														class='card-title text-dark' id="quote_nickname">${junghun.q_nickname}</a>
+													<a class='card-subtitle mb-2 text-muted' id="quote_atid">${junghun.q_atid}</a>
+													<a class='card-subtitle mb-2 text-muted' id="quote_regdate">${junghun.q_regdate}</a>
+													<p class='card-text mt-2 mb-0' style="height: 100%;"
+														id="quote_content">${junghun.q_content}</p>
+													<c:if test="${junghun.q_attach != ''}">
+														<div class="quote_file mt-2">
+															<c:if test="${junghun.q_attachtype eq 'image'}">
+																<img id="quote_img"
+																	src="<%=context %>/image/${junghun.q_attachsrc }"
+																	class="img-fluid" />
+															</c:if>
+															<c:if test="${junghun.q_attachtype eq 'video'}">
+																<div id="show_quote_video"
+																	class="embed-responsive embed-responsive-16by9">
+																	<video controls id="quote_video"
+																		src="<%=context %>/video/${junghun.q_attachsrc }">
+																	</video>
+																</div>
+															</c:if>
+														</div>
+													</c:if>
 
-								<!-- 우선 인용문이 있을 때-->
-								<c:if test="${junghun.btype=='quote' }">
-									<div class="col-12 float-left" id="QuoteArea"
-										style="font-size: 0.8em;">
-										<div class='card'>
-											<div class='card-body'>
-												<img id="quote_profile"
-													src="<%=context %>/profile_image/${junghun.q_uimage}"
-													alt='no_image' class='rounded-circle' width='30'> <a
-													class='card-title text-dark' id="quote_nickname">${junghun.q_nickname}</a>
-												<a class='card-subtitle mb-2 text-muted' id="quote_atid">${junghun.q_atid}</a>
-												<a class='card-subtitle mb-2 text-muted' id="quote_regdate">${junghun.q_regdate}</a>
-												<p class='card-text mt-2 mb-0' style="height: 100%;"
-													id="quote_content">${junghun.q_content}</p>
-												<c:if test="${junghun.q_attach != ''}">
-													<div class="quote_file mt-2">
-														<c:if test="${junghun.q_attachtype eq 'image'}">
-															<img id="quote_img"
-																src="<%=context %>/image/${junghun.q_attachsrc }"
-																class="img-fluid" />
-														</c:if>
-														<c:if test="${junghun.q_attachtype eq 'video'}">
-															<div id="show_quote_video"
-																class="embed-responsive embed-responsive-16by9">
-																<video controls id="quote_video"
-																	src="<%=context %>/video/${junghun.q_attachsrc }">
-																</video>
-															</div>
-														</c:if>
-													</div>
-												</c:if>
-
+												</div>
 											</div>
 										</div>
-									</div>
-								</c:if>
-
+									</c:if>
 								<div align="center">
 									<div class="btn-group col-md-12" role="group"
 										aria-label="Button group with nested dropdown">
@@ -970,14 +1069,13 @@ function deleteBom(loginUcode, bUcode, sIndex, class_index){
 				<!-- 사진 -->
 				<div class="tab-pane fade" id="image" role="tabpanel"
 					aria-labelledby="contact-tab">
-					<c:if
+					<%-- <c:if
 						test="${searchbattach.size() == 0 && searchbattach2.size() == 0 }">
 						" ${search } " 검색된 사진이 없습니다
 					</c:if>
 					<c:if test="${searchbattach.size() == 0}">
 						<c:forEach var="junghun" items="${searchbattach2 }"
 							varStatus="Status">
-
 							<!-- 경빈 part 시작 -->
 							<div class="card">
 								<div class="card-body"
@@ -988,27 +1086,30 @@ function deleteBom(loginUcode, bUcode, sIndex, class_index){
 										<input type="hidden" name="coffeeBoardBcode"
 											value="${junghun.bcode }"> <input type="hidden"
 											name="coffeeBoardUatid" value="${junghun.uatid }">
-										<%-- <input type="hidden" class="coffeeStatusIndex" value="${status.index }"> --%>
-										<%-- <input type="hidden" name="coffeeLoginUcode" value="${user.ucode }"> --%>
+										<input type="hidden" class="coffeeStatusIndex" value="${status.index }">
+										<input type="hidden" name="coffeeLoginUcode" value="${user.ucode }">
 										<button type="button" class="btn btn-light float-right"
 											onclick="deleteBom(${loginUser.ucode }, ${junghun.ucode }, ${status.index },5);">
 											<img src="/img/coffee/trash.svg" width="15" height="15">
 										</button>
 									</form>
 									<!-- 경빈 part 끝 -->
-
 									<img src="<%=context %>/profile_image/${junghun.uimage }"
 										alt="no_image" class="rounded-circle" width="50" width="50">
 									<a class="card-title text-dark">${junghun.unickName}</a> <a
 										class="card-subtitle mb-2 text-muted">@${junghun.uatid}</a> <a
 										class="card-subtitle mb-2 text-muted" style="font-size: 12px">${junghun.bregdate }</a>
-									<p class="card-text" style="margin-top: 10px;">
-										${junghun.bcontent }
-									<p>
-										<c:if test="${junghun.battachType=='image'}">
-											<img class="img-thumnail" width="300"
-												src="<%=context %>/image/${junghun.battachSrc}" />
-										</c:if>
+										<p class='card-text mt-2 mb-0' style="height: 100%;"
+														id="quote_content">${junghun.bcontent}</p>
+													<c:if test="${junghun.battach != ''}">
+														<div class="quote_file mt-2">
+															<c:if test="${junghun.battachType eq 'image'}">
+																<img id="quote_img"
+																	src="<%=context %>/image/${junghun.battachSrc }"
+																	class="img-fluid" />
+															</c:if>
+														</div>
+													</c:if>
 									<div align="center">
 										<div class="btn-group col-md-12" role="group"
 											aria-label="Button group with nested dropdown">
@@ -1022,7 +1123,6 @@ function deleteBom(loginUcode, bUcode, sIndex, class_index){
 												${junghun.breplycount }
 											</c:if>
 											</button>
-
 											<!-- 인용 -->
 											<button type="button"
 												onclick="scrap_click('${junghun.bcode}',${status.index },'${junghun.uNickName }','${junghun.uatid }','<%=context %>/profile_image/${junghun.uimage }','${junghun.battachType}','${junghun.battachSrc}','<%=context %>');"
@@ -1057,40 +1157,44 @@ function deleteBom(loginUcode, bUcode, sIndex, class_index){
 								</div>
 							</div>
 						</c:forEach>
-					</c:if>
-					<c:forEach var="junghun" items="${searchbattach }"
-						varStatus="status">
+					</c:if> --%>
 
-						<!-- 경빈 part 시작 -->
-						<div class="card">
-							<div class="card-body"
-								onclick="goSingleBoard(${junghun.bcode},${status.index });">
-								<form action="/coffee/deleteBom_singleBoard"
-									class="coffeeDeleteBom6_${status.index }"
-									name="coffeeDeleteBom${status.index }" method="post">
-									<input type="hidden" name="coffeeBoardBcode"
-										value="${junghun.bcode }"> <input type="hidden"
-										name="coffeeBoardUatid" value="${junghun.uatid }">
-									<%-- <input type="hidden" class="coffeeStatusIndex" value="${status.index }"> --%>
-									<%-- <input type="hidden" name="coffeeLoginUcode" value="${user.ucode }"> --%>
-									<button type="button" class="btn btn-light float-right"
-										onclick="deleteBom(${loginUser.ucode }, ${junghun.ucode }, ${status.index },6);">
-										<img src="/img/coffee/trash.svg" width="15" height="15">
-									</button>
-								</form>
-								<!-- 경빈 part 끝 -->
+					<c:forEach var="junghun" items="${listSearch }" varStatus="status">
+						<c:if test="${junghun.battachType == 'image' }">
+							<!-- 경빈 part 시작 -->
+							<div class="card">
+								<div class="card-body"
+									onclick="goSingleBoard(${junghun.bcode},${status.index });">
+									<form action="/coffee/deleteBom_singleBoard"
+										class="coffeeDeleteBom6_${status.index }"
+										name="coffeeDeleteBom${status.index }" method="post">
+										<input type="hidden" name="coffeeBoardBcode"
+											value="${junghun.bcode }"> <input type="hidden"
+											name="coffeeBoardUatid" value="${junghun.uatid }">
+										<%-- <input type="hidden" class="coffeeStatusIndex" value="${status.index }"> --%>
+										<%-- <input type="hidden" name="coffeeLoginUcode" value="${user.ucode }"> --%>
+										<button type="button" class="btn btn-light float-right"
+											onclick="deleteBom(${loginUser.ucode }, ${junghun.ucode }, ${status.index },6);">
+											<img src="/img/coffee/trash.svg" width="15" height="15">
+										</button>
+									</form>
+									<!-- 경빈 part 끝 -->
 
-								<img src="<%=context %>/profile_image/${junghun.uimage }"
-									alt="no_image" class="rounded-circle" width="50" width="50">
-								<a class="card-title text-dark">${junghun.unickName}</a> <a
-									class="card-subtitle mb-2 text-muted">@${junghun.uatid}</a> <a
-									class="card-subtitle mb-2 text-muted" style="font-size: 12px">${junghun.bregdate }</a>
-								<p class="card-text" style="margin-top: 10px;">
-									${junghun.bcontent }
-								<p>
-									<c:if test="${junghun.battachType=='image'}">
-										<img class="img-thumnail" width="300"
-											src="<%=context %>/image/${junghun.battachSrc}" />
+									<img src="<%=context %>/profile_image/${junghun.uimage }"
+										alt="no_image" class="rounded-circle" width="50" width="50">
+									<a class="card-title text-dark">${junghun.unickName}</a> <a
+										class="card-subtitle mb-2 text-muted">@${junghun.uatid}</a> <a
+										class="card-subtitle mb-2 text-muted" style="font-size: 12px">${junghun.bregdate }</a>
+									<p class='card-text mt-2 mb-0' style="height: 100%;"
+										id="quote_content">${junghun.bcontent}</p>
+									<c:if test="${junghun.battach != ''}">
+										<div class="quote_file mt-2">
+											<c:if test="${junghun.battachType eq 'image'}">
+												<img id="quote_img"
+													src="<%=context %>/image/${junghun.battachSrc }"
+													class="img-fluid" />
+											</c:if>
+										</div>
 									</c:if>
 									<!-- 우선 인용문이 있을 때-->
 									<c:if test="${junghun.btype=='quote' }">
@@ -1128,74 +1232,73 @@ function deleteBom(loginUcode, bUcode, sIndex, class_index){
 											</div>
 										</div>
 									</c:if>
-								<div align="center">
-									<div class="btn-group col-md-12" role="group"
-										aria-label="Button group with nested dropdown">
-										<!-- 답글 -->
-										<button type="button"
-											class="replySetting btn btn-secondary mr-3 btn-light"
-											data-toggle="modal" data-target="#writeForm"
-											onclick="reply_click('${junghun.bcode}','${junghun.uatid }');">
-											<img src="/img/speech-bubble.svg" width="20" height="20">
-											<c:if test="${junghun.breplycount ne 0}">
+									<div align="center">
+										<div class="btn-group col-md-12" role="group"
+											aria-label="Button group with nested dropdown">
+											<!-- 답글 -->
+											<button type="button"
+												class="replySetting btn btn-secondary mr-3 btn-light"
+												data-toggle="modal" data-target="#writeForm"
+												onclick="reply_click('${junghun.bcode}','${junghun.uatid }');">
+												<img src="/img/speech-bubble.svg" width="20" height="20">
+												<c:if test="${junghun.breplycount ne 0}">
 												${junghun.breplycount }
 											</c:if>
-										</button>
+											</button>
 
-										<!-- 인용 -->
-										<button type="button"
-											onclick="scrap_click('${junghun.bcode}',${status.index },'${junghun.uNickName }','${junghun.uatid }','<%=context %>/profile_image/${junghun.uimage }','${junghun.battachType}','${junghun.battachSrc}','<%=context %>');"
-											class="scrapSetting btn btn-secondary mr-3 btn-light"
-											data-toggle="modal" data-target="#writeForm">
-											<input type="hidden" value="${junghun.bcontent}"
-												id="tagContent${status.index}"> <img
-												src="/img/bring.svg" width="20" height="20">
-											<c:if test="${junghun.bquotecount ne 0}">
+											<!-- 인용 -->
+											<button type="button"
+												onclick="scrap_click('${junghun.bcode}',${status.index },'${junghun.uNickName }','${junghun.uatid }','<%=context %>/profile_image/${junghun.uimage }','${junghun.battachType}','${junghun.battachSrc}','<%=context %>');"
+												class="scrapSetting btn btn-secondary mr-3 btn-light"
+												data-toggle="modal" data-target="#writeForm">
+												<input type="hidden" value="${junghun.bcontent}"
+													id="tagContent${status.index}"> <img
+													src="/img/bring.svg" width="20" height="20">
+												<c:if test="${junghun.bquotecount ne 0}">
 												${junghun.bquotecount }
 											</c:if>
-										</button>
+											</button>
 
-										<button id="likeBtn${status.index }" type="button"
-											class="btn btn-secondary btn-light mr-3"
-											data-toggle="tooltip" data-placement="top" title="좋아요"
-											onclick="clickLikeBtn(${junghun.bcode},${status.index }); return false;">
-											<c:if test="${junghun.ltype == 0 || junghun.ltype == null }">
-												<img src="/img/heart.svg" width="20" height="20">
-											</c:if>
-											<c:if test="${junghun.ltype == 1 }">
-												<img src="/img/red_heart.svg" width="20" height="20">
-											</c:if>
-											<c:if test="${junghun.blikecount ne 0}">
+											<button id="likeBtn${status.index }" type="button"
+												class="btn btn-secondary btn-light mr-3"
+												data-toggle="tooltip" data-placement="top" title="좋아요"
+												onclick="clickLikeBtn(${junghun.bcode},${status.index }); return false;">
+												<c:if test="${junghun.ltype == 0 || junghun.ltype == null }">
+													<img src="/img/heart.svg" width="20" height="20">
+												</c:if>
+												<c:if test="${junghun.ltype == 1 }">
+													<img src="/img/red_heart.svg" width="20" height="20">
+												</c:if>
+												<c:if test="${junghun.blikecount ne 0}">
                                  ${junghun.blikecount }
                               </c:if>
-										</button>
-										<button type="button"
-											class="btn btn-secondary btn-light mr-3 dropdown-toggle caret-off"
-											data-toggle="dropdown" aria-haspopup="true"
-											aria-expanded="false">
-											<img src="/img/share.svg" width="20" height="20">
-										</button>
-										<div class="dropdown-menu">
-											<a class="dropdown-item" href="#">북마크 추가/삭제</a> <a
-												class="dropdown-item" href="#">URL담아가기</a>
+											</button>
+											<button type="button"
+												class="btn btn-secondary btn-light mr-3 dropdown-toggle caret-off"
+												data-toggle="dropdown" aria-haspopup="true"
+												aria-expanded="false">
+												<img src="/img/share.svg" width="20" height="20">
+											</button>
+											<div class="dropdown-menu">
+												<a class="dropdown-item" href="#">북마크 추가/삭제</a> <a
+													class="dropdown-item" href="#">URL담아가기</a>
+											</div>
 										</div>
 									</div>
 								</div>
 							</div>
-						</div>
+						</c:if>
 					</c:forEach>
 				</div>
-
 				<!-- 동영상 -->
 				<div class="tab-pane fade" id="video" role="tabpanel"
 					aria-labelledby="contact-tab">
-					<c:if
+					<%-- <c:if
 						test="${searchbattachvideo.size()==0 && searchbattachvideo2.size()==0 }">
 						" ${search } " 검색된 동영상이 없습니다
 					</c:if>
 					<c:if test="${searchbattachvideo.size()==0 }">
 						<c:forEach var="junghun" items="${searchbattachvideo2 }" varStatus="status">
-
 							<!-- 경빈 part 시작 -->
 							<div class="card">
 								<div class="card-body"
@@ -1206,10 +1309,134 @@ function deleteBom(loginUcode, bUcode, sIndex, class_index){
 										<input type="hidden" name="coffeeBoardBcode"
 											value="${junghun.bcode }"> <input type="hidden"
 											name="coffeeBoardUatid" value="${junghun.uatid }">
+										<input type="hidden" class="coffeeStatusIndex" value="${status.index }">
+										<input type="hidden" name="coffeeLoginUcode" value="${user.ucode }">
+										<button type="button" class="btn btn-light float-right"
+											onclick="deleteBom(${loginUser.ucode }, ${junghun.ucode }, ${status.index },7);">
+											<img src="/img/coffee/trash.svg" width="15" height="15">
+										</button>
+									</form>
+									<!-- 경빈 part 끝 -->
+									<img src="<%=context %>/profile_image/${junghun.uimage }"
+										alt="no_image" class="rounded-circle" width="50" width="50">
+									<a class="card-title text-dark">${junghun.unickName}</a> <a
+										class="card-subtitle mb-2 text-muted">@${junghun.uatid}</a> <a
+										class="card-subtitle mb-2 text-muted" style="font-size: 12px">${junghun.bregdate }</a>
+									<p class="card-text" style="margin-top: 10px;">
+										${junghun.bcontent }
+									<p>
+										<c:if test="${junghun.battachType=='video'}">
+											<video controls width="300">
+												<source src="<%=context %>/video/${junghun.battachSrc}"
+													type="video/mp4">
+												<source src="<%=context %>/video/${junghun.battachSrc}"
+													type="video/webm">
+											</video>
+										</c:if>
+										<!-- 우선 인용문이 있을 때-->
+										<c:if test="${junghun.btype=='quote' }">
+											<div class="col-12 float-left" id="QuoteArea"
+												style="font-size: 0.8em;">
+												<div class='card'>
+													<div class='card-body'>
+														<img id="quote_profile"
+															src="<%=context %>/profile_image/${junghun.q_uimage}"
+															alt='no_image' class='rounded-circle' width='30'> <a
+															class='card-title text-dark' id="quote_nickname">${junghun.q_nickname}</a>
+														<a class='card-subtitle mb-2 text-muted' id="quote_atid">${junghun.q_atid}</a>
+														<a class='card-subtitle mb-2 text-muted'
+															id="quote_regdate">${junghun.q_regdate}</a>
+														<p class='card-text mt-2 mb-0' style="height: 100%;"
+															id="quote_content">${junghun.q_content}</p>
+														<c:if test="${junghun.q_attach != ''}">
+															<div class="quote_file mt-2">
+																<c:if test="${junghun.q_attachtype eq 'image'}">
+																	<img id="quote_img"
+																		src="<%=context %>/image/${junghun.q_attachsrc }"
+																		class="img-fluid" />
+																</c:if>
+																<c:if test="${junghun.q_attachtype eq 'video'}">
+																	<div id="show_quote_video"
+																		class="embed-responsive embed-responsive-16by9">
+																		<video controls id="quote_video"
+																			src="<%=context %>/video/${junghun.q_attachsrc }">
+																		</video>
+																	</div>
+																</c:if>
+															</div>
+														</c:if>
+													</div>
+												</div>
+											</div>
+										</c:if>
+									</p>
+									<div align="center">
+										<div class="btn-group col-md-12" role="group"
+											aria-label="Button group with nested dropdown">
+											<!-- 답글 -->
+											<button type="button"
+												class="replySetting btn btn-secondary mr-3 btn-light"
+												data-toggle="modal" data-target="#writeForm"
+												onclick="reply_click('${junghun.bcode}','${junghun.uatid }');">
+												<img src="/img/speech-bubble.svg" width="20" height="20">
+												<c:if test="${junghun.breplycount ne 0}">
+												${junghun.breplycount }
+											</c:if>
+											</button>
+											<!-- 인용 -->
+											<button type="button"
+												onclick="scrap_click('${junghun.bcode}',${status.index },'${junghun.uNickName }','${junghun.uatid }','<%=context %>/profile_image/${junghun.uimage }','${junghun.battachType}','${junghun.battachSrc}','<%=context %>');"
+												class="scrapSetting btn btn-secondary mr-3 btn-light"
+												data-toggle="modal" data-target="#writeForm">
+												<input type="hidden" value="${junghun.bcontent}"
+													id="tagContent${status.index}"> <img
+													src="/img/bring.svg" width="20" height="20">
+												<c:if test="${junghun.bquotecount ne 0}">
+												${junghun.bquotecount }
+											</c:if>
+											</button>
+											<button type="button"
+												class="btn btn-secondary btn-light mr-3"
+												id="searchLikeBtn${status.index }"
+												onclick="searchLikeBtn(${junghun.bcode},${status.index }); return false;"
+												data-toggle="tooltip" data-placement="top" title="좋아요"
+												style="font-size: 12px;">
+												<img src="/img/heart.svg" width="20" height="20">
+												&ensp;${junghun.blikecount }
+											</button>
+											<button type="button"
+												class="btn btn-secondary btn-light mr-3 dropdown-toggle caret-off"
+												data-toggle="dropdown" aria-haspopup="true"
+												aria-expanded="false">
+												<img src="/img/share.svg" width="20" height="20">
+											</button>
+											<div class="dropdown-menu">
+												<a class="dropdown-item" href="#">북마크 추가/삭제</a> <a
+													class="dropdown-item" href="#">URL담아가기</a>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</c:forEach>
+					</c:if> --%>
+
+					<c:forEach var="junghun" items="${listSearch }" varStatus="status">
+						<c:if test="${junghun.battachType == 'video' }">
+							<!-- 경빈 part 시작 -->
+							<div class="card">
+								<div class="card-body"
+									onclick="goSingleBoard(${junghun.bcode},${status.index });">
+									<form action="/coffee/deleteBom_singleBoard"
+										class="coffeeDeleteBom8_${status.index }"
+										name="coffeeDeleteBom${status.index }" method="post">
+										<input type="hidden" name="coffeeBoardBcode"
+											value="${junghun.bcode }"> <input type="hidden"
+											name="coffeeBoardUatid" value="${junghun.uatid }">
 										<%-- <input type="hidden" class="coffeeStatusIndex" value="${status.index }"> --%>
 										<%-- <input type="hidden" name="coffeeLoginUcode" value="${user.ucode }"> --%>
 										<button type="button" class="btn btn-light float-right"
-											onclick="deleteBom(${loginUser.ucode }, ${junghun.ucode }, ${status.index },7);">
+											onclick="deleteBom(${loginUser.ucode }, ${junghun.ucode }, ${status.index },8);">
 											<img src="/img/coffee/trash.svg" width="15" height="15">
 										</button>
 									</form>
@@ -1232,7 +1459,6 @@ function deleteBom(loginUcode, bUcode, sIndex, class_index){
 													type="video/webm">
 											</video>
 										</c:if>
-
 										<!-- 우선 인용문이 있을 때-->
 										<c:if test="${junghun.btype=='quote' }">
 											<div class="col-12 float-left" id="QuoteArea"
@@ -1270,7 +1496,6 @@ function deleteBom(loginUcode, bUcode, sIndex, class_index){
 												</div>
 											</div>
 										</c:if>
-
 
 									</p>
 
@@ -1327,138 +1552,7 @@ function deleteBom(loginUcode, bUcode, sIndex, class_index){
 									</div>
 								</div>
 							</div>
-						</c:forEach>
-					</c:if>
-
-					<c:forEach var="junghun" items="${searchbattachvideo }" varStatus="status">
-
-						<!-- 경빈 part 시작 -->
-						<div class="card">
-							<div class="card-body"
-								onclick="goSingleBoard(${junghun.bcode},${status.index });">
-								<form action="/coffee/deleteBom_singleBoard"
-									class="coffeeDeleteBom8_${status.index }"
-									name="coffeeDeleteBom${status.index }" method="post">
-									<input type="hidden" name="coffeeBoardBcode"
-										value="${junghun.bcode }"> <input type="hidden"
-										name="coffeeBoardUatid" value="${junghun.uatid }">
-									<%-- <input type="hidden" class="coffeeStatusIndex" value="${status.index }"> --%>
-									<%-- <input type="hidden" name="coffeeLoginUcode" value="${user.ucode }"> --%>
-									<button type="button" class="btn btn-light float-right"
-										onclick="deleteBom(${loginUser.ucode }, ${junghun.ucode }, ${status.index },8);">
-										<img src="/img/coffee/trash.svg" width="15" height="15">
-									</button>
-								</form>
-								<!-- 경빈 part 끝 -->
-
-								<img src="<%=context %>/profile_image/${junghun.uimage }"
-									alt="no_image" class="rounded-circle" width="50" width="50">
-								<a class="card-title text-dark">${junghun.unickName}</a> <a
-									class="card-subtitle mb-2 text-muted">@${junghun.uatid}</a> <a
-									class="card-subtitle mb-2 text-muted" style="font-size: 12px">${junghun.bregdate }</a>
-								<p class="card-text" style="margin-top: 10px;">
-									${junghun.bcontent }
-								<p>
-
-									<c:if test="${junghun.battachType=='video'}">
-										<video controls width="300">
-											<source src="<%=context %>/video/${junghun.battachSrc}"
-												type="video/mp4">
-											<source src="<%=context %>/video/${junghun.battachSrc}"
-												type="video/webm">
-										</video>
-									</c:if>
-									<!-- 우선 인용문이 있을 때-->
-									<c:if test="${junghun.btype=='quote' }">
-										<div class="col-12 float-left" id="QuoteArea"
-											style="font-size: 0.8em;">
-											<div class='card'>
-												<div class='card-body'>
-													<img id="quote_profile"
-														src="<%=context %>/profile_image/${junghun.q_uimage}"
-														alt='no_image' class='rounded-circle' width='30'> <a
-														class='card-title text-dark' id="quote_nickname">${junghun.q_nickname}</a>
-													<a class='card-subtitle mb-2 text-muted' id="quote_atid">${junghun.q_atid}</a>
-													<a class='card-subtitle mb-2 text-muted' id="quote_regdate">${junghun.q_regdate}</a>
-													<p class='card-text mt-2 mb-0' style="height: 100%;"
-														id="quote_content">${junghun.q_content}</p>
-													<c:if test="${junghun.q_attach != ''}">
-														<div class="quote_file mt-2">
-															<c:if test="${junghun.q_attachtype eq 'image'}">
-																<img id="quote_img"
-																	src="<%=context %>/image/${junghun.q_attachsrc }"
-																	class="img-fluid" />
-															</c:if>
-															<c:if test="${junghun.q_attachtype eq 'video'}">
-																<div id="show_quote_video"
-																	class="embed-responsive embed-responsive-16by9">
-																	<video controls id="quote_video"
-																		src="<%=context %>/video/${junghun.q_attachsrc }">
-																	</video>
-																</div>
-															</c:if>
-														</div>
-													</c:if>
-
-												</div>
-											</div>
-										</div>
-									</c:if>
-
-								</p>
-
-								<div align="center">
-									<div class="btn-group col-md-12" role="group"
-										aria-label="Button group with nested dropdown">
-										<!-- 답글 -->
-										<button type="button"
-											class="replySetting btn btn-secondary mr-3 btn-light"
-											data-toggle="modal" data-target="#writeForm"
-											onclick="reply_click('${junghun.bcode}','${junghun.uatid }');">
-											<img src="/img/speech-bubble.svg" width="20" height="20">
-											<c:if test="${junghun.breplycount ne 0}">
-												${junghun.breplycount }
-											</c:if>
-										</button>
-
-										<!-- 인용 -->
-										<button type="button"
-											onclick="scrap_click('${junghun.bcode}',${status.index },'${junghun.uNickName }','${junghun.uatid }','<%=context %>/profile_image/${junghun.uimage }','${junghun.battachType}','${junghun.battachSrc}','<%=context %>');"
-											class="scrapSetting btn btn-secondary mr-3 btn-light"
-											data-toggle="modal" data-target="#writeForm">
-											<input type="hidden" value="${junghun.bcontent}"
-												id="tagContent${status.index}"> <img
-												src="/img/bring.svg" width="20" height="20">
-											<c:if test="${junghun.bquotecount ne 0}">
-												${junghun.bquotecount }
-											</c:if>
-										</button>
-
-
-										<button type="button" class="btn btn-secondary btn-light mr-3"
-											id="searchLikeBtn${status.index }"
-											onclick="searchLikeBtn(${junghun.bcode},${status.index }); return false;"
-											data-toggle="tooltip" data-placement="top" title="좋아요"
-											style="font-size: 12px;">
-											<img src="/img/heart.svg" width="20" height="20">
-											&ensp;${junghun.blikecount }
-										</button>
-
-
-										<button type="button"
-											class="btn btn-secondary btn-light mr-3 dropdown-toggle caret-off"
-											data-toggle="dropdown" aria-haspopup="true"
-											aria-expanded="false">
-											<img src="/img/share.svg" width="20" height="20">
-										</button>
-										<div class="dropdown-menu">
-											<a class="dropdown-item" href="#">북마크 추가/삭제</a> <a
-												class="dropdown-item" href="#">URL담아가기</a>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
+						</c:if>
 					</c:forEach>
 				</div>
 			</div>
@@ -1570,7 +1664,7 @@ function deleteBom(loginUcode, bUcode, sIndex, class_index){
 	</div>
 
 	<!-- 오른쪽 사이드바 끝 -->
-<!--GOD 글쓰기 팝업 시작-->
+	<!--GOD 글쓰기 팝업 시작-->
 	<form action="../god/write" method="post" enctype="Multipart/form-data"
 		onsubmit="return checkWrite()">
 		<!--실제 값을 보내는곳 -->
@@ -1780,7 +1874,6 @@ function deleteBom(loginUcode, bUcode, sIndex, class_index){
 							<%
 								SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy");
 								Date d = new Date();
-
 								int year = Integer.parseInt(sdf1.format(d));
 							%>
 							<select name="year" id="year"
@@ -2234,7 +2327,6 @@ function deleteBom(loginUcode, bUcode, sIndex, class_index){
 			$('#ReplyArea').css("display","block");
 			$('#toreply').text("@"+atid);
 		}
-
 		//클릭시 스크랩 반응안하게
 		$('.scrapSetting').click(function(e){
 			e.stopPropagation();
@@ -2537,7 +2629,6 @@ function deleteBom(loginUcode, bUcode, sIndex, class_index){
 			$("#realCloseWrite").click();
 			location.href="../hoon/searchView?search="+search;
 		}
-
 		
 		/*마지막 저장창에서 저장해 클릭*/
 		jQuery("#saveBtn").click(function(){

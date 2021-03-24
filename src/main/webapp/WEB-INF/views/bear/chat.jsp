@@ -40,6 +40,18 @@ String context = request.getContextPath();
 <script src="/js/bootstrap.bundle.min.js"></script>
 <script src="/js/bootstrap.bundle.js"></script>
 <style>
+@font-face {
+   font-family: 'GmarketSansLight';
+   src:
+      url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansLight.woff')
+      format('woff');
+   font-weight: normal;
+   font-style: normal;
+}
+
+body {
+   font-family: GmarketSansLight;
+}
 #lineclear {
 	border: 0;
 	outline: none;

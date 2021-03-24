@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.spring.bom.model.hoon.Junghun;
 import com.spring.bom.model.iron.Follow;
-import com.spring.bom.model.iron.HashTag;
 import com.spring.bom.model.iron.User_Info;
 import com.spring.bom.service.hoon.JunghunService;
 
@@ -124,7 +123,15 @@ public class JunghunController {
 						+ listSearch.get(i).getBattachSrc());
 			}
 		}
-
+		for (int i = 0; i < listNew.size(); i++) {
+			if (listNew.get(i).getBattach() != null) {
+				System.out.println("[" + i + "]" + " Nbattach Data : " + listNew.get(i).getBattach());
+				listNew.get(i).setBattachType(listNew.get(i).getBattach().substring(0, 5));
+				listNew.get(i).setBattachSrc(listNew.get(i).getBattach().substring(6));
+				System.out.println("Nbattach Type : " + listNew.get(i).getBattachType() + " / battach Source : "
+						+ listNew.get(i).getBattachSrc());
+			}
+		}
 		List<Junghun> searchbattach = js.searchbattach(junghun);
 
 		for (int i = 0; i < searchbattach.size(); i++) {

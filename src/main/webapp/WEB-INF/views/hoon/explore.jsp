@@ -47,6 +47,19 @@
 <script src="/js/bootstrap.bundle.min.js"></script>
 <script src="/js/bootstrap.bundle.js"></script>
 <style>
+@font-face {
+	font-family: 'GmarketSansLight';
+	src:
+		url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansLight.woff')
+		format('woff');
+	font-weight: normal;
+	font-style: normal;
+}
+
+body {
+	font-family: GmarketSansLight;
+}
+
 #bearsize {
 	width: 550px;
 	overflow: hidden;
@@ -124,22 +137,18 @@ label {
 <!-- Like Ajax Fuction -->
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <script type="text/javascript">
-
 function goProfile(){
 	location.href = "../iron/profile?uatid="+${user.uatid};
 }
-
 window.onload = function(){	//주혜
 	clickWriteBtn();
 	clickSaveBtn();
 	getFollower('<%=context %>');
 }
-
 function goSingleBoard(bbcode,bindex){
 	alert(bbcode+'로 이동합니다.');
 	location.href = 'singleBoard?bcode='+bbcode;
 }
-
 function clickLikeBtn(bbcode,btnIndex){
 	event.stopPropagation();
 	var index = btnIndex;
@@ -162,7 +171,6 @@ function clickLikeBtn(bbcode,btnIndex){
 		}
 	});
 }
-
 function viewBoardOptions(bbcode,bindex){
 	event.stopPropagation();
 	var index = bindex;
@@ -185,7 +193,6 @@ function viewBoardOptions(bbcode,bindex){
 		}
 	});
 }
-
 //팔로우 추천 가져가야할 
 //팔로우 추천 더보기 닫기 기능
 function closemodal(){
@@ -383,7 +390,6 @@ function unfollow(number){
 	var imageArray = [ "<%=context%>/image/ti433a10907.jpg",
 			"<%=context%>/image/코로나.png", "<%=context%>/image/중앙.png" ];
 	var imageIndex = 0;
-
 	function changeImage() {
 		myImage.setAttribute("src", imageArray[imageIndex]);
 		imageIndex++;
@@ -400,15 +406,17 @@ function unfollow(number){
 						<tr>
 							<td>
 								<div class="card-body" style="padding: 5px;">
-									<c:forEach var="tag" items="${tag_list}" varStatus="status">
-										<c:if test="${status.count <=3 }">
+									<c:forEach var="tag" items="${listHash}" varStatus="status">
+										<c:if test="${status.count <=5 }">
 											<div class="card">
 												<div class="card-body"
 													style="font-size: 0.8rem; padding: 10px;">
 													<div>
 														<a href="searchView?search=%23${tag.hname}">#${tag.hname}</a>
 														<p>
-															<span>${tag.hcount }봄</span>
+															<c:if test="${tag.hcount >0 }">
+															${tag.hcount }봄
+														</c:if>
 													</div>
 												</div>
 											</div>
@@ -739,7 +747,6 @@ function unfollow(number){
 							<%
 								SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy");
 								Date d = new Date();
-
 								int year = Integer.parseInt(sdf1.format(d));
 							%>
 							<select name="year" id="year"
@@ -1193,7 +1200,6 @@ function unfollow(number){
 			$('#ReplyArea').css("display","block");
 			$('#toreply').text("@"+atid);
 		}
-
 		//클릭시 스크랩 반응안하게
 		$('.scrapSetting').click(function(e){
 			e.stopPropagation();

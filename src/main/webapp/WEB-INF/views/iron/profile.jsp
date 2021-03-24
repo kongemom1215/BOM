@@ -41,6 +41,18 @@
 <script src="/js/bootstrap.bundle.js"></script>
 <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <style>
+@font-face {
+   font-family: 'GmarketSansLight';
+   src:
+      url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansLight.woff')
+      format('woff');
+   font-weight: normal;
+   font-style: normal;
+}
+
+body {
+   font-family: GmarketSansLight;
+}
 #bearsize {
 	width: 550px;
 	overflow: hidden;
@@ -474,7 +486,7 @@ label {
 				<!-- </nav> -->
 				<nav
 					class="navbar navbar-expand-lg navbar-light bg-light border-bottom"
-					style="left: 100px; right: 241px; margin-top: 50px; padding-bottom: 0px;">
+					style="left: 70px; right: 241px; margin-top: 50px; padding-bottom: 0px;">
 
 					<ul class="nav nav-tabs nav-justified col-md-20" id="myTab"
 						role="tablist" style="width: 800px;">

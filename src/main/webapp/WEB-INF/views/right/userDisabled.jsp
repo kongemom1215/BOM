@@ -39,6 +39,18 @@
 <script src="/js/bootstrap.bundle.min.js"></script>
 <script src="/js/bootstrap.bundle.js"></script>
 <style>
+@font-face {
+   font-family: 'GmarketSansLight';
+   src:
+      url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansLight.woff')
+      format('woff');
+   font-weight: normal;
+   font-style: normal;
+}
+
+body {
+   font-family: GmarketSansLight;
+}
 .dropdown-toggle.caret-off::after {
 	display: none;
 }
@@ -337,7 +349,7 @@ function unfollow(number){
 				<div class="list-group-item list-group-item-action bg-light"
 					style="padding: 5px;">
 					<div class="card bg-light mb-3">
-						<div class="card-header">해시태그</div>
+						<div class="card-header">해시태그 순위</div>
 						<div class="card-body" style="padding: 5px;">
 							<c:forEach var="tag" items="${tag_list}" varStatus="status">
 								<c:if test="${status.count <=3 }">
@@ -346,7 +358,7 @@ function unfollow(number){
 											style="font-size: 0.8rem; padding: 10px;">
 											${tag.hrank}위
 											<div>
-												<a href="#">#${tag.hname}</a> <span class="float-right">${tag.hcount }
+												<a href="/hoon/searchView?search=%23${tag.hname}">#${tag.hname}</a> <span class="float-right">${tag.hcount }
 													봄</span>
 											</div>
 										</div>

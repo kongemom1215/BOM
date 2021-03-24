@@ -186,11 +186,11 @@
 	<!-- 해쉬태그 랜덤값 -->
 	<select id="searchHash" parameterType="Junghun"
 		resultType="Junghun">
-		<![CDATA[
-		select * from ( select * from search where search like '<'||'%' order by DBMS_RANDOM.RANDOM)
-		where rownum <10
-		and scount>3000
-		]]>
+		    	select 
+			hname, count(*) as hcount
+		from hashtag
+		group by hname
+		order by DBMS_RANDOM.RANDOM
 	</select>
 
 	<!-- 해쉬태그 순위 -->
