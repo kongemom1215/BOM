@@ -191,14 +191,16 @@ public class JuhyeController {
 	}
 
 	// 검색한 유저 목록을 가져오는 아작스
-	@RequestMapping(value = "god/getSearchUser", produces = "application/json;charset=UTF-8")
-	@ResponseBody
-	public List<JHUser_info> getSearchUser(String search_value) {
-		System.out.println("[GOD] start JuhyeController getSearchUser");
-		List<JHUser_info> searchList = us.getSearchList(search_value);
-
-		return searchList;
-	}
+	/*
+	 * @RequestMapping(value = "god/getSearchUser", produces =
+	 * "application/json;charset=UTF-8")
+	 * 
+	 * @ResponseBody public List<JHUser_info> getSearchUser(String search_value) {
+	 * System.out.println("[GOD] start JuhyeController getSearchUser");
+	 * List<JHUser_info> searchList = us.getSearchList(search_value);
+	 * 
+	 * return searchList; }
+	 */
 	
 	@RequestMapping(value="god/AjaxLikeAction", produces = "application/json;charset=UTF-8")
 	@ResponseBody
